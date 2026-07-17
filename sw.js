@@ -1,5 +1,5 @@
 /* 宅建数字ドリル Service Worker */
-const CACHE = "takken-suji-v3";
+const CACHE = "takken-suji-v4";
 const ASSETS = [
   "./",
   "./index.html",
