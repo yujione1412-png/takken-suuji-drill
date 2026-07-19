@@ -1,135 +1,362 @@
-<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#0f766e"><title>宅建 数字トレーニング</title><style>
-:root{--bg:#f3f7f6;--card:#fff;--ink:#17312e;--muted:#667b77;--main:#0f766e;--line:#dbe8e5;--ok:#18753b;--bad:#b72e2e;--shadow:0 10px 28px rgba(15,118,110,.1)}
-*{box-sizing:border-box}body{margin:0;background:linear-gradient(150deg,#e8f8f4,#f7f9f8 40%,#eef4f3);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans JP",sans-serif;min-height:100vh}
-button,input,select{font:inherit}.app{max-width:760px;margin:auto;padding:0 14px 92px}header{padding:18px 3px 12px;display:flex;justify-content:space-between;align-items:center}
-.brand{font-size:20px;font-weight:900}.brand small{display:block;color:var(--muted);font-size:11px;margin-top:3px}.pill{background:white;border:1px solid var(--line);border-radius:99px;padding:8px 11px;font-size:12px;font-weight:900}
-.card{background:rgba(255,255,255,.97);border:1px solid var(--line);border-radius:21px;padding:17px;box-shadow:var(--shadow);margin-bottom:13px}
-.hero{background:linear-gradient(135deg,#0f766e,#13a393);color:#fff;border:0}.hero h1{margin:0 0 8px;font-size:24px}.hero p{margin:0;font-size:14px;line-height:1.65;opacity:.92}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:9px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.stat{background:#f7fbfa;border:1px solid var(--line);border-radius:15px;text-align:center;padding:12px 6px}.stat b{display:block;color:var(--main);font-size:21px}.stat span{font-size:10px;color:var(--muted)}
-label{display:block;font-size:12px;font-weight:900;color:var(--muted);margin:0 0 6px}select,input{width:100%;padding:12px;border:1px solid var(--line);border-radius:13px;background:#fff;color:var(--ink)}
-.btn{width:100%;border:0;border-radius:14px;padding:13px;font-weight:900;background:var(--main);color:white;cursor:pointer}.btn.secondary{background:#e5f5f2;color:#0d6d64}.btn.ghost{background:white;color:var(--ink);border:1px solid var(--line)}.btn.warn{background:#fff1d9;color:#875000}.btn.danger{background:#fff0f0;color:#a32c2c}
-.row{display:flex;gap:9px}.row>*{flex:1}.section-title{font-weight:900;margin-bottom:11px}.note{font-size:11px;line-height:1.55;color:var(--muted)}
-.view{display:none}.view.active{display:block}.tabs{position:fixed;bottom:0;left:0;right:0;background:rgba(255,255,255,.95);backdrop-filter:blur(12px);border-top:1px solid var(--line);z-index:10;padding-bottom:env(safe-area-inset-bottom)}
-.tabs-inner{max-width:760px;margin:auto;display:grid;grid-template-columns:repeat(3,1fr)}.tab{border:0;background:none;padding:10px 3px 8px;color:var(--muted);font-size:11px;font-weight:900}.tab span{display:block;font-size:21px}.tab.active{color:var(--main)}
-.progress{height:9px;background:#e8efed;border-radius:99px;overflow:hidden}.progress div{height:100%;background:linear-gradient(90deg,#0f766e,#14b8a6)}
-.qmeta{display:flex;justify-content:space-between;color:var(--muted);font-size:12px;margin:11px 0}.question{font-size:20px;font-weight:900;line-height:1.5;margin:10px 0}.intro{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:13px}
-.multi{display:grid;gap:10px}.part{border:1px solid var(--line);border-radius:15px;padding:12px;background:#fbfdfc}.part.correct{border-color:var(--ok);background:#ebf8ef}.part.wrong{border-color:var(--bad);background:#fff0f0}.part-label{font-size:13px;font-weight:900;line-height:1.5;margin-bottom:8px}.answer-result{font-size:12px;line-height:1.5;margin-top:7px;display:none}.part.correct .answer-result,.part.wrong .answer-result{display:block}
-.confidence{margin-top:15px;border:1px dashed #afc7c2;border-radius:15px;padding:12px;background:#f8fbfa}.confidence-title{font-size:12px;font-weight:900;margin-bottom:8px}.confidence-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.conf{border:1px solid var(--line);background:white;color:var(--ink);border-radius:11px;padding:10px 4px;font-size:12px;font-weight:900}.conf.active{background:var(--main);color:white;border-color:var(--main)}.confidence small{display:block;color:var(--muted);font-size:10px;line-height:1.5;margin-top:7px}
-.feedback{display:none;margin-top:13px;padding:13px;border-radius:14px;font-size:13px;line-height:1.65}.feedback.show{display:block}.feedback.ok{background:#eaf8ee;color:#145e2f}.feedback.bad{background:#fff0f0;color:#912929}
-.hidden{display:none!important}.list{display:grid;gap:9px}.item{background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px}.item-top{display:flex;justify-content:space-between;gap:8px}.tag{font-size:10px;font-weight:900;color:#0d6d64;background:#e6f5f2;border-radius:99px;padding:4px 7px}.item h3{font-size:14px;margin:8px 0 5px}.item p{font-size:12px;color:var(--muted);line-height:1.55;margin:0}.empty{text-align:center;color:var(--muted);padding:28px 10px}
-@media(max-width:430px){.question{font-size:18px}.card{padding:15px}.confidence-grid{grid-template-columns:1fr}.conf{padding:9px}}
-
-/* 元の見やすいUIに近づける調整 */
-.tabs-inner{grid-template-columns:repeat(4,1fr)}
-.category-chips{display:flex;gap:7px;overflow:auto;padding-bottom:4px}.chip{white-space:nowrap;border:1px solid var(--line);background:#fff;padding:9px 12px;border-radius:999px;font-size:12px;font-weight:800}.chip.active{background:var(--main);color:#fff;border-color:var(--main)}
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0f766e">
+<title>宅建 数字トレーニング</title>
+<style>
+:root{
+  --bg:#f3f7f6;--card:#fff;--ink:#17312e;--muted:#657875;--main:#0f766e;
+  --main2:#14b8a6;--line:#dce8e5;--ok:#16803d;--bad:#c53636;--warn:#a15c00;
+  --shadow:0 10px 30px rgba(15,118,110,.10)
+}
+*{box-sizing:border-box}
+body{margin:0;background:linear-gradient(160deg,#e9f8f5 0,#f7f9f8 35%,#eef4f3 100%);
+ color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans JP",sans-serif;min-height:100vh}
+button,input,select{font:inherit}button{cursor:pointer}
+.app{max-width:760px;margin:auto;min-height:100vh;padding:0 14px 92px}
+header{padding:18px 4px 12px;display:flex;justify-content:space-between;align-items:center}
+.brand{font-weight:900;font-size:20px}.brand small{display:block;font-size:11px;color:var(--muted);font-weight:600;margin-top:3px}
+.pill{background:#fff;border:1px solid var(--line);border-radius:999px;padding:8px 11px;font-size:12px;font-weight:800}
+.card{background:rgba(255,255,255,.96);border:1px solid var(--line);border-radius:22px;padding:18px;box-shadow:var(--shadow);margin-bottom:14px}
+.hero{background:linear-gradient(135deg,#0f766e,#129f90);color:white;border:0}
+.hero h1{font-size:25px;margin:0 0 8px}.hero p{margin:0;opacity:.9;line-height:1.65;font-size:14px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.stat{background:#f7fbfa;border:1px solid var(--line);padding:13px 8px;border-radius:16px;text-align:center}
+.stat b{display:block;font-size:21px;color:var(--main)}.stat span{font-size:11px;color:var(--muted)}
+.section-title{font-weight:900;margin:3px 0 12px}
+.btn{border:0;border-radius:15px;padding:13px 14px;font-weight:900;background:var(--main);color:#fff;width:100%}
+.btn.secondary{background:#e4f5f2;color:#0d6e65}.btn.ghost{background:#fff;color:var(--ink);border:1px solid var(--line)}
+.btn.warn{background:#fff4df;color:#8b5100}.btn.danger{background:#fff0f0;color:#a72828}.btn:disabled{opacity:.45}
+.row{display:flex;gap:9px;align-items:center}.row>*{flex:1}
+label{font-size:12px;font-weight:800;color:var(--muted);display:block;margin-bottom:6px}
+select,input{width:100%;border:1px solid var(--line);border-radius:13px;padding:12px;background:white;color:var(--ink)}
+.tabs{position:fixed;bottom:0;left:0;right:0;background:rgba(255,255,255,.95);backdrop-filter:blur(12px);
+ border-top:1px solid var(--line);display:flex;justify-content:center;z-index:20;padding-bottom:env(safe-area-inset-bottom)}
+.tabs-inner{width:min(760px,100%);display:grid;grid-template-columns:repeat(4,1fr)}
+.tab{border:0;background:none;padding:11px 3px 8px;color:var(--muted);font-size:11px;font-weight:800}.tab .ico{font-size:21px;display:block;margin-bottom:2px}
+.tab.active{color:var(--main)}
+.view{display:none}.view.active{display:block}
+.category-chips{display:flex;gap:7px;overflow:auto;padding-bottom:4px;scrollbar-width:none}
+.chip{white-space:nowrap;border:1px solid var(--line);background:white;padding:9px 12px;border-radius:999px;font-size:12px;font-weight:800}
+.chip.active{background:var(--main);color:#fff;border-color:var(--main)}
+.progress{height:9px;background:#e8efed;border-radius:99px;overflow:hidden}.progress>div{height:100%;background:linear-gradient(90deg,var(--main),var(--main2));width:0}
+.qmeta{display:flex;justify-content:space-between;color:var(--muted);font-size:12px;margin:11px 0}
+.question{font-weight:900;font-size:20px;line-height:1.6;margin:12px 0 18px}
+.answers{display:grid;gap:9px}.answer{border:1px solid var(--line);background:#fff;border-radius:15px;padding:14px;text-align:left;font-weight:800;color:var(--ink)}
+.answer.selected{border-color:var(--main);background:#e9f7f5}.answer.correct{border-color:var(--ok);background:#eaf8ee;color:#10652f}
+.answer.wrong{border-color:var(--bad);background:#fff0f0;color:#9d2626}
+.feedback{display:none;margin-top:14px;padding:14px;border-radius:15px;line-height:1.7;font-size:14px}
+.feedback.show{display:block}.feedback.ok{background:#eaf8ee;color:#145f30}.feedback.bad{background:#fff0f0;color:#902929}
+.list{display:grid;gap:9px}.item{border:1px solid var(--line);border-radius:15px;padding:13px;background:#fff}
+.item-top{display:flex;justify-content:space-between;gap:8px}.tag{font-size:10px;font-weight:900;padding:4px 7px;background:#e8f5f2;color:#0d6e65;border-radius:99px;height:max-content}
+.item h3{font-size:14px;margin:7px 0}.item p{font-size:12px;color:var(--muted);margin:0;line-height:1.55}
 .search{position:sticky;top:0;padding:6px 0 10px;background:linear-gradient(#f3f7f6 80%,transparent);z-index:4}
-.answers{display:grid;gap:9px}.answer{border:1px solid var(--line);background:#fff;border-radius:15px;padding:14px;text-align:left;font-weight:800;color:var(--ink)}.answer.selected{border-color:var(--main);background:#e9f7f5}.answer.correct{border-color:var(--ok);background:#eaf8ee;color:#10652f}.answer.wrong{border-color:var(--bad);background:#fff0f0;color:#9d2626}
-.big-input{font-size:23px;font-weight:900;text-align:center}.unit-row{display:flex;align-items:center;gap:8px}.unit-row input{flex:1}.unit{font-weight:900;min-width:54px}
-.mode-note{font-size:11px;color:var(--muted);margin-top:8px;line-height:1.5}
-</style></head><body>
+.note{font-size:11px;color:var(--muted);line-height:1.55}.hidden{display:none!important}.empty{text-align:center;padding:28px 10px;color:var(--muted)}
+.confidence-box{margin-top:15px;padding:13px;border:1px dashed #b7cbc7;border-radius:16px;background:#f8fbfa}
+.confidence-title{font-size:12px;font-weight:900;margin-bottom:8px}
+.confidence-options{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+.conf-btn{border:1px solid var(--line);background:#fff;border-radius:12px;padding:10px 5px;font-size:12px;font-weight:900;color:var(--ink)}
+.conf-btn.active{background:var(--main);border-color:var(--main);color:#fff}
+.conf-hint{font-size:10px;color:var(--muted);margin-top:7px;line-height:1.45}
+.multi-intro{font-size:13px;color:var(--muted);line-height:1.6;margin:-6px 0 13px}
+.multi-list{display:grid;gap:12px}.multi-row{border:1px solid var(--line);border-radius:16px;padding:12px;background:#fbfdfc}
+.multi-row.correct{border-color:var(--ok);background:#eaf8ee}.multi-row.wrong{border-color:var(--bad);background:#fff0f0}
+.multi-label{font-size:13px;font-weight:900;line-height:1.5;margin-bottom:8px}
+.mini-answers{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.mini-answer{border:1px solid var(--line);background:#fff;border-radius:12px;padding:10px 7px;font-weight:800;color:var(--ink)}
+.mini-answer.selected{border-color:var(--main);background:#e9f7f5}.mini-answer.correct{border-color:var(--ok);background:#eaf8ee;color:#10652f}
+.mini-answer.wrong{border-color:var(--bad);background:#fff0f0;color:#9d2626}
+.result-line{font-size:12px;margin-top:7px;display:none}.multi-row.correct .result-line,.multi-row.wrong .result-line{display:block}
+@media(max-width:430px){.question{font-size:18px}.card{padding:15px;border-radius:19px}.hero h1{font-size:22px}.confidence-options{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
 <div class="app">
-<header><div class="brand">宅建 数字トレーニング<small>数字だけを、短時間で反復暗記</small></div><div class="pill" id="streak">🔥 0日</div></header>
+<header>
+  <div class="brand">宅建 数字トレーニング<small>数字だけを、短時間で反復暗記</small></div>
+  <div class="pill" id="streakPill">🔥 0日</div>
+</header>
 <main>
 <section id="home" class="view active">
-<div class="card hero"><h1>数字問題を、毎日10問。</h1><p>通常の数字入力・4択を中心に出題し、ときどき関連数字をまとめて答えるセット問題が混ざります。</p></div>
-<div class="card"><div class="grid3"><div class="stat"><b id="today">0</b><span>今日の回答</span></div><div class="stat"><b id="rate">0%</b><span>正答率</span></div><div class="stat"><b id="weak">0</b><span>要復習</span></div></div></div>
-<div class="card"><div class="section-title">トレーニング設定</div><div class="row"><div><label>分野</label><select id="cat"></select></div><div><label>問題数</label><select id="count"><option>5</option><option selected>10</option><option>20</option><option value="99">全問</option></select></div></div><div style="height:10px"></div><button class="btn" id="start">トレーニング開始</button><div class="mode-note">通常問題がメインです。10問中、目安として2問ほどセット問題がランダムに入ります。</div><div style="height:10px"></div><div class="grid2"><button class="btn warn" id="review">要復習だけ</button><button class="btn secondary" id="random5">すきま時間5問</button></div></div>
-<p class="note">正解しても「少し不安」「自信なし」を選んだ問題は復習対象になります。法改正や試験年度の範囲は最新教材でも確認してください。</p>
+  <div class="card hero">
+    <h1>数字問題を、毎日10問。</h1>
+    <p>4択問題を中心に出題。ランダムで、関連数字を一度に複数回答する問題も出題されます。</p>
+  </div>
+  <div class="card"><div class="grid3">
+    <div class="stat"><b id="todayCount">0</b><span>今日の回答</span></div>
+    <div class="stat"><b id="accuracy">0%</b><span>正答率</span></div>
+    <div class="stat"><b id="weakCount">0</b><span>要復習</span></div>
+  </div></div>
+  <div class="card">
+    <div class="section-title">トレーニング設定</div>
+    <div class="row">
+      <div><label>分野</label><select id="categorySelect"></select></div>
+      <div><label>問題数</label><select id="countSelect"><option>5</option><option selected>10</option><option>20</option><option value="999">全問</option></select></div>
+    </div>
+    <div style="height:10px"></div>
+    <label>出題モード</label>
+    <div class="grid2">
+      <button class="btn secondary mode" data-mode="normal">バランス出題</button>
+      <button class="btn ghost mode" data-mode="weak">苦手を優先</button>
+    </div>
+    <div style="height:10px"></div><button class="btn" id="startBtn">トレーニング開始</button>
+  </div>
+  <div class="card">
+    <div class="section-title">おすすめメニュー</div>
+    <div class="grid2">
+      <button class="btn warn" id="mistakeBtn">要復習だけ</button>
+      <button class="btn secondary" id="random5Btn">すきま時間5問</button>
+    </div>
+  </div>
+  <p class="note">※ 正解しても「少し不安」「自信なし」を選んだ問題は、要復習として記録されます。</p>
 </section>
-<section id="quiz" class="view"><div class="card"><div class="progress"><div id="bar" style="width:0"></div></div><div class="qmeta"><span id="qcat"></span><span id="qnum"></span></div><div class="question" id="qtitle"></div><div id="answerArea"></div><div class="confidence" id="confidence"><div class="confidence-title">採点前の自信度</div><div class="confidence-grid"><button class="conf" data-conf="high">自信あり</button><button class="conf" data-conf="mid">少し不安</button><button class="conf" data-conf="low">自信なし</button></div><small>「自信ないけどコレかな？」という場合は、回答を変えずに「自信なし」で採点します。</small></div><div class="feedback" id="feedback"></div><div style="height:12px"></div><button class="btn" id="check">答え合わせ</button><button class="btn hidden" id="next">次の問題</button></div><button class="btn ghost" id="quit">中断してホームへ</button></section>
-<section id="book" class="view"><div class="search"><input id="search" placeholder="例：3か月、営業保証金、媒介契約"></div><div class="category-chips" id="chips"></div><div style="height:10px"></div><div class="list" id="questionList"></div></section>
-<section id="data" class="view"><div class="card"><div class="section-title">学習データ</div><div class="grid3"><div class="stat"><b id="total">0</b><span>総回答数</span></div><div class="stat"><b id="correct">0</b><span>正解数</span></div><div class="stat"><b id="master">0</b><span>習得済み</span></div></div></div><div class="card"><div class="section-title">分野別の正答率</div><div class="list" id="catstats"></div></div><div class="card"><div class="section-title">データ管理</div><div class="grid2"><button class="btn secondary" id="export">バックアップ</button><button class="btn danger" id="reset">履歴を初期化</button></div></div></section>
-</main></div>
-<nav class="tabs"><div class="tabs-inner"><button class="tab active" data-view="home"><span>🏠</span>ホーム</button><button class="tab" data-view="quiz"><span>✍️</span>問題</button><button class="tab" data-view="book"><span>📚</span>一覧</button><button class="tab" data-view="data"><span>📊</span>記録</button></div></nav>
+
+<section id="quiz" class="view">
+  <div class="card">
+    <div class="progress"><div id="progressBar"></div></div>
+    <div class="qmeta"><span id="qCategory"></span><span id="qNumber"></span></div>
+    <div class="question" id="questionText"></div>
+    <div id="answerArea"></div>
+    <div class="confidence-box" id="confidenceBox">
+      <div class="confidence-title">採点前の自信度</div>
+      <div class="confidence-options">
+        <button class="conf-btn" data-conf="high">自信あり</button>
+        <button class="conf-btn" data-conf="mid">少し不安</button>
+        <button class="conf-btn" data-conf="low">自信なし</button>
+      </div>
+      <div class="conf-hint">「自信ないけどコレかな？」という場合は、その回答のまま「自信なし」を選びます。</div>
+    </div>
+    <div id="feedback" class="feedback"></div>
+    <div style="height:12px"></div>
+    <button class="btn" id="checkBtn">答え合わせ</button>
+    <button class="btn hidden" id="nextBtn">次の問題</button>
+  </div>
+  <button class="btn ghost" id="quitBtn">中断してホームへ</button>
+</section>
+
+<section id="book" class="view">
+  <div class="search"><input id="searchInput" placeholder="例：3か月、営業保証金、媒介契約"></div>
+  <div class="category-chips" id="chips"></div><div style="height:10px"></div>
+  <div class="list" id="questionList"></div>
+</section>
+
+<section id="data" class="view">
+  <div class="card">
+    <div class="section-title">学習データ</div>
+    <div class="grid3">
+      <div class="stat"><b id="totalAnswered">0</b><span>総回答数</span></div>
+      <div class="stat"><b id="totalCorrect">0</b><span>正解数</span></div>
+      <div class="stat"><b id="mastered">0</b><span>習得済み</span></div>
+    </div>
+  </div>
+  <div class="card"><div class="section-title">分野別の正答率</div><div id="categoryStats" class="list"></div></div>
+  <div class="card"><div class="section-title">データ管理</div><div class="grid2">
+    <button class="btn ghost" id="exportBtn">バックアップ</button>
+    <button class="btn danger" id="resetBtn">履歴を初期化</button>
+  </div></div>
+</section>
+</main>
+</div>
+<nav class="tabs"><div class="tabs-inner">
+<button class="tab active" data-view="home"><span class="ico">🏠</span>ホーム</button>
+<button class="tab" data-view="quiz"><span class="ico">✍️</span>問題</button>
+<button class="tab" data-view="book"><span class="ico">📚</span>一覧</button>
+<button class="tab" data-view="data"><span class="ico">📊</span>記録</button>
+</div></nav>
+
 <script>
 const normalQuestions=[
-{id:"n01",cat:"宅建業法",q:"宅建業者の免許の有効期間は何年？",a:5,u:"年",e:"免許の有効期間は5年です。"},
-{id:"n02",cat:"宅建業法",q:"宅地建物取引士証の有効期間は何年？",a:5,u:"年",e:"宅建士証の有効期間は5年です。"},
-{id:"n03",cat:"宅建業法",q:"専任の宅建士は、事務所の業務従事者何人につき1人以上必要？",a:5,u:"人",e:"業務従事者5人に1人以上です。"},
-{id:"n04",cat:"宅建業法",q:"営業保証金は、主たる事務所についていくら？",a:1000,u:"万円",e:"主たる事務所は1,000万円です。"},
-{id:"n05",cat:"宅建業法",q:"営業保証金は、従たる事務所1か所につきいくら？",a:500,u:"万円",e:"従たる事務所1か所につき500万円です。"},
-{id:"n06",cat:"宅建業法",q:"弁済業務保証金分担金は、主たる事務所についていくら？",a:60,u:"万円",e:"主たる事務所は60万円です。"},
-{id:"n07",cat:"宅建業法",q:"専任媒介契約の有効期間の上限は何か月？",a:3,u:"か月",e:"3か月以内です。"},
-{id:"n08",cat:"宅建業法",q:"専任媒介契約では、指定流通機構へ何日以内に登録？",a:7,u:"日",e:"休業日を除き7日以内です。"},
-{id:"n09",cat:"宅建業法",q:"専属専任媒介契約では、指定流通機構へ何日以内に登録？",a:5,u:"日",e:"休業日を除き5日以内です。"},
-{id:"n10",cat:"宅建業法",q:"クーリング・オフは、告知を受けた日から何日以内？",a:8,u:"日",e:"8日以内です。"},
-{id:"n11",cat:"宅建業法",q:"宅建業者自ら売主の場合、手付額の上限は代金の何％？",a:20,u:"％",e:"代金の20％が上限です。"},
-{id:"n12",cat:"宅建業法",q:"損害賠償予定額と違約金の合計上限は代金の何％？",a:20,u:"％",e:"合計20％が上限です。"},
-{id:"n13",cat:"民法・権利関係",q:"債権の消滅時効は、権利を行使できることを知った時から原則何年？",a:5,u:"年",e:"知った時から5年です。"},
-{id:"n14",cat:"民法・権利関係",q:"債権の消滅時効は、権利を行使できる時から原則何年？",a:10,u:"年",e:"行使できる時から10年です。"},
-{id:"n15",cat:"民法・権利関係",q:"取得時効は、善意・無過失なら何年？",a:10,u:"年",e:"善意・無過失なら10年です。"},
-{id:"n16",cat:"民法・権利関係",q:"取得時効は、善意・無過失でない場合は何年？",a:20,u:"年",e:"それ以外は20年です。"},
-{id:"n17",cat:"民法・権利関係",q:"相続放棄・限定承認は、相続開始を知った時から何か月以内？",a:3,u:"か月",e:"熟慮期間は3か月です。"},
-{id:"n18",cat:"民法・権利関係",q:"普通借地権の当初の存続期間は最低何年？",a:30,u:"年",e:"当初は30年以上です。"},
-{id:"n19",cat:"民法・権利関係",q:"普通借地権の最初の更新期間は最低何年？",a:20,u:"年",e:"最初の更新は20年以上です。"},
-{id:"n20",cat:"民法・権利関係",q:"普通借地権の2回目以降の更新期間は最低何年？",a:10,u:"年",e:"2回目以降は10年以上です。"},
-{id:"n21",cat:"法令上の制限",q:"市街化区域内の開発許可の一般的な基準は何㎡以上？",a:1000,u:"㎡",e:"一般的な基準は1,000㎡以上です。"},
-{id:"n22",cat:"法令上の制限",q:"都市計画区域・準都市計画区域外の開発許可基準は何㎡以上？",a:10000,u:"㎡",e:"10,000㎡以上です。"},
-{id:"n23",cat:"法令上の制限",q:"低層住居専用地域等の絶対高さ制限は10mまたは何m？",a:12,u:"m",e:"10mまたは12mです。"},
-{id:"n24",cat:"法令上の制限",q:"自己所有農地を転用する場合の農地法の条文番号は？",a:4,u:"条",e:"自己転用は4条です。"},
-{id:"n25",cat:"法令上の制限",q:"転用目的で農地の権利を移転する場合の条文番号は？",a:5,u:"条",e:"転用目的の権利移転は5条です。"},
-{id:"n26",cat:"税・その他",q:"固定資産税の標準税率は何％？",a:1.4,u:"％",e:"1.4％です。"},
-{id:"n27",cat:"税・その他",q:"都市計画税の制限税率は何％？",a:0.3,u:"％",e:"0.3％です。"},
-{id:"n28",cat:"税・その他",q:"小規模住宅用地は住宅1戸につき何㎡まで？",a:200,u:"㎡",e:"200㎡までです。"},
-{id:"n29",cat:"税・その他",q:"小規模住宅用地の固定資産税の課税標準は価格の何分の1？",a:6,u:"分の1",e:"6分の1です。"},
-{id:"n30",cat:"税・その他",q:"地価公示の基準日は毎年何月1日？",a:1,u:"月",e:"1月1日です。"},
-{id:"n31",cat:"税・その他",q:"都道府県地価調査の基準日は毎年何月1日？",a:7,u:"月",e:"7月1日です。"}
+{id:"g01",type:"single",cat:"宅建業法",q:"宅建業者の免許の有効期間は何年？",a:5,u:"年",choices:[3,5,7,10],e:"宅建業者の免許の有効期間は5年です。更新を受けなければ、期間満了によって効力を失います。"},
+{id:"g02",type:"single",cat:"宅建業法",q:"宅地建物取引士証の有効期間は何年？",a:5,u:"年",choices:[3,5,7,10],e:"宅地建物取引士証の有効期間も5年です。免許の有効期間と同じ数字です。"},
+{id:"g03",type:"single",cat:"宅建業法",q:"事務所では、業務従事者何人につき1人以上の専任宅建士が必要？",a:5,u:"人",choices:[3,5,10,20],e:"事務所では、業務に従事する者5人につき1人以上の割合で、専任の宅建士を置きます。"},
+{id:"g04",type:"single",cat:"宅建業法",q:"営業保証金は、主たる事務所についていくら？",a:1000,u:"万円",choices:[500,600,1000,1500],e:"主たる事務所については1,000万円です。従たる事務所は1か所につき500万円です。"},
+{id:"g05",type:"single",cat:"宅建業法",q:"弁済業務保証金分担金は、主たる事務所についていくら？",a:60,u:"万円",choices:[30,60,90,100],e:"保証協会に加入する場合、主たる事務所は60万円、従たる事務所は1か所につき30万円です。"},
+{id:"g06",type:"single",cat:"宅建業法",q:"専任媒介契約の指定流通機構への登録期限は何日以内？",a:7,u:"日",choices:[3,5,7,8],e:"専任媒介契約は7日以内です。宅建業者の休業日は日数に算入しません。"},
+{id:"g07",type:"single",cat:"宅建業法",q:"専属専任媒介契約の指定流通機構への登録期限は何日以内？",a:5,u:"日",choices:[3,5,7,8],e:"専属専任媒介契約は5日以内です。専任媒介の7日と区別します。"},
+{id:"g08",type:"single",cat:"宅建業法",q:"クーリング・オフが可能な場合、告知を受けた日から何日以内？",a:8,u:"日",choices:[5,7,8,14],e:"書面で告げられた日から8日以内です。"},
+{id:"g09",type:"single",cat:"宅建業法",q:"宅建業者が自ら売主の場合、受領できる手付額の上限は代金の何％？",a:20,u:"％",choices:[5,10,20,30],e:"手付の額は代金の20％を超えることができません。"},
+{id:"m01",type:"single",cat:"民法・権利関係",q:"債権の消滅時効は、権利を行使できることを知った時から原則何年？",a:5,u:"年",choices:[1,3,5,10],e:"主観的起算点から5年です。客観的起算点からは10年です。"},
+{id:"m02",type:"single",cat:"民法・権利関係",q:"取得時効は、占有開始時に善意・無過失なら何年？",a:10,u:"年",choices:[5,10,15,20],e:"善意・無過失なら10年です。それ以外は20年です。"},
+{id:"m03",type:"single",cat:"民法・権利関係",q:"相続放棄・限定承認の熟慮期間は何か月？",a:3,u:"か月",choices:[1,3,6,12],e:"自己のために相続開始があったことを知った時から3か月以内です。"},
+{id:"m04",type:"single",cat:"民法・権利関係",q:"普通借地権の当初の存続期間は最低何年？",a:30,u:"年",choices:[10,20,30,50],e:"普通借地権は当初30年以上、最初の更新20年以上、その後は10年以上です。"},
+{id:"m05",type:"single",cat:"民法・権利関係",q:"一般定期借地権の存続期間は何年以上？",a:50,u:"年",choices:[20,30,50,60],e:"一般定期借地権は50年以上です。"},
+{id:"h01",type:"single",cat:"法令上の制限",q:"都市計画区域・準都市計画区域外で開発許可が原則必要となる規模は何㎡以上？",a:10000,u:"㎡",choices:[1000,3000,5000,10000],e:"区域外では1ヘクタール、つまり10,000㎡以上が基準です。"},
+{id:"h02",type:"single",cat:"法令上の制限",q:"自己所有農地を転用する場合の農地法の条文番号は？",a:4,u:"条",choices:[2,3,4,5],e:"自己転用は農地法4条です。権利移転は3条、転用目的の権利移転は5条です。"},
+{id:"z01",type:"single",cat:"税・その他",q:"固定資産税の標準税率は何％？",a:1.4,u:"％",choices:[0.3,1.4,3,4],e:"固定資産税の標準税率は1.4％です。"},
+{id:"z02",type:"single",cat:"税・その他",q:"都市計画税の制限税率は何％？",a:0.3,u:"％",choices:[0.3,1.4,3,4],e:"都市計画税の制限税率は0.3％です。"},
+{id:"z03",type:"single",cat:"税・その他",q:"小規模住宅用地は住宅1戸につき何㎡まで？",a:200,u:"㎡",choices:[100,150,200,300],e:"住宅1戸につき200㎡までです。固定資産税の課税標準は価格の6分の1になります。"}
 ];
 
-const sets=[
-{id:"mediation",cat:"宅建業法",title:"媒介契約の重要数字",prompt:"次の項目をすべて選んでください。",items:[
-["専任媒介契約のレインズ登録期限",7,"日以内",[5,7,8,14]],["専属専任媒介契約のレインズ登録期限",5,"日以内",[3,5,7,8]],["専任媒介契約の報告",2,"週間に1回以上",[1,2,3,4]],["専属専任媒介契約の報告",1,"週間に1回以上",[1,2,3,4]],["契約有効期間の上限",3,"か月",[1,2,3,6]]],e:"専任は登録7日・報告2週間、専属専任は登録5日・報告1週間。期間はどちらも3か月以内です。"},
-{id:"license",cat:"宅建業法",title:"免許・宅建士・設置人数",prompt:"有効期間と必要人数をすべて選んでください。",items:[
-["宅建業者免許の有効期間",5,"年",[3,5,7,10]],["宅建士証の有効期間",5,"年",[3,5,7,10]],["事務所の専任宅建士",5,"人につき1人以上",[3,5,10,20]],["一定の案内所等の専任宅建士",1,"人以上",[1,2,3,5]]],e:"免許・宅建士証はともに5年。事務所は5人に1人、一定の案内所等は1人以上です。"},
-{id:"guarantee",cat:"宅建業法",title:"営業保証金と保証協会",prompt:"主たる事務所・従たる事務所の金額をすべて選んでください。",items:[
-["営業保証金：主たる事務所",1000,"万円",[500,600,1000,1500]],["営業保証金：従たる事務所1か所",500,"万円",[250,300,500,1000]],["分担金：主たる事務所",60,"万円",[30,60,90,100]],["分担金：従たる事務所1か所",30,"万円",[15,30,50,60]]],e:"営業保証金は1,000万円・500万円。保証協会の分担金は60万円・30万円です。"},
-{id:"selfseller",cat:"宅建業法",title:"宅建業者自ら売主の制限",prompt:"上限・保全措置・責任期間をすべて選んでください。",items:[
-["受領できる手付額の上限",20,"％",[5,10,20,30]],["損害賠償予定額と違約金の合計上限",20,"％",[10,20,30,40]],["保全措置不要となる割合の上限",5,"％",[5,10,15,20]],["保全措置不要となる金額の上限",1000,"万円",[500,800,1000,1500]],["担保責任の通知期間を短縮できる最低期間",2,"年以上",[1,2,5,10]]],e:"20％・20％、保全不要は5％以下かつ1,000万円以下、担保責任は2年以上です。"},
-{id:"prescription",cat:"民法・権利関係",title:"消滅時効の基本セット",prompt:"債権と不法行為の期間をすべて選んでください。",items:[
-["債権：行使できることを知った時から",5,"年",[1,3,5,10]],["債権：行使できる時から",10,"年",[5,10,15,20]],["不法行為：損害と加害者を知った時から",3,"年",[1,3,5,10]],["生命・身体侵害：知った時から",5,"年",[3,5,10,20]],["不法行為の時から",20,"年",[5,10,15,20]]],e:"債権は5年・10年。不法行為は原則3年、生命身体は5年、行為時から20年です。"},
-{id:"acquisitive",cat:"民法・権利関係",title:"取得時効",prompt:"2つの期間を選んでください。",items:[
-["善意・無過失",10,"年",[5,10,15,20]],["善意・無過失でない場合",20,"年",[5,10,15,20]]],e:"善意・無過失は10年、それ以外は20年です。"},
-{id:"inheritance",cat:"民法・権利関係",title:"相続の期間",prompt:"相続放棄と遺留分の期間をすべて選んでください。",items:[
-["相続放棄・限定承認",3,"か月",[1,3,6,12]],["遺留分侵害額請求：知った時から",1,"年",[1,2,3,5]],["遺留分侵害額請求：相続開始から",10,"年",[5,10,15,20]]],e:"相続放棄等は3か月、遺留分は知った時から1年・相続開始から10年です。"},
-{id:"landlease",cat:"民法・権利関係",title:"普通借地権の期間",prompt:"当初・最初の更新・2回目以降をすべて選んでください。",items:[
-["当初の存続期間",30,"年以上",[10,20,30,50]],["最初の更新後",20,"年以上",[10,20,30,50]],["2回目以降の更新",10,"年以上",[5,10,20,30]]],e:"当初30年、最初の更新20年、その後10年です。"},
-{id:"fixedlease",cat:"民法・権利関係",title:"定期借地権の期間",prompt:"定期借地権の各期間をすべて選んでください。",items:[
-["一般定期借地権",50,"年以上",[20,30,50,60]],["事業用定期借地権の下限",10,"年以上",[5,10,20,30]],["事業用定期借地権の上限",50,"年未満",[30,40,50,60]],["建物譲渡特約付借地権",30,"年以上経過後",[10,20,30,50]]],e:"一般定期50年以上、事業用10年以上50年未満、建物譲渡特約付は30年以上経過後です。"},
-{id:"development",cat:"法令上の制限",title:"開発許可の規模",prompt:"区域ごとの代表的基準をすべて選んでください。",items:[
-["市街化区域の一般的基準",1000,"㎡以上",[300,500,1000,3000]],["三大都市圏の一定区域",500,"㎡以上",[300,500,1000,3000]],["都市計画区域等の区域外",10000,"㎡以上",[1000,3000,5000,10000]],["市街化調整区域で面積だけにより一律許可不要",0,"㎡",[0,300,500,1000]]],e:"一般1,000㎡、一定区域500㎡、区域外10,000㎡。市街化調整区域には面積だけの一律免除はありません。"},
-{id:"fireproof",cat:"法令上の制限",title:"防火・準防火地域",prompt:"階数と延べ面積をすべて選んでください。",items:[
-["防火地域：地階を含む階数",3,"階以上",[2,3,4,5]],["防火地域：延べ面積",100,"㎡超",[50,100,500,1500]],["準防火地域：地階を除く階数",4,"階以上",[2,3,4,5]],["準防火地域：延べ面積",1500,"㎡超",[100,500,1000,1500]]],e:"防火地域は3階以上・100㎡超、準防火地域は4階以上・1,500㎡超が基本整理です。"},
-{id:"farmland",cat:"法令上の制限",title:"農地法3条・4条・5条",prompt:"内容に対応する条文番号をすべて選んでください。",items:[
-["農地の権利移転・設定",3,"条",[2,3,4,5]],["自己所有農地の転用",4,"条",[2,3,4,5]],["転用目的の権利移転・設定",5,"条",[2,3,4,5]]],e:"権利移転は3条、自己転用は4条、転用目的の権利移転は5条です。"},
-{id:"taxrate",cat:"税・その他",title:"不動産に関する税率",prompt:"標準税率・制限税率をすべて選んでください。",items:[
-["不動産取得税の標準税率（原則）",4,"％",[1.4,3,4,5]],["固定資産税の標準税率",1.4,"％",[0.3,1.4,3,4]],["都市計画税の制限税率",0.3,"％",[0.3,1.4,3,4]]],e:"不動産取得税4％、固定資産税1.4％、都市計画税0.3％です。"},
-{id:"residential",cat:"税・その他",title:"住宅用地の特例",prompt:"小規模住宅用地の数字をすべて選んでください。",items:[
-["住宅1戸あたりの面積",200,"㎡まで",[100,150,200,300]],["固定資産税の課税標準",6,"分の1",[2,3,4,6]],["都市計画税の課税標準",3,"分の1",[2,3,4,6]]],e:"200㎡まで。固定資産税は6分の1、都市計画税は3分の1です。"},
-{id:"publicprice",cat:"税・その他",title:"地価公示・地価調査",prompt:"それぞれの基準日を選んでください。",items:[
-["地価公示",1,"月1日",[1,4,7,10]],["都道府県地価調査",7,"月1日",[1,4,7,10]]],e:"地価公示は1月1日、都道府県地価調査は7月1日です。"}
+const multiQuestions=[
+{id:"s01",type:"multi",cat:"宅建業法",q:"媒介契約の重要数字",prompt:"各項目について正しい数字を1つずつ選んでください。",items:[
+ {label:"専任媒介契約の登録期限",a:7,u:"日以内",choices:[3,5,7,8]},
+ {label:"専属専任媒介契約の登録期限",a:5,u:"日以内",choices:[3,5,7,8]},
+ {label:"専任媒介契約の報告",a:2,u:"週間に1回以上",choices:[1,2,3,4]},
+ {label:"専属専任媒介契約の報告",a:1,u:"週間に1回以上",choices:[1,2,3,4]}
+],e:"専任媒介は「登録7日・報告2週間」、専属専任媒介は「登録5日・報告1週間」です。登録期限では宅建業者の休業日は算入しません。"},
+{id:"s02",type:"multi",cat:"民法・権利関係",q:"普通借地権の期間",prompt:"各期間について正しい数字を1つずつ選んでください。",items:[
+ {label:"当初の存続期間",a:30,u:"年以上",choices:[10,20,30,50]},
+ {label:"最初の更新後",a:20,u:"年以上",choices:[10,20,30,50]},
+ {label:"2回目以降の更新",a:10,u:"年以上",choices:[5,10,20,30]}
+],e:"普通借地権は「当初30年・最初の更新20年・2回目以降10年」とセットで覚えます。"},
+{id:"s03",type:"multi",cat:"宅建業法",q:"営業保証金と保証協会",prompt:"各金額について正しい数字を1つずつ選んでください。",items:[
+ {label:"営業保証金：主たる事務所",a:1000,u:"万円",choices:[500,600,1000,1500]},
+ {label:"営業保証金：従たる事務所",a:500,u:"万円",choices:[250,300,500,1000]},
+ {label:"分担金：主たる事務所",a:60,u:"万円",choices:[30,60,90,100]},
+ {label:"分担金：従たる事務所",a:30,u:"万円",choices:[15,30,50,60]}
+],e:"営業保証金は本店1,000万円・支店500万円。保証協会の分担金は本店60万円・支店30万円です。"},
+{id:"s04",type:"multi",cat:"法令上の制限",q:"農地法3条・4条・5条",prompt:"各内容に対応する条文番号を1つずつ選んでください。",items:[
+ {label:"農地の権利移転・設定",a:3,u:"条",choices:[2,3,4,5]},
+ {label:"自己所有農地の転用",a:4,u:"条",choices:[2,3,4,5]},
+ {label:"転用目的の権利移転・設定",a:5,u:"条",choices:[2,3,4,5]}
+],e:"3条は権利移転・設定、4条は自己転用、5条は転用目的の権利移転・設定です。"},
+{id:"s05",type:"multi",cat:"税・その他",q:"税率の比較",prompt:"各税率について正しい数字を1つずつ選んでください。",items:[
+ {label:"不動産取得税の標準税率（原則）",a:4,u:"％",choices:[0.3,1.4,3,4]},
+ {label:"固定資産税の標準税率",a:1.4,u:"％",choices:[0.3,1.4,3,4]},
+ {label:"都市計画税の制限税率",a:0.3,u:"％",choices:[0.3,1.4,3,4]}
+],e:"不動産取得税4％、固定資産税1.4％、都市計画税0.3％です。軽減措置の適用は別に確認します。"}
 ];
 
-const multiQuestions=sets.map(x=>({...x,type:"multi"}));
-normalQuestions.forEach(x=>x.type="normal");
 const allQuestions=[...normalQuestions,...multiQuestions];
-const KEY="takkenMixedStatsV3";
-let stats=JSON.parse(localStorage.getItem(KEY)||"{}"),quiz=[],index=0,confidence=null,answered=false,selected=null,listCat="すべて";
+const KEY="takkenNumberTrainerV4";
+let stats=JSON.parse(localStorage.getItem(KEY)||"{}");
+let quiz=[],index=0,answered=false,selected=null,confidence=null,mode="normal",listCat="すべて";
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
-const todayKey=()=>new Date().toISOString().slice(0,10),shuffle=a=>[...a].sort(()=>Math.random()-.5);
-const getStat=id=>stats[id]||{right:0,wrong:0,streak:0,uncertain:0,conf:{high:0,mid:0,low:0},last:""};
-function save(){localStorage.setItem(KEY,JSON.stringify(stats))}function cats(){return["すべて",...new Set(allQuestions.map(x=>x.cat))]}
-function choices(q){let p=normalQuestions.filter(x=>x.u===q.u&&x.id!==q.id).map(x=>x.a),v=[q.a,...shuffle([...new Set(p)]).slice(0,3)],d=[1,2,3,5,10,20,50,100];while(v.length<4){let n=Number(q.a)+(Math.random()<.5?-1:1)*d[Math.floor(Math.random()*d.length)];if(n>=0&&!v.includes(n))v.push(n)}return shuffle(v)}
-function init(){ $("#cat").innerHTML=cats().map(x=>`<option>${x}</option>`).join(""); $$(".tab").forEach(b=>b.onclick=()=>show(b.dataset.view)); $$(".conf").forEach(b=>b.onclick=()=>{$$(".conf").forEach(x=>x.classList.remove("active"));b.classList.add("active");confidence=b.dataset.conf}); $("#start").onclick=()=>start();$("#random5").onclick=()=>start({count:5});$("#review").onclick=()=>start({review:true});$("#check").onclick=check;$("#next").onclick=()=>{index++;render()};$("#quit").onclick=()=>show("home");$("#search").oninput=renderList;$("#reset").onclick=()=>{if(confirm("学習履歴を削除しますか？")){stats={};save();dashboard();renderList()}};$("#export").onclick=exportData;renderChips();renderList();dashboard()}
-function show(v){$$(".view").forEach(x=>x.classList.toggle("active",x.id===v));$$(".tab").forEach(x=>x.classList.toggle("active",x.dataset.view===v));if(v==="home"||v==="data")dashboard();if(v==="book")renderList();scrollTo({top:0,behavior:"smooth"})}
-function mixed(pool,count){let n=shuffle(pool.filter(x=>x.type==="normal")),m=shuffle(pool.filter(x=>x.type==="multi")),mc=Math.min(m.length,Math.max(1,Math.round(count*.2))),r=[...n.slice(0,Math.max(0,count-mc)),...m.slice(0,mc)];if(r.length<count)r.push(...shuffle(pool.filter(x=>!r.some(y=>y.id===x.id))).slice(0,count-r.length));return shuffle(r)}
-function start(opt={}){let pool=[...allQuestions],cat=$("#cat").value;if(cat!=="すべて")pool=pool.filter(x=>x.cat===cat);if(opt.review)pool=pool.filter(x=>{let s=getStat(x.id);return s.wrong>s.right||s.uncertain>0});if(!pool.length){alert("対象となる問題がありません。");return}let count=Math.min(opt.count||Number($("#count").value),pool.length);quiz=mixed(pool,count);index=0;render();show("quiz")}
-function render(){if(index>=quiz.length){finish();return}answered=false;confidence=null;selected=null;$$(".conf").forEach(x=>x.classList.remove("active"));let q=quiz[index];$("#bar").style.width=`${index/quiz.length*100}%`;$("#qcat").textContent=q.cat;$("#qnum").textContent=`${index+1} / ${quiz.length}`;$("#qtitle").textContent=q.type==="multi"?q.title:q.q;$("#feedback").className="feedback";$("#feedback").innerHTML="";$("#check").classList.remove("hidden");$("#next").classList.add("hidden");if(q.type==="multi"){$("#answerArea").innerHTML=`<div class="intro">${q.prompt}</div><div class="multi">${q.items.map((it,i)=>`<div class="part"><div class="part-label">${i+1}. ${it[0]}</div><select class="part-select"><option value="">選択してください</option>${shuffle(it[3]).map(v=>`<option value="${v}">${v}${it[2]}</option>`).join("")}</select><div class="answer-result"></div></div>`).join("")}</div>`}else if(Math.random()<.55){$("#answerArea").innerHTML=`<div class="unit-row"><input id="numAnswer" class="big-input" type="number" step="any" inputmode="decimal" placeholder="数字を入力"><span class="unit">${q.u}</span></div>`}else{$("#answerArea").innerHTML=`<div class="answers">${choices(q).map(v=>`<button class="answer" data-value="${v}">${v}${q.u}</button>`).join("")}</div>`;$$(".answer").forEach(b=>b.onclick=()=>{$$(".answer").forEach(x=>x.classList.remove("selected"));b.classList.add("selected");selected=Number(b.dataset.value)})}}
-function check(){if(answered)return;let q=quiz[index];if(!confidence){alert("採点前の自信度を選んでください。");return}let all=false,detail="";if(q.type==="multi"){let sels=$$(".part-select");if(sels.some(x=>x.value==="")){alert("すべての項目を選択してください。");return}let c=0;sels.forEach((x,i)=>{let it=q.items[i],ok=Math.abs(Number(x.value)-Number(it[1]))<.00001,row=x.closest(".part");if(ok)c++;row.classList.add(ok?"correct":"wrong");row.querySelector(".answer-result").innerHTML=ok?`○ 正解：<b>${it[1]}${it[2]}</b>`:`× あなた：${x.value}${it[2]}　正解：<b>${it[1]}${it[2]}</b>`;x.disabled=true});all=c===q.items.length;detail=`${c}/${q.items.length}項目正解`}else{let inp=$("#numAnswer"),val=inp?Number(inp.value):selected;if((inp&&inp.value==="")||val===null){alert("答えを入力・選択してください。");return}all=Math.abs(val-Number(q.a))<.00001;if(!inp)$$(".answer").forEach(b=>{let v=Number(b.dataset.value);if(v===Number(q.a))b.classList.add("correct");else if(b.classList.contains("selected"))b.classList.add("wrong")});detail=all?"正解！":`不正解　正解：${q.a}${q.u}`}answered=true;let st=getStat(q.id);st.right+=all?1:0;st.wrong+=all?0:1;st.streak=all?st.streak+1:0;st.conf=st.conf||{high:0,mid:0,low:0};st.conf[confidence]=(st.conf[confidence]||0)+1;st.last=todayKey();if(all&&confidence!=="high")st.uncertain=(st.uncertain||0)+1;if(!all&&st.uncertain>0)st.uncertain--;stats[q.id]=st;stats._days=stats._days||{};let d=stats._days[todayKey()]||{total:0,right:0};d.total++;if(all)d.right++;stats._days[todayKey()]=d;save();let labels={high:"自信あり",mid:"少し不安",low:"自信なし"},extra=all&&confidence!=="high"?"<br><b>正解ですが、要復習として記録しました。</b>":(!all&&confidence==="high"?"<br><b>自信ありで不正解です。思い込みに注意してください。</b>":"");let f=$("#feedback");f.className=`feedback show ${all?"ok":"bad"}`;f.innerHTML=`<b>${detail}</b><br>採点前：${labels[confidence]}${extra}<br><br>${q.e}`;$("#check").classList.add("hidden");$("#next").classList.remove("hidden");$("#next").textContent=index===quiz.length-1?"結果を見る":"次の問題"}
-function finish(){$("#bar").style.width="100%";$("#qcat").textContent="完了";$("#qnum").textContent="";$("#qtitle").textContent="トレーニング終了！";$("#answerArea").innerHTML='<div class="empty"><div style="font-size:50px">🎉</div>間違えた問題と、自信がなかった正解は要復習に記録されています。</div>';$("#confidence").classList.add("hidden");$("#check").classList.add("hidden");$("#next").classList.add("hidden");dashboard();setTimeout(()=>$("#confidence").classList.remove("hidden"),800)}
-function dashboard(){let d=(stats._days||{})[todayKey()]||{total:0,right:0};$("#today").textContent=d.total;$("#rate").textContent=d.total?Math.round(d.right/d.total*100)+"%":"0%";$("#weak").textContent=allQuestions.filter(x=>{let s=getStat(x.id);return s.wrong>s.right||s.uncertain>0}).length;let t=0,r=0,m=0;allQuestions.forEach(x=>{let s=getStat(x.id);t+=s.right+s.wrong;r+=s.right;if(s.streak>=3&&!s.uncertain)m++});$("#total").textContent=t;$("#correct").textContent=r;$("#master").textContent=m;let days=stats._days||{},streak=0,dt=new Date();for(let i=0;i<365;i++){let k=dt.toISOString().slice(0,10);if(days[k]?.total){streak++;dt.setDate(dt.getDate()-1)}else if(i===0)dt.setDate(dt.getDate()-1);else break}$("#streak").textContent=`🔥 ${streak}日`;$("#catstats").innerHTML=cats().filter(c=>c!=="すべて").map(c=>{let a=0,b=0;allQuestions.filter(x=>x.cat===c).forEach(x=>{let s=getStat(x.id);a+=s.right+s.wrong;b+=s.right});let p=a?Math.round(b/a*100):0;return`<div class="item"><div class="item-top"><b>${c}</b><span>${p}%</span></div><div class="progress" style="margin:8px 0"><div style="width:${p}%"></div></div><p>${b}/${a} 正解</p></div>`}).join("")}
-function renderChips(){$("#chips").innerHTML=cats().map(c=>`<button class="chip ${c===listCat?"active":""}" data-cat="${c}">${c}</button>`).join("");$$("#chips .chip").forEach(b=>b.onclick=()=>{listCat=b.dataset.cat;renderChips();renderList()})}
-function renderList(){let w=($("#search")?.value||"").toLowerCase(),arr=allQuestions.filter(x=>(listCat==="すべて"||x.cat===listCat)&&((x.q||x.title)+" "+x.e).toLowerCase().includes(w));$("#questionList").innerHTML=arr.map(x=>`<div class="item"><div class="item-top"><span class="tag">${x.cat}</span><span class="note">${x.type==="multi"?"セット問題":"通常問題"}</span></div><h3>${x.q||x.title}</h3><p>${x.type==="multi"?x.items.map(i=>`${i[0]}：${i[1]}${i[2]}`).join("<br>"):`答え：${x.a}${x.u}`}<br>${x.e}</p></div>`).join("")}
-function exportData(){let b=new Blob([JSON.stringify({version:3,stats},null,2)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(b);a.download=`宅建数字トレーニング_${todayKey()}.json`;a.click();URL.revokeObjectURL(a.href)}
+const today=()=>new Date().toISOString().slice(0,10);
+const shuffle=a=>[...a].sort(()=>Math.random()-.5);
+const getStat=id=>stats[id]||{right:0,wrong:0,streak:0,uncertain:0,last:""};
+function save(){localStorage.setItem(KEY,JSON.stringify(stats))}
+function cats(){return["すべて",...new Set(allQuestions.map(q=>q.cat))]}
+function init(){
+ $("#categorySelect").innerHTML=cats().map(c=>`<option>${c}</option>`).join("");
+ renderChips();renderList();updateDashboard();
+ $$(".tab").forEach(b=>b.onclick=()=>showView(b.dataset.view));
+ $$(".mode").forEach(b=>b.onclick=()=>{$$(".mode").forEach(x=>x.className="btn ghost mode");b.className="btn secondary mode";mode=b.dataset.mode});
+ $$(".conf-btn").forEach(b=>b.onclick=()=>{$$(".conf-btn").forEach(x=>x.classList.remove("active"));b.classList.add("active");confidence=b.dataset.conf});
+ $("#startBtn").onclick=()=>startQuiz();$("#random5Btn").onclick=()=>startQuiz({count:5});$("#mistakeBtn").onclick=()=>startQuiz({review:true});
+ $("#checkBtn").onclick=checkAnswer;$("#nextBtn").onclick=()=>{index++;renderQuestion()};$("#quitBtn").onclick=()=>showView("home");
+ $("#searchInput").oninput=renderList;$("#exportBtn").onclick=exportData;
+ $("#resetBtn").onclick=()=>{if(confirm("学習履歴をすべて削除しますか？")){stats={};save();updateDashboard();renderList()}};
+}
+function showView(v){
+ $$(".view").forEach(x=>x.classList.toggle("active",x.id===v));
+ $$(".tab").forEach(x=>x.classList.toggle("active",x.dataset.view===v));
+ if(v==="home"||v==="data")updateDashboard();if(v==="book")renderList();scrollTo({top:0,behavior:"smooth"});
+}
+function makeQuiz(pool,count){
+ const singles=shuffle(pool.filter(q=>q.type==="single"));
+ const multis=shuffle(pool.filter(q=>q.type==="multi"));
+ const m=Math.min(multis.length,Math.max(1,Math.round(count*.2)));
+ let result=[...singles.slice(0,Math.max(0,count-m)),...multis.slice(0,m)];
+ if(result.length<count){
+   const rest=shuffle(pool.filter(q=>!result.some(r=>r.id===q.id)));
+   result.push(...rest.slice(0,count-result.length));
+ }
+ return shuffle(result);
+}
+function startQuiz(opt={}){
+ let pool=[...allQuestions],cat=$("#categorySelect").value;
+ if(cat!=="すべて")pool=pool.filter(q=>q.cat===cat);
+ if(opt.review)pool=pool.filter(q=>{const s=getStat(q.id);return s.wrong>s.right||s.uncertain>0});
+ if(!pool.length){alert("対象となる問題がありません。");return}
+ const count=Math.min(opt.count||Number($("#countSelect").value),pool.length);
+ if(mode==="weak"&&!opt.review){
+   pool.sort((a,b)=>{const A=getStat(a.id),B=getStat(b.id);return(B.wrong*4+B.uncertain*2-B.right)-(A.wrong*4+A.uncertain*2-A.right)});
+   quiz=pool.slice(0,count);
+ }else quiz=makeQuiz(pool,count);
+ index=0;renderQuestion();showView("quiz");
+}
+function renderQuestion(){
+ if(index>=quiz.length){finishQuiz();return}
+ answered=false;selected=null;confidence=null;$$(".conf-btn").forEach(x=>x.classList.remove("active"));
+ const q=quiz[index];
+ $("#progressBar").style.width=`${index/quiz.length*100}%`;$("#qCategory").textContent=q.cat;$("#qNumber").textContent=`${index+1} / ${quiz.length}`;$("#questionText").textContent=q.q;
+ $("#feedback").className="feedback";$("#feedback").innerHTML="";$("#checkBtn").classList.remove("hidden");$("#nextBtn").classList.add("hidden");
+ if(q.type==="single"){
+   $("#answerArea").innerHTML=`<div class="answers">${shuffle(q.choices).map(v=>`<button class="answer" data-value="${v}">${v}${q.u}</button>`).join("")}</div>`;
+   $$(".answer").forEach(b=>b.onclick=()=>{$$(".answer").forEach(x=>x.classList.remove("selected"));b.classList.add("selected");selected=Number(b.dataset.value)});
+ }else{
+   $("#answerArea").innerHTML=`<div class="multi-intro">${q.prompt}</div><div class="multi-list">${q.items.map((it,i)=>`
+   <div class="multi-row" data-row="${i}">
+    <div class="multi-label">${i+1}. ${it.label}</div>
+    <div class="mini-answers">${shuffle(it.choices).map(v=>`<button class="mini-answer" data-value="${v}">${v}${it.u}</button>`).join("")}</div>
+    <div class="result-line"></div>
+   </div>`).join("")}</div>`;
+   $$(".multi-row").forEach(row=>{
+     row.querySelectorAll(".mini-answer").forEach(b=>b.onclick=()=>{
+       row.querySelectorAll(".mini-answer").forEach(x=>x.classList.remove("selected"));
+       b.classList.add("selected");
+     });
+   });
+ }
+}
+function checkAnswer(){
+ if(answered)return;
+ const q=quiz[index];
+ if(!confidence){alert("採点前の自信度を選んでください。");return}
+ let ok=false,summary="";
+ if(q.type==="single"){
+   if(selected===null){alert("回答を選択してください。");return}
+   ok=selected===q.a;
+   $$(".answer").forEach(b=>{const v=Number(b.dataset.value);if(v===q.a)b.classList.add("correct");else if(b.classList.contains("selected"))b.classList.add("wrong")});
+   summary=ok?"正解！":`不正解　正解：${q.a}${q.u}`;
+ }else{
+   const rows=$$(".multi-row");
+   if(rows.some(r=>!r.querySelector(".mini-answer.selected"))){alert("すべての項目に回答してください。");return}
+   let correct=0;
+   rows.forEach((row,i)=>{
+     const it=q.items[i],sel=row.querySelector(".mini-answer.selected"),val=Number(sel.dataset.value),partOk=val===it.a;
+     if(partOk)correct++;
+     row.classList.add(partOk?"correct":"wrong");
+     row.querySelectorAll(".mini-answer").forEach(b=>{const v=Number(b.dataset.value);if(v===it.a)b.classList.add("correct");else if(b.classList.contains("selected"))b.classList.add("wrong")});
+     row.querySelector(".result-line").innerHTML=partOk?`○ 正解：<b>${it.a}${it.u}</b>`:`× 正解：<b>${it.a}${it.u}</b>`;
+   });
+   ok=correct===q.items.length;summary=`${correct}/${q.items.length}項目正解`;
+ }
+ answered=true;
+ const s=getStat(q.id);s.right+=ok?1:0;s.wrong+=ok?0:1;s.streak=ok?s.streak+1:0;s.last=today();
+ if(ok&&confidence!=="high")s.uncertain=(s.uncertain||0)+1;
+ if(!ok&&s.uncertain>0)s.uncertain--;
+ stats[q.id]=s;stats._daily=stats._daily||{};const d=stats._daily[today()]||{total:0,right:0};d.total++;if(ok)d.right++;stats._daily[today()]=d;save();
+ const confLabel={high:"自信あり",mid:"少し不安",low:"自信なし"}[confidence];
+ let extra="";
+ if(ok&&confidence!=="high")extra="<br><b>正解ですが、要復習として記録しました。</b>";
+ if(!ok&&confidence==="high")extra="<br><b>自信ありで不正解でした。思い込みに注意してください。</b>";
+ const f=$("#feedback");f.className=`feedback show ${ok?"ok":"bad"}`;
+ f.innerHTML=`<b>${summary}</b><br>採点前の自信度：${confLabel}${extra}<br><br><b>解説</b><br>${q.e}`;
+ $("#checkBtn").classList.add("hidden");$("#nextBtn").classList.remove("hidden");$("#nextBtn").textContent=index===quiz.length-1?"結果を見る":"次の問題";
+}
+function finishQuiz(){
+ $("#progressBar").style.width="100%";$("#qCategory").textContent="完了";$("#qNumber").textContent="";$("#questionText").textContent="トレーニング終了！";
+ $("#answerArea").innerHTML='<div class="empty"><div style="font-size:52px">🎉</div><b>今日も数字に強くなりました</b><p>間違えた問題と、自信がなかった正解は「要復習だけ」で繰り返せます。</p></div>';
+ $("#confidenceBox").classList.add("hidden");$("#feedback").className="feedback";$("#checkBtn").classList.add("hidden");$("#nextBtn").classList.add("hidden");
+ updateDashboard();setTimeout(()=>$("#confidenceBox").classList.remove("hidden"),500);
+}
+function updateDashboard(){
+ const d=(stats._daily||{})[today()]||{total:0,right:0};$("#todayCount").textContent=d.total;$("#accuracy").textContent=d.total?Math.round(d.right/d.total*100)+"%":"0%";
+ $("#weakCount").textContent=allQuestions.filter(q=>{const s=getStat(q.id);return s.wrong>s.right||s.uncertain>0}).length;
+ let total=0,right=0,master=0;allQuestions.forEach(q=>{const s=getStat(q.id);total+=s.right+s.wrong;right+=s.right;if(s.streak>=3&&!s.uncertain)master++});
+ $("#totalAnswered").textContent=total;$("#totalCorrect").textContent=right;$("#mastered").textContent=master;
+ let streak=0,dt=new Date(),days=stats._daily||{};for(let i=0;i<365;i++){const k=dt.toISOString().slice(0,10);if(days[k]?.total){streak++;dt.setDate(dt.getDate()-1)}else if(i===0)dt.setDate(dt.getDate()-1);else break}
+ $("#streakPill").textContent=`🔥 ${streak}日`;
+ $("#categoryStats").innerHTML=cats().filter(c=>c!=="すべて").map(c=>{let t=0,r=0;allQuestions.filter(q=>q.cat===c).forEach(q=>{const s=getStat(q.id);t+=s.right+s.wrong;r+=s.right});const p=t?Math.round(r/t*100):0;return`<div class="item"><div class="item-top"><b>${c}</b><span>${p}%</span></div><div class="progress" style="margin-top:8px"><div style="width:${p}%"></div></div><p>${r} / ${t} 正解</p></div>`}).join("");
+}
+function renderChips(){
+ $("#chips").innerHTML=cats().map(c=>`<button class="chip ${c===listCat?"active":""}" data-cat="${c}">${c}</button>`).join("");
+ $$("#chips .chip").forEach(b=>b.onclick=()=>{listCat=b.dataset.cat;renderChips();renderList()});
+}
+function renderList(){
+ const word=($("#searchInput")?.value||"").toLowerCase();
+ const arr=allQuestions.filter(q=>(listCat==="すべて"||q.cat===listCat)&&(`${q.q} ${q.e}`).toLowerCase().includes(word));
+ $("#questionList").innerHTML=arr.length?arr.map(q=>`<div class="item"><div class="item-top"><span class="tag">${q.cat}</span><span class="note">${q.type==="multi"?"複数回答":"4択"}</span></div><h3>${q.q}</h3><p>${q.e}</p></div>`).join(""):'<div class="empty">該当する問題がありません。</div>';
+}
+function exportData(){
+ const blob=new Blob([JSON.stringify({version:4,stats},null,2)],{type:"application/json"});
+ const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=`宅建数字トレーニング_${today()}.json`;a.click();URL.revokeObjectURL(a.href);
+}
 init();
-</script></body></html>
+</script>
+</body>
+</html>
