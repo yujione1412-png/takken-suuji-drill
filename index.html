@@ -1,1121 +1,183 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ja">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>宅建 数字ドリル</title>
-<meta name="description" content="宅建試験で問われる数字を、直答・穴埋め問題の反復で覚える学習アプリ">
-<link rel="manifest" href="manifest.webmanifest">
-<meta name="theme-color" content="#1e2a44">
-<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
-<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="宅建数字">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@600;800&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap" rel="stylesheet">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0f766e">
+<title>宅建 数字セットトレーニング</title>
 <style>
-:root{
-  --ink:#1e2a44;
-  --ink-soft:#4a566e;
-  --paper:#f4f5f2;
-  --card:#ffffff;
-  --line:#d8dbd4;
-  --shu:#c0392f;
-  --shu-soft:#f6e4e1;
-  --seal-ok:#c0392f;
-  --seal-ng:#26436e;
-  --gold:#8a6d2f;
-  --radius:14px;
-  --shadow:0 2px 10px rgba(30,42,68,.08);
-}
-*{margin:0;padding:0;box-sizing:border-box;}
-html{font-size:16px;}
-body{
-  font-family:"Zen Kaku Gothic New",sans-serif;
-  background:var(--paper);
-  background-image:repeating-linear-gradient(0deg,transparent,transparent 27px,rgba(30,42,68,.035) 27px,rgba(30,42,68,.035) 28px);
-  color:var(--ink);
-  min-height:100vh;
-  line-height:1.75;
-  -webkit-font-smoothing:antialiased;
-}
-.wrap{max-width:720px;margin:0 auto;padding:24px 18px 80px;}
-header{
-  display:flex;align-items:baseline;justify-content:space-between;
-  border-bottom:3px double var(--ink);
-  padding-bottom:12px;margin-bottom:26px;
-}
-.brand{font-family:"Shippori Mincho",serif;font-weight:800;font-size:1.5rem;letter-spacing:.12em;}
-.brand .shu{color:var(--shu);}
-.brand-sub{font-size:.72rem;color:var(--ink-soft);letter-spacing:.28em;}
-
-.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:26px 24px;}
-.eyebrow{display:inline-flex;gap:8px;align-items:center;font-size:.72rem;font-weight:700;letter-spacing:.22em;color:var(--shu);margin-bottom:8px;}
-.eyebrow::before{content:"";width:22px;height:2px;background:var(--shu);}
-.btn{
-  display:inline-block;font-family:inherit;font-weight:700;font-size:1rem;
-  padding:13px 34px;border-radius:999px;border:2px solid var(--ink);
-  background:var(--ink);color:#fff;cursor:pointer;letter-spacing:.14em;
-  transition:transform .12s ease, background .12s ease;
-}
-.btn:hover{transform:translateY(-1px);background:#2b3a5c;}
-.btn:focus-visible{outline:3px solid var(--shu);outline-offset:3px;}
-.btn.ghost{background:transparent;color:var(--ink);}
-.btn.ghost:hover{background:rgba(30,42,68,.06);}
-.btn.shu-btn{background:var(--shu);border-color:var(--shu);}
-.btn.shu-btn:hover{background:#a83028;}
-.btn.small{font-size:.82rem;padding:8px 20px;}
-.btn:disabled{opacity:.4;cursor:not-allowed;transform:none;}
-
-/* ---------- スタート画面 ---------- */
-.hero-title{font-family:"Shippori Mincho",serif;font-weight:800;font-size:clamp(1.7rem,5.5vw,2.4rem);line-height:1.4;letter-spacing:.06em;}
-.hero-title em{font-style:normal;color:var(--shu);}
-.hero-lead{color:var(--ink-soft);font-size:.94rem;margin-top:10px;}
-fieldset{border:none;margin-top:26px;}
-legend{font-weight:700;font-size:.85rem;letter-spacing:.18em;color:var(--ink-soft);margin-bottom:10px;}
-.chips{display:flex;flex-wrap:wrap;gap:9px;}
-.chip{position:relative;}
-.chip input{position:absolute;opacity:0;inset:0;cursor:pointer;}
-.chip .lab{
-  display:inline-flex;align-items:center;gap:6px;
-  padding:8px 16px;border-radius:999px;border:1.5px solid var(--line);
-  background:#fff;font-size:.9rem;font-weight:500;cursor:pointer;
-  transition:all .12s ease;
-}
-.chip input:checked + .lab{border-color:var(--ink);background:var(--ink);color:#fff;}
-.chip input:focus-visible + .lab{outline:3px solid var(--shu);outline-offset:2px;}
-.chip .cnt{font-size:.72rem;opacity:.65;}
-.start-actions{margin-top:30px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
-
-/* ---------- 学習記録 ---------- */
-.record-card{margin-top:20px;}
-.record-head{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px;}
-.record-title{font-family:"Shippori Mincho",serif;font-weight:800;font-size:1.05rem;letter-spacing:.12em;}
-.record-note{font-size:.74rem;color:var(--ink-soft);}
-.stat-rows{margin-top:14px;display:grid;gap:12px;}
-.stat-row{display:grid;grid-template-columns:7.5em 1fr 6.5em;gap:10px;align-items:center;font-size:.85rem;}
-.stat-row .nm{font-weight:700;}
-.stat-row .nm .weak-mark{color:var(--shu);font-size:.72rem;font-weight:700;margin-left:4px;}
-.bar{height:12px;background:#e8eae4;border-radius:99px;overflow:hidden;}
-.bar i{display:block;height:100%;background:var(--ink);border-radius:99px;}
-.bar i.low{background:var(--shu);}
-.stat-row .val{text-align:right;color:var(--ink-soft);font-size:.8rem;}
-.record-empty{margin-top:12px;font-size:.86rem;color:var(--ink-soft);}
-.record-actions{margin-top:16px;display:flex;gap:10px;flex-wrap:wrap;}
-
-/* ---------- 出題 ---------- */
-.meta-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;font-size:.8rem;color:var(--ink-soft);}
-.qtags{display:flex;gap:8px;flex-wrap:wrap;}
-.qtag{border:1px solid var(--ink);border-radius:4px;padding:2px 10px;font-size:.72rem;font-weight:700;letter-spacing:.1em;}
-.qtag.type{border-color:var(--shu);color:var(--shu);}
-.qtag.weak{border-color:var(--gold);color:var(--gold);}
-.progress{height:6px;background:#e4e6e0;border-radius:99px;overflow:hidden;margin-bottom:22px;}
-.progress i{display:block;height:100%;background:var(--shu);border-radius:99px;transition:width .35s ease;}
-.qnum{font-family:"Shippori Mincho",serif;font-weight:800;font-size:.95rem;letter-spacing:.15em;color:var(--gold);margin-bottom:8px;}
-.qtext{font-size:1.08rem;font-weight:500;line-height:2;}
-.blank{
-  display:inline-block;min-width:3.2em;text-align:center;
-  border-bottom:2.5px solid var(--shu);
-  font-family:"Shippori Mincho",serif;font-weight:800;color:var(--shu);
-  padding:0 .35em;margin:0 .1em;
-}
-.opts{position:relative;display:grid;gap:11px;margin-top:24px;}
-.opt{
-  text-align:left;font-family:inherit;font-size:.98rem;font-weight:500;
-  padding:14px 16px 14px 52px;border-radius:10px;border:1.5px solid var(--line);
-  background:#fff;color:var(--ink);cursor:pointer;position:relative;line-height:1.6;
-  transition:border-color .12s ease, background .12s ease;
-}
-.opt:hover:not(:disabled){border-color:var(--ink);}
-.opt:focus-visible{outline:3px solid var(--shu);outline-offset:2px;}
-.opt .key{
-  position:absolute;left:14px;top:50%;transform:translateY(-50%);
-  width:26px;height:26px;border-radius:50%;border:1.5px solid var(--ink-soft);
-  display:flex;align-items:center;justify-content:center;
-  font-family:"Shippori Mincho",serif;font-weight:600;font-size:.85rem;color:var(--ink-soft);
-}
-.opt:disabled{cursor:default;}
-.opt.is-correct{border-color:var(--seal-ok);background:var(--shu-soft);}
-.opt.is-correct .key{border-color:var(--seal-ok);background:var(--seal-ok);color:#fff;}
-.opt.is-wrong{border-color:var(--seal-ng);background:#e8edf5;}
-.opt.is-wrong .key{border-color:var(--seal-ng);background:var(--seal-ng);color:#fff;}
-.opt.dim{opacity:.45;}
-
-/* ---------- 採点印 ---------- */
-.seal{
-  position:absolute;right:-6px;top:-34px;z-index:5;pointer-events:none;
-  width:96px;height:96px;border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  font-family:"Shippori Mincho",serif;font-weight:800;font-size:2rem;letter-spacing:.05em;
-  border:4px solid currentColor;
-  transform:rotate(-12deg);
-  mix-blend-mode:multiply;opacity:.92;
-}
-.seal::after{content:"";position:absolute;inset:5px;border-radius:50%;border:1.5px solid currentColor;opacity:.7;}
-.seal.ok{color:var(--seal-ok);}
-.seal.ng{color:var(--seal-ng);}
-@keyframes stamp{
-  0%{transform:rotate(-12deg) scale(2.1);opacity:0;}
-  55%{transform:rotate(-12deg) scale(.92);opacity:.95;}
-  75%{transform:rotate(-12deg) scale(1.05);}
-  100%{transform:rotate(-12deg) scale(1);opacity:.92;}
-}
-.seal.animate{animation:stamp .42s cubic-bezier(.2,.8,.3,1) both;}
-@media (prefers-reduced-motion:reduce){
-  .seal.animate{animation:none;}
-  .progress i{transition:none;}
-  .btn:hover{transform:none;}
-}
-
-/* ---------- 解説 ---------- */
-.kaisetsu{margin-top:26px;display:grid;gap:14px;}
-.kbox{border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff;}
-.kbox h3{font-size:.8rem;font-weight:700;letter-spacing:.2em;padding:8px 14px;display:flex;align-items:center;gap:8px;}
-.kbox .body{padding:12px 16px 14px;font-size:.92rem;color:var(--ink);border-top:1px solid var(--line);}
-.kbox.k1 h3{background:var(--shu-soft);color:var(--shu);}
-.kbox.k2 h3{background:#eef1ea;color:#4d6138;}
-.kbox.k3 h3{background:#e9edf5;color:var(--seal-ng);}
-.kbox.k4 h3{background:#f3efe4;color:var(--gold);}
-.kbox .body strong{color:var(--shu);font-weight:700;}
-.linkline{display:flex;flex-wrap:wrap;gap:8px;}
-.linkline a{
-  display:inline-flex;align-items:center;gap:5px;
-  font-size:.82rem;font-weight:500;color:var(--ink);
-  border:1px solid var(--line);border-radius:999px;padding:5px 14px;
-  text-decoration:none;background:#fff;transition:border-color .12s ease;
-}
-.linkline a:hover{border-color:var(--gold);color:var(--gold);}
-.linkline a::after{content:"↗";font-size:.75em;opacity:.6;}
-.link-note{font-size:.72rem;color:var(--ink-soft);margin-top:8px;}
-.next-row{margin-top:26px;text-align:right;}
-.answer-line{font-weight:700;margin-bottom:6px;}
-.answer-line .ans{font-family:"Shippori Mincho",serif;color:var(--shu);font-size:1.05em;}
-
-/* ---------- 結果 ---------- */
-.result-head{text-align:center;padding:10px 0 4px;}
-.score-seal{
-  width:150px;height:150px;margin:14px auto 6px;border-radius:50%;
-  border:5px solid var(--shu);color:var(--shu);position:relative;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  font-family:"Shippori Mincho",serif;transform:rotate(-8deg);mix-blend-mode:multiply;
-}
-.score-seal::after{content:"";position:absolute;inset:7px;border-radius:50%;border:2px solid var(--shu);opacity:.65;}
-.score-seal .big{font-size:2.6rem;font-weight:800;line-height:1.1;}
-.score-seal .small{font-size:.78rem;letter-spacing:.2em;}
-.result-msg{font-family:"Shippori Mincho",serif;font-weight:600;font-size:1.1rem;margin-top:10px;}
-.review{margin-top:26px;}
-.review h2{font-size:.85rem;letter-spacing:.2em;color:var(--ink-soft);border-bottom:1px solid var(--line);padding-bottom:8px;margin-bottom:14px;}
-.rv-item{border-left:3px solid var(--seal-ng);padding:4px 0 4px 14px;margin-bottom:16px;}
-.rv-q{font-size:.9rem;font-weight:500;}
-.rv-a{font-size:.88rem;margin-top:2px;}
-.rv-a b{color:var(--shu);}
-.result-actions{margin-top:30px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
-.hidden{display:none;}
-.refs{margin-top:26px;}
-.refs h2{font-size:.8rem;letter-spacing:.2em;color:var(--ink-soft);margin-bottom:10px;}
-.install-note{margin-top:14px;font-size:.8rem;color:var(--ink-soft);border-top:1px dashed var(--line);padding-top:12px;line-height:1.9;}
-footer{margin-top:40px;text-align:center;font-size:.72rem;color:var(--ink-soft);letter-spacing:.05em;line-height:1.9;}
+:root{--bg:#f3f7f6;--card:#fff;--ink:#17312e;--muted:#667b77;--main:#0f766e;--line:#dbe8e5;--ok:#18753b;--bad:#b72e2e;--shadow:0 10px 28px rgba(15,118,110,.1)}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(150deg,#e8f8f4,#f7f9f8 40%,#eef4f3);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans JP",sans-serif;min-height:100vh}
+button,input,select{font:inherit}.app{max-width:760px;margin:auto;padding:0 14px 92px}header{padding:18px 3px 12px;display:flex;justify-content:space-between;align-items:center}
+.brand{font-size:20px;font-weight:900}.brand small{display:block;color:var(--muted);font-size:11px;margin-top:3px}.pill{background:white;border:1px solid var(--line);border-radius:99px;padding:8px 11px;font-size:12px;font-weight:900}
+.card{background:rgba(255,255,255,.97);border:1px solid var(--line);border-radius:21px;padding:17px;box-shadow:var(--shadow);margin-bottom:13px}
+.hero{background:linear-gradient(135deg,#0f766e,#13a393);color:#fff;border:0}.hero h1{margin:0 0 8px;font-size:24px}.hero p{margin:0;font-size:14px;line-height:1.65;opacity:.92}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:9px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.stat{background:#f7fbfa;border:1px solid var(--line);border-radius:15px;text-align:center;padding:12px 6px}.stat b{display:block;color:var(--main);font-size:21px}.stat span{font-size:10px;color:var(--muted)}
+label{display:block;font-size:12px;font-weight:900;color:var(--muted);margin:0 0 6px}select,input{width:100%;padding:12px;border:1px solid var(--line);border-radius:13px;background:#fff;color:var(--ink)}
+.btn{width:100%;border:0;border-radius:14px;padding:13px;font-weight:900;background:var(--main);color:white;cursor:pointer}.btn.secondary{background:#e5f5f2;color:#0d6d64}.btn.ghost{background:white;color:var(--ink);border:1px solid var(--line)}.btn.warn{background:#fff1d9;color:#875000}.btn.danger{background:#fff0f0;color:#a32c2c}
+.row{display:flex;gap:9px}.row>*{flex:1}.section-title{font-weight:900;margin-bottom:11px}.note{font-size:11px;line-height:1.55;color:var(--muted)}
+.view{display:none}.view.active{display:block}.tabs{position:fixed;bottom:0;left:0;right:0;background:rgba(255,255,255,.95);backdrop-filter:blur(12px);border-top:1px solid var(--line);z-index:10;padding-bottom:env(safe-area-inset-bottom)}
+.tabs-inner{max-width:760px;margin:auto;display:grid;grid-template-columns:repeat(3,1fr)}.tab{border:0;background:none;padding:10px 3px 8px;color:var(--muted);font-size:11px;font-weight:900}.tab span{display:block;font-size:21px}.tab.active{color:var(--main)}
+.progress{height:9px;background:#e8efed;border-radius:99px;overflow:hidden}.progress div{height:100%;background:linear-gradient(90deg,#0f766e,#14b8a6)}
+.qmeta{display:flex;justify-content:space-between;color:var(--muted);font-size:12px;margin:11px 0}.question{font-size:20px;font-weight:900;line-height:1.5;margin:10px 0}.intro{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:13px}
+.multi{display:grid;gap:10px}.part{border:1px solid var(--line);border-radius:15px;padding:12px;background:#fbfdfc}.part.correct{border-color:var(--ok);background:#ebf8ef}.part.wrong{border-color:var(--bad);background:#fff0f0}.part-label{font-size:13px;font-weight:900;line-height:1.5;margin-bottom:8px}.answer-result{font-size:12px;line-height:1.5;margin-top:7px;display:none}.part.correct .answer-result,.part.wrong .answer-result{display:block}
+.confidence{margin-top:15px;border:1px dashed #afc7c2;border-radius:15px;padding:12px;background:#f8fbfa}.confidence-title{font-size:12px;font-weight:900;margin-bottom:8px}.confidence-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.conf{border:1px solid var(--line);background:white;color:var(--ink);border-radius:11px;padding:10px 4px;font-size:12px;font-weight:900}.conf.active{background:var(--main);color:white;border-color:var(--main)}.confidence small{display:block;color:var(--muted);font-size:10px;line-height:1.5;margin-top:7px}
+.feedback{display:none;margin-top:13px;padding:13px;border-radius:14px;font-size:13px;line-height:1.65}.feedback.show{display:block}.feedback.ok{background:#eaf8ee;color:#145e2f}.feedback.bad{background:#fff0f0;color:#912929}
+.hidden{display:none!important}.list{display:grid;gap:9px}.item{background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px}.item-top{display:flex;justify-content:space-between;gap:8px}.tag{font-size:10px;font-weight:900;color:#0d6d64;background:#e6f5f2;border-radius:99px;padding:4px 7px}.item h3{font-size:14px;margin:8px 0 5px}.item p{font-size:12px;color:var(--muted);line-height:1.55;margin:0}.empty{text-align:center;color:var(--muted);padding:28px 10px}
+@media(max-width:430px){.question{font-size:18px}.card{padding:15px}.confidence-grid{grid-template-columns:1fr}.conf{padding:9px}}
 </style>
 </head>
 <body>
-<div class="wrap">
-  <header>
-    <div><div class="brand">宅建<span class="shu">数字</span>ドリル</div></div>
-    <div class="brand-sub">TAKKEN SUJI DRILL</div>
-  </header>
+<div class="app">
+<header><div class="brand">宅建 数字セットトレーニング<small>関連する数字を、ひとまとまりで記憶</small></div><div class="pill" id="streak">🔥 0日</div></header>
+<main>
+<section id="home" class="view active">
+ <div class="card hero"><h1>1問で、関連数字をまとめて回答。</h1><p>複数の項目をすべて選んでから一括採点。採点前に「自信あり・少し不安・自信なし」を記録します。</p></div>
+ <div class="card"><div class="grid3">
+  <div class="stat"><b id="today">0</b><span>今日のセット</span></div>
+  <div class="stat"><b id="rate">0%</b><span>全項目正解率</span></div>
+  <div class="stat"><b id="weak">0</b><span>要復習セット</span></div>
+ </div></div>
+ <div class="card"><div class="section-title">トレーニング設定</div>
+  <div class="row"><div><label>分野</label><select id="cat"></select></div><div><label>セット数</label><select id="count"><option>3</option><option selected>5</option><option>10</option><option value="99">全問</option></select></div></div>
+  <div style="height:10px"></div><button class="btn" id="start">開始する</button>
+  <div style="height:9px"></div><div class="grid2"><button class="btn warn" id="review">要復習だけ</button><button class="btn secondary" id="random3">すきま時間3セット</button></div>
+ </div>
+ <p class="note">正解しても「少し不安」「自信なし」を選んだセットは復習対象になります。法改正や試験年度の出題範囲は、最新教材でも確認してください。</p>
+</section>
 
-  <!-- ========== スタート画面 ========== -->
-  <section id="screen-start">
-    <div class="card">
-      <p class="eyebrow">数字で落とさない</p>
-      <h1 class="hero-title">宅建試験の<em>「数字」</em>を、<br>反復で自分のものに。</h1>
-      <p class="hero-lead">クーリング・オフの8日、保全措置の5%と10%、媒介契約の3か月——。宅建試験は「数字のすり替え」で受験生を落としに来ます。直答・穴埋め・○×・計算・誤り探し・逆引きの6形式で、混同しやすい数字ごと整理して覚えましょう。</p>
+<section id="quiz" class="view">
+ <div class="card">
+  <div class="progress"><div id="bar" style="width:0"></div></div>
+  <div class="qmeta"><span id="qcat"></span><span id="qnum"></span></div>
+  <div class="question" id="qtitle"></div><div class="intro" id="qprompt"></div>
+  <div class="multi" id="parts"></div>
+  <div class="confidence" id="confidence">
+   <div class="confidence-title">採点前の自信度を選んでください</div>
+   <div class="confidence-grid">
+    <button class="conf" data-conf="high">自信あり</button>
+    <button class="conf" data-conf="mid">少し不安</button>
+    <button class="conf" data-conf="low">自信なし</button>
+   </div>
+   <small>「自信ないけど、これかな？」という場合は、回答を変えずに「自信なし」を選んで採点します。</small>
+  </div>
+  <div class="feedback" id="feedback"></div>
+  <div style="height:12px"></div><button class="btn" id="check">この内容で採点</button><button class="btn hidden" id="next">次のセット</button>
+ </div>
+ <button class="btn ghost" id="quit">中断してホームへ</button>
+</section>
 
-      <fieldset>
-        <legend>出題分野</legend>
-        <div class="chips" id="cat-chips"></div>
-      </fieldset>
-
-      <fieldset>
-        <legend>出題数</legend>
-        <div class="chips" id="num-chips">
-          <span class="chip"><input type="radio" name="qnum" value="5" id="n5"><label class="lab" for="n5">5問</label></span>
-          <span class="chip"><input type="radio" name="qnum" value="10" id="n10" checked><label class="lab" for="n10">10問</label></span>
-          <span class="chip"><input type="radio" name="qnum" value="20" id="n20"><label class="lab" for="n20">20問</label></span>
-          <span class="chip"><input type="radio" name="qnum" value="all" id="nall"><label class="lab" for="nall">全問</label></span>
-        </div>
-      </fieldset>
-
-      <div class="start-actions">
-        <button class="btn" id="btn-start">試験開始</button>
-        <button class="btn shu-btn" id="btn-start-weak" title="正答率の低い問題・分野を優先して出題します">苦手優先で出題</button>
-      </div>
-    </div>
-
-    <!-- 学習記録 -->
-    <div class="card record-card">
-      <div class="record-head">
-        <span class="record-title">学習記録 — 分野別成績</span>
-        <span class="record-note" id="record-note"></span>
-      </div>
-      <div id="stat-rows" class="stat-rows"></div>
-      <p class="record-empty hidden" id="record-empty">まだ記録がありません。1回解くと、分野ごとの正答率と苦手分野がここに表示されます。</p>
-      <div class="record-actions">
-        <button class="btn ghost small" id="btn-reset-stats">記録をリセット</button>
-      </div>
-    </div>
-
-    <!-- 参考サイト -->
-    <div class="card record-card refs">
-      <h2>あわせて使いたい外部サイト</h2>
-      <div class="linkline">
-        <a href="https://takken-siken.com/" target="_blank" rel="noopener">宅建試験ドットコム(過去問解説)</a>
-        <a href="https://takken-siken.com/marubatu.php" target="_blank" rel="noopener">一問一答道場(○×形式)</a>
-        <a href="https://takken.kakomonn.com/" target="_blank" rel="noopener">過去問ドットコム 宅建</a>
-        <a href="https://laws.e-gov.go.jp/" target="_blank" rel="noopener">e-Gov法令検索(条文原文)</a>
-      </div>
-      <p class="link-note">各問題の解説にも、論点ごとの検索リンクと根拠条文へのリンクが付いています。</p>
-      <p class="install-note">📱 <strong>ホーム画面に追加してアプリのように使う</strong><br>
-      GitHub Pages等で公開したこのページをスマホで開き、iPhone(Safari)は共有ボタン→「ホーム画面に追加」、Android(Chrome)はメニュー→「ホーム画面に追加(アプリをインストール)」を選ぶと、朱印アイコンから全画面で起動できます。一度開けばオフラインでも動きます。</p>
-    </div>
-  </section>
-
-  <!-- ========== 出題画面 ========== -->
-  <section id="screen-quiz" class="hidden">
-    <div class="meta-row">
-      <div class="qtags">
-        <span class="qtag" id="tag-cat"></span>
-        <span class="qtag type" id="tag-type"></span>
-        <span class="qtag weak hidden" id="tag-weak">要復習</span>
-      </div>
-      <div id="quiz-counter"></div>
-    </div>
-    <div class="progress"><i id="progress-bar" style="width:0%"></i></div>
-
-    <div class="card" style="position:relative;">
-      <div class="qnum" id="q-num"></div>
-      <p class="qtext" id="q-text"></p>
-      <div class="opts" id="opts"></div>
-
-      <div class="kaisetsu hidden" id="kaisetsu">
-        <p class="answer-line">正解：<span class="ans" id="ans-text"></span></p>
-        <div class="kbox k1"><h3>解説</h3><div class="body" id="k-main"></div></div>
-        <div class="kbox k2"><h3>あわせて覚える</h3><div class="body" id="k-related"></div></div>
-        <div class="kbox k3"><h3>ひっかけ注意 — 似ている数字</h3><div class="body" id="k-confuse"></div></div>
-        <div class="kbox k4"><h3>もっと調べる — 外部リンク</h3><div class="body">
-          <div class="linkline" id="k-links"></div>
-          <p class="link-note">外部サイトが開きます。法改正への対応状況は各サイト・原文でご確認ください。</p>
-        </div></div>
-      </div>
-
-      <div class="next-row hidden" id="next-row">
-        <button class="btn" id="btn-next">次の問題へ</button>
-      </div>
-    </div>
-  </section>
-
-  <!-- ========== 結果画面 ========== -->
-  <section id="screen-result" class="hidden">
-    <div class="card">
-      <div class="result-head">
-        <p class="eyebrow" style="justify-content:center;">採点結果</p>
-        <div class="score-seal">
-          <span class="big" id="score-big"></span>
-          <span class="small" id="score-small"></span>
-        </div>
-        <p class="result-msg" id="result-msg"></p>
-        <p class="record-note" id="save-note"></p>
-      </div>
-      <div class="review" id="review-wrap">
-        <h2>復習リスト</h2>
-        <div id="review-list"></div>
-      </div>
-      <div class="result-actions">
-        <button class="btn" id="btn-retry-wrong">間違えた問題だけ再挑戦</button>
-        <button class="btn ghost" id="btn-home">最初に戻る</button>
-      </div>
-    </div>
-  </section>
-
-  <footer>法改正により数値・制度が変わることがあります(特に建築確認・盛土規制・報酬特例は近年改正あり)。<br>最新の法令・テキストで必ず確認してください。</footer>
+<section id="data" class="view">
+ <div class="card"><div class="section-title">学習記録</div><div class="grid3">
+  <div class="stat"><b id="total">0</b><span>総セット回答</span></div>
+  <div class="stat"><b id="correct">0</b><span>全項目正解</span></div>
+  <div class="stat"><b id="master">0</b><span>習得済み</span></div>
+ </div></div>
+ <div class="card"><div class="section-title">分野別</div><div class="list" id="catstats"></div></div>
+ <div class="card"><div class="section-title">データ管理</div><div class="grid2"><button class="btn secondary" id="export">バックアップ</button><button class="btn danger" id="reset">履歴を初期化</button></div></div>
+</section>
+</main>
 </div>
+<nav class="tabs"><div class="tabs-inner">
+<button class="tab active" data-view="home"><span>🏠</span>ホーム</button>
+<button class="tab" data-view="quiz"><span>✍️</span>問題</button>
+<button class="tab" data-view="data"><span>📊</span>記録</button>
+</div></nav>
 
 <script>
-/* =====================================================
-   根拠条文(e-Gov)リンク
-===================================================== */
-const LAWS = {
-  gyoho:   {name:"宅建業法",        url:"https://laws.e-gov.go.jp/law/327AC1000000176"},
-  minpo:   {name:"民法",            url:"https://laws.e-gov.go.jp/law/129AC0000000089"},
-  shakuchi:{name:"借地借家法",      url:"https://laws.e-gov.go.jp/law/403AC0000000090"},
-  kenchiku:{name:"建築基準法",      url:"https://laws.e-gov.go.jp/law/325AC0000000201"},
-  toshi:   {name:"都市計画法",      url:"https://laws.e-gov.go.jp/law/343AC0000000100"},
-  kokudo:  {name:"国土利用計画法",  url:"https://laws.e-gov.go.jp/law/349AC0000000092"},
-  chihozei:{name:"地方税法",        url:"https://laws.e-gov.go.jp/law/325AC0000000226"},
-  sozei:   {name:"租税特別措置法",  url:"https://laws.e-gov.go.jp/law/332AC0000000026"},
-  kashi:   {name:"住宅瑕疵担保履行法", url:"https://laws.e-gov.go.jp/law/419AC0000000066"},
-  morido:  {name:"盛土規制法",      url:"https://laws.e-gov.go.jp/law/336AC0000000191"},
-  inshi:   {name:"印紙税法",        url:"https://laws.e-gov.go.jp/law/342AC0000000023"},
-  souzoku: {name:"相続税法",        url:"https://laws.e-gov.go.jp/law/325AC0000000073"},
-  chika:   {name:"地価公示法",      url:"https://laws.e-gov.go.jp/law/344AC0000000049"}
-};
-
-/* =====================================================
-   問題データ
-   type: "choice"=数値直答 / "cloze"=穴埋め(＿Ａ＿等が空欄)
-   law: 根拠条文 / search: 解説サイト検索用キーワード
-===================================================== */
-const QUESTIONS = [
-/* ---------------- 宅建業法 ---------------- */
-{id:"gy01", cat:"宅建業法", type:"cloze",
- text:"宅建業者が自ら売主となる売買で、事務所等以外の場所で買受けの申込みをした者は、クーリング・オフができる旨を書面で告げられた日から起算して＿Ａ＿を経過するまでは、＿Ｂ＿により申込みの撤回等を行うことができる。",
- options:["Ａ：8日間　Ｂ：書面","Ａ：8日間　Ｂ：口頭または書面","Ａ：10日間　Ｂ：書面","Ａ：14日間　Ｂ：口頭または書面"],
- answer:0, law:"gyoho", search:"宅建 クーリングオフ 8日間 37条の2 解説",
- kaisetsu:"クーリング・オフは<strong>「書面で告げられた日」を1日目として8日間</strong>行使できます。撤回等は必ず<strong>書面</strong>で行い、書面を<strong>発した時</strong>に効力が生じます(発信主義)。",
- related:"「事務所等」で申込みをした場合はクーリング・オフ不可。テント張りの案内所や喫茶店・自宅(申出なし)は「事務所等以外」に当たります。買主に不利な特約(例:期間を5日に短縮)は無効ですが、有利な特約(10日に延長)は有効です。",
- confuse:"<strong>「引渡しを受け、かつ代金全部を支払った」</strong>ときは8日以内でもクーリング・オフ不可。「引渡しのみ」「代金の一部支払いのみ」ならまだ可能、という引っかけが頻出です。また起算点は「契約した日」ではなく「書面で告げられた日」です。"},
-{id:"gy02", cat:"宅建業法", type:"choice",
- text:"宅建業者が自ら売主となる売買契約で、受領できる手付の額の上限は代金のいくらか。",
- options:["10分の1(10%)","10分の2(20%)","10分の3(30%)","2分の1(50%)"],
- answer:1, law:"gyoho", search:"宅建 手付額の制限 10分の2 39条 解説",
- kaisetsu:"自ら売主制限(8種制限)の一つ。手付は代金の<strong>10分の2(20%)を超えて受領できません</strong>。超えた部分は無効です。",
- related:"この手付はどんな名目でも<strong>解約手付</strong>とみなされます。相手方が履行に着手するまで、買主は手付放棄、売主は<strong>倍額を現実に提供</strong>して解除できます。損害賠償額の予定・違約金も合算して代金の<strong>10分の2まで</strong>です。",
- confuse:"手付金等の<strong>保全措置</strong>の基準(未完成5%・完成10%)と混同しがち。「受領できる上限」は20%、「保全措置が必要になるライン」は5%・10%と、別の制度・別の数字です。"},
-{id:"gy03", cat:"宅建業法", type:"cloze",
- text:"宅建業者が自ら売主となる場合、未完成物件では代金の＿Ａ＿を超えるか＿Ｂ＿を超える手付金等を受領するときは、保全措置を講じなければならない。",
- options:["Ａ：5%　Ｂ：1,000万円","Ａ：10%　Ｂ：1,000万円","Ａ：5%　Ｂ：500万円","Ａ：20%　Ｂ：1,000万円"],
- answer:0, law:"gyoho", search:"宅建 手付金等の保全措置 5% 10% 1000万円 解説",
- kaisetsu:"未完成物件は<strong>代金の5%超 または 1,000万円超</strong>で保全措置が必要。<strong>完成物件は10%超 または 1,000万円超</strong>です。",
- related:"保全の方法は、未完成物件が「銀行等による保証」「保険事業者による保証保険」の2種類。完成物件はこれに<strong>指定保管機関による保管</strong>を加えた3種類が使えます。買主への所有権移転登記がされれば保全措置は不要です。",
- confuse:"<strong>「未完成=5%」「完成=10%」の入れ替え</strong>が最頻出の引っかけ。また手付の受領上限20%とも混同注意。保全措置を講じない場合、買主は手付金等の支払いを拒めます。"},
-{id:"gy04", cat:"宅建業法", type:"choice",
- text:"営業保証金の供託額は、主たる事務所につきいくらか。",
- options:["500万円","1,000万円","2,000万円","60万円"],
- answer:1, law:"gyoho", search:"宅建 営業保証金 1000万円 500万円 供託 解説",
- kaisetsu:"営業保証金は<strong>主たる事務所1,000万円</strong>、<strong>その他の事務所は1か所につき500万円</strong>を、主たる事務所の最寄りの供託所に供託します。",
- related:"金銭のほか有価証券でも供託でき、評価額は<strong>国債100%・地方債等90%・その他80%</strong>。供託した旨の届出をした後でなければ事業を開始できません。免許から3か月以内に届出がないと催告され、催告から1か月以内に届出がないと免許を取り消されることがあります。",
- confuse:"保証協会の<strong>弁済業務保証金分担金(主60万円・従30万円)</strong>との混同が定番。「1,000万/500万」は供託所へ、「60万/30万」は保証協会へ、と納付先ごとに整理しましょう。"},
-{id:"gy05", cat:"宅建業法", type:"choice",
- text:"保証協会に加入する宅建業者が納付する弁済業務保証金分担金は、本店と支店2か所の場合、合計いくらか。",
- options:["90万円","120万円","150万円","2,000万円"],
- answer:1, law:"gyoho", search:"宅建 弁済業務保証金分担金 60万円 30万円 解説",
- kaisetsu:"分担金は<strong>主たる事務所60万円+その他の事務所1か所につき30万円</strong>。60万+30万×2=<strong>120万円</strong>です。",
- related:"納付は<strong>加入しようとする日まで</strong>に、<strong>金銭のみ</strong>で行います(有価証券は不可)。加入後に事務所を新設したときは、設置日から<strong>2週間以内</strong>に納付しないと社員の地位を失います。",
- confuse:"営業保証金(1,000万/500万・有価証券可)との対比で出題されます。「分担金も有価証券で納付できる」は誤り。同じ計算問題でも営業保証金なら 1,000万+500万×2=2,000万円になります。"},
-{id:"gy06", cat:"宅建業法", type:"cloze",
- text:"専任媒介契約の有効期間は＿Ａ＿を超えることができず、依頼者に対し業務の処理状況を＿Ｂ＿に1回以上報告しなければならない。",
- options:["Ａ：3か月　Ｂ：2週間","Ａ：3か月　Ｂ：1週間","Ａ：6か月　Ｂ：2週間","Ａ：1か月　Ｂ：1週間"],
- answer:0, law:"gyoho", search:"宅建 専任媒介契約 3か月 2週間に1回 解説",
- kaisetsu:"専任媒介は<strong>有効期間3か月以内・報告2週間に1回以上</strong>。3か月を超える定めをしたときは、無効ではなく<strong>3か月に短縮</strong>されます。",
- related:"指定流通機構(レインズ)への登録は、専任媒介では契約日から<strong>7日以内(休業日を除く)</strong>。更新は依頼者の申出があるときに限り可能で、自動更新特約は無効です。",
- confuse:"<strong>専属専任媒介は「1週間に1回以上・登録5日以内」</strong>。専任「2週・7日」/専属専任「1週・5日」のセットで暗記を。一般媒介には期間規制・報告義務・登録義務がありません。"},
-{id:"gy07", cat:"宅建業法", type:"choice",
- text:"専属専任媒介契約を締結したとき、指定流通機構(レインズ)への登録は契約締結日から何日以内に行うか(休業日を除く)。",
- options:["3日以内","5日以内","7日以内","10日以内"],
- answer:1, law:"gyoho", search:"宅建 専属専任媒介 レインズ 5日以内 解説",
- kaisetsu:"専属専任媒介は<strong>5日以内(休業日を除く)</strong>に登録します。専任媒介より依頼者の拘束が強いぶん、業者の義務は重くなります。",
- related:"登録事項は所在・規模・形質・売買すべき価額など。登録後は<strong>遅滞なく登録を証する書面(または電磁的記録)を依頼者に引き渡す</strong>義務があります。成約したら遅滞なく機構へ通知します。",
- confuse:"専任媒介の<strong>7日以内</strong>とのすり替えが頻出。「拘束が強い専属専任ほど日数が短い(5日)」と理屈で覚えると混同しません。"},
-{id:"gy08", cat:"宅建業法", type:"choice",
- text:"宅建業者は、事務所ごとに業務に従事する者何人に1人以上の割合で、成年者である専任の宅建士を置かなければならないか。",
- options:["3人に1人","5人に1人","10人に1人","事務所ごとに1人"],
- answer:1, law:"gyoho", search:"宅建 専任の宅建士 設置 5人に1人 解説",
- kaisetsu:"事務所には<strong>従事者5人に1人以上</strong>の割合で成年者である専任の宅建士が必要です。従事者11人なら3人必要になります。",
- related:"契約の申込み・締結を行う<strong>案内所等には(人数にかかわらず)専任の宅建士1人以上</strong>で足ります。法定数を欠いたときは<strong>2週間以内</strong>に補充等の措置をとらなければなりません。",
- confuse:"「案内所も5人に1人」は誤り。<strong>事務所=5人に1人、案内所=1人以上</strong>。また補充の「2週間以内」は、媒介の報告「2週間に1回」と数字は同じでも別制度なので注意。"},
-{id:"gy09", cat:"宅建業法", type:"cloze",
- text:"宅建業の免許の有効期間は＿Ａ＿であり、更新を受けようとする者は、有効期間満了の日の＿Ｂ＿前から＿Ｃ＿前までの間に免許申請書を提出しなければならない。",
- options:["Ａ：5年　Ｂ：90日　Ｃ：30日","Ａ：5年　Ｂ：60日　Ｃ：30日","Ａ：3年　Ｂ：90日　Ｃ：30日","Ａ：5年　Ｂ：30日　Ｃ：14日"],
- answer:0, law:"gyoho", search:"宅建業 免許 有効期間 5年 更新 90日前 30日前",
- kaisetsu:"免許の有効期間は<strong>5年</strong>。更新申請は満了日の<strong>90日前から30日前まで</strong>に行います。期間内に申請すれば、処分が遅れても旧免許は処分があるまで有効です。",
- related:"<strong>宅建士証の有効期間も5年</strong>。宅建士証の更新には、交付申請前<strong>6か月以内</strong>に行われる知事指定の法定講習の受講が必要です(登録の移転に伴う交付は講習不要・残存期間のみ)。",
- confuse:"「90日〜30日」を「60日〜30日」などにすり替える出題が定番。また免許・宅建士証はどちらも5年ですが、<strong>更新講習が要るのは宅建士証</strong>だけ、という対比も問われます。"},
-{id:"gy10", cat:"宅建業法", type:"choice",
- text:"宅建業者が事務所ごとに備える従業者名簿の保存期間は、最終の記載をした日からどれだけか。",
- options:["3年間","5年間","10年間","永久保存"],
- answer:2, law:"gyoho", search:"宅建 従業者名簿 10年 帳簿 5年 保存期間",
- kaisetsu:"従業者名簿は<strong>最終の記載をした日から10年間</strong>保存します。取引関係者から請求があれば閲覧させる義務があります。",
- related:"<strong>帳簿</strong>は各事業年度末に閉鎖し、<strong>閉鎖後5年間</strong>(自ら売主となる新築住宅に係るものは<strong>10年間</strong>)保存します。帳簿には閲覧義務はありません。",
- confuse:"<strong>名簿10年・帳簿5年</strong>の入れ替えが最頻出。「閲覧させる義務があるのは名簿だけ」「帳簿は取引のつど記載」もセットで整理しましょう。"},
-{id:"gy11", cat:"宅建業法", type:"choice",
- text:"宅建業者の商号・役員・事務所の所在地等に変更があった場合、免許権者への変更の届出は何日以内に行うか。",
- options:["2週間以内","30日以内","3か月以内","遅滞なく"],
- answer:1, law:"gyoho", search:"宅建業者 変更の届出 30日以内 解説",
- kaisetsu:"宅建業者名簿の登載事項(商号、役員・政令使用人の氏名、事務所の名称・所在地、専任宅建士の氏名など)に変更があったときは、<strong>30日以内</strong>に届け出ます。",
- related:"廃業・破産・解散などの<strong>廃業等の届出も30日以内</strong>(死亡の場合のみ、相続人が<strong>死亡を知った日から30日以内</strong>)。免許換えが必要になった場合は新たな免許を申請します。",
- confuse:"宅建士の<strong>資格登録簿の変更の登録は「遅滞なく」</strong>で日数の定めがありません。「業者=30日以内」「宅建士=遅滞なく」の対比が引っかけどころです。"},
-{id:"gy12", cat:"宅建業法", type:"choice",
- text:"土地(代金1,000万円・消費税は考慮しない)の売買を媒介した宅建業者が、依頼者の一方から受領できる報酬の限度額はいくらか。",
- options:["30万円","33万円","36万円","39万円"],
- answer:2, law:"gyoho", search:"宅建 報酬 速算式 3% 6万円 計算 解説",
- kaisetsu:"代金400万円超なので速算式<strong>「代金×3%+6万円」</strong>を使い、1,000万×3%+6万=<strong>36万円</strong>です(課税業者は別途消費税を加算可)。",
- related:"速算式は<strong>200万円以下:5% / 200万超400万以下:4%+2万円 / 400万超:3%+6万円</strong>。<strong>代理</strong>なら媒介の2倍まで受領できますが、双方から受ける合計も同じ上限です。",
- confuse:"低廉な空家等(<strong>800万円以下</strong>)の売買では、売主・買主双方それぞれから<strong>最大30万円(税抜)</strong>まで受領できる特例があります(2024年改正)。通常の速算式の額と混同しないように。"},
-{id:"gy13", cat:"宅建業法", type:"choice",
- text:"契約の締結や申込みの受付を行う案内所を設置する宅建業者は、免許権者および所在地を管轄する都道府県知事に、業務を開始する日の何日前までに届け出なければならないか。",
- options:["5日前まで","10日前まで","2週間前まで","30日前まで"],
- answer:1, law:"gyoho", search:"宅建 案内所 届出 10日前 50条2項 解説",
- kaisetsu:"契約行為等を行う案内所等の届出(50条2項)は、業務開始の<strong>10日前まで</strong>に、<strong>免許権者と所在地の知事の両方</strong>(知事が同一ならその知事のみ)へ行います。",
- related:"この案内所には<strong>成年者である専任の宅建士を1人以上</strong>置き、<strong>標識</strong>を掲示します。契約行為等を行わない案内所でも標識の掲示は必要です。",
- confuse:"変更の届出「30日以内」や、専任宅建士補充の「2週間以内」とのすり替えに注意。「10日<strong>前まで</strong>(事前)」であり、「10日<strong>以内</strong>(事後)」ではない点も問われます。"},
-{id:"gy14", cat:"宅建業法", type:"choice",
- text:"禁錮以上の刑または宅建業法違反等による罰金刑に処せられた者は、刑の執行を終わった日から何年間、宅建業の免許を受けられないか。",
- options:["1年間","3年間","5年間","10年間"],
- answer:2, law:"gyoho", search:"宅建 免許 欠格事由 5年 刑の執行 解説",
- kaisetsu:"欠格期間は<strong>刑の執行を終わり、または執行を受けることがなくなった日から5年間</strong>です。暴力団関係の罪・傷害・背任など一定の罪の罰金刑も対象になります。",
- related:"不正手段による免許取得等で<strong>免許を取り消された場合も5年間</strong>欠格。取消処分の聴聞公示後に廃業の届出をした場合も、届出から5年間は免許を受けられません。",
- confuse:"<strong>執行猶予付きの判決は、猶予期間が満了すれば直ちに免許OK</strong>(さらに5年待つ必要なし)という引っかけが超頻出。「拘留・科料」や宅建業法等以外の過失犯の罰金は欠格事由になりません。"},
-{id:"gy15", cat:"宅建業法", type:"cloze",
- text:"営業保証金が還付により不足した場合、宅建業者は免許権者から不足の通知を受けた日から＿Ａ＿以内に不足額を供託し、供託した日から＿Ｂ＿以内にその旨を免許権者に届け出なければならない。",
- options:["Ａ：2週間　Ｂ：2週間","Ａ：1週間　Ｂ：2週間","Ａ：2週間　Ｂ：30日","Ａ：30日　Ｂ：2週間"],
- answer:0, law:"gyoho", search:"宅建 営業保証金 不足額 供託 2週間 解説",
- kaisetsu:"不足額の供託は<strong>通知から2週間以内</strong>、供託した旨の届出は<strong>供託から2週間以内</strong>。「2週間・2週間」のセットで覚えます。",
- related:"保証協会の場合も同様に、<strong>還付充当金は通知から2週間以内</strong>に協会へ納付。納付しないと<strong>社員の地位を失い</strong>、地位を失った日から<strong>1週間以内</strong>に営業保証金を供託しなければなりません。",
- confuse:"「1週間以内に営業保証金を供託」(社員の地位喪失時)と「2週間以内に不足額を供託」の混同に注意。保証金まわりは<strong>ほぼ2週間、地位喪失後の供託だけ1週間</strong>です。"},
-{id:"gy16", cat:"宅建業法", type:"choice",
- text:"宅建士に対する事務禁止処分の期間は、最長でどれだけか。",
- options:["6か月以内","1年以内","2年以内","5年以内"],
- answer:1, law:"gyoho", search:"宅建士 事務禁止処分 1年以内 解説",
- kaisetsu:"事務禁止処分は<strong>1年以内</strong>の期間を定めて行われます。処分を受けたら、速やかに宅建士証を<strong>交付を受けた知事に提出</strong>します。",
- related:"宅建士への監督処分は<strong>指示処分→事務禁止処分→登録消除処分</strong>の3段階。事務禁止処分に違反したときは登録消除の対象となり、消除から5年間は再登録できません。",
- confuse:"宅建業者への<strong>業務停止処分も1年以内</strong>で数字は同じですが、対象が異なります。宅建士証は事務禁止では「提出」、登録消除では「返納」——用語のすり替えも頻出です。"},
-{id:"gy17", cat:"宅建業法", type:"cloze",
- text:"住宅瑕疵担保履行法上、新築住宅の売主である宅建業者は、構造耐力上主要な部分等の瑕疵について引渡しから＿Ａ＿の担保責任を負い、資力確保措置の状況を基準日から＿Ｂ＿以内に免許権者へ届け出なければならない。",
- options:["Ａ：10年間　Ｂ：3週間","Ａ：10年間　Ｂ：2週間","Ａ：5年間　Ｂ：3週間","Ａ：10年間　Ｂ：50日"],
- answer:0, law:"kashi", search:"住宅瑕疵担保履行法 10年 基準日 3週間 届出 宅建",
- kaisetsu:"新築住宅の構造耐力上主要な部分・雨水の浸入を防止する部分の瑕疵担保責任は<strong>引渡しから10年間</strong>。保証金の供託や保険加入の状況は<strong>基準日(毎年3月31日)から3週間以内</strong>に届け出ます。",
- related:"資力確保措置は<strong>「住宅販売瑕疵担保保証金の供託」か「保険への加入」</strong>。届出をしないと、基準日の翌日から<strong>50日を経過した日以後</strong>、新たに自ら売主となる新築住宅の売買契約を締結できません。",
- confuse:"基準日は以前は年2回でしたが、<strong>現在は3月31日の年1回のみ</strong>。「10年」は品確法由来の担保責任期間で、帳簿の保存(新築住宅10年)と数字が同じでも別制度です。"},
-{id:"gy18", cat:"宅建業法", type:"choice",
- text:"宅建試験の合格者が宅建士の資格登録を受けるには、原則として何年以上の実務経験が必要か(登録実務講習修了者等を除く)。",
- options:["1年以上","2年以上","3年以上","5年以上"],
- answer:1, law:"gyoho", search:"宅建士 登録 実務経験 2年 登録実務講習",
- kaisetsu:"登録には<strong>2年以上の実務経験</strong>が必要です。経験がない場合は<strong>登録実務講習</strong>を修了すれば登録できます。登録先は<strong>合格した試験を行った知事</strong>です。",
- related:"<strong>試験合格自体は一生有効</strong>(不正受験による合格取消しを除く)。登録も原則有効期限なしですが、宅建士として仕事をするには有効期間<strong>5年</strong>の宅建士証の交付が別途必要、と3層構造で整理しましょう。",
- confuse:"「実務経験5年」「合格から1年以内に登録しないと無効」などのすり替えに注意。<strong>合格から1年以内</strong>という数字は、宅建士証交付時の<strong>法定講習が免除される期間</strong>のことです。"},
-{id:"gy19", cat:"宅建業法", type:"choice",
- text:"宅建士(資格登録者)が死亡した場合、その相続人は、死亡の事実を知った日から何日以内に登録している知事に届け出なければならないか。",
- options:["2週間以内","30日以内","3か月以内","遅滞なく"],
- answer:1, law:"gyoho", search:"宅建士 死亡等の届出 30日以内 相続人",
- kaisetsu:"死亡等の届出は<strong>死亡の事実を知った日から30日以内</strong>に相続人が行います。破産・心身の故障等の場合は本人(または法定代理人・同居の親族)が30日以内に届け出ます。",
- related:"宅建業者(個人)が死亡した場合の<strong>廃業等の届出も、相続人が知った日から30日以内</strong>。どちらも「知った日から」起算する点がポイントです。",
- confuse:"氏名や住所が変わったときの<strong>変更の登録は「遅滞なく」</strong>(30日ではない)。「死亡・破産系=30日以内」「変更=遅滞なく」で使い分けましょう。"},
-{id:"gy20", cat:"宅建業法", type:"cloze",
- text:"貸借の媒介の報酬は、依頼者双方から受ける合計で借賃の＿Ａ＿以内が限度である。居住用建物の場合、依頼を受けるにあたって承諾を得ていない限り、一方の依頼者からは借賃の＿Ｂ＿以内しか受領できない。",
- options:["Ａ：1か月分　Ｂ：2分の1か月分","Ａ：2か月分　Ｂ：1か月分","Ａ：1か月分　Ｂ：1か月分","Ａ：3か月分　Ｂ：1か月分"],
- answer:0, law:"gyoho", search:"宅建 報酬 貸借 媒介 借賃1か月分 居住用 2分の1",
- kaisetsu:"貸借の媒介・代理の報酬は、双方合計で<strong>借賃1か月分+消費税</strong>が上限。<strong>居住用建物</strong>の媒介では、依頼時の承諾がなければ一方から<strong>1/2か月分</strong>までです。",
- related:"<strong>居住用建物以外</strong>(事務所・店舗や宅地)の貸借で権利金(返還されないもの)の授受があるときは、<strong>権利金を売買代金とみなして速算式で計算</strong>した額との比較ができます。",
- confuse:"「合計2か月分まで」とする誤りが定番。売買の速算式(3%+6万等)とは別体系です。承諾は<strong>依頼を受けるにあたって</strong>得る必要があり、契約成立後の承諾では足りません。"},
-/* ---------------- 法令上の制限 ---------------- */
-{id:"ho01", cat:"法令上の制限", type:"choice",
- text:"市街化区域内で開発許可が不要となるのは、開発行為の規模が何㎡未満の場合か。",
- options:["500㎡未満","1,000㎡未満","2,000㎡未満","3,000㎡未満"],
- answer:1, law:"toshi", search:"宅建 開発許可 市街化区域 1000㎡ 解説",
- kaisetsu:"市街化区域では<strong>1,000㎡未満</strong>の開発行為は許可不要です(小規模例外)。",
- related:"<strong>非線引き都市計画区域・準都市計画区域は3,000㎡未満</strong>、<strong>都市計画区域外・準都市計画区域外は1ha(10,000㎡)未満</strong>が許可不要。図書館・公民館・鉄道施設や、市街化区域外での農林漁業用建築物のための開発も許可不要です。",
- confuse:"<strong>市街化調整区域には小規模例外がなく、面積にかかわらず許可が必要</strong>。また国土利用計画法の事後届出(市街化区域2,000㎡以上)と数字が紛らわしいので、制度ごとに分けて覚えましょう。"},
-{id:"ho02", cat:"法令上の制限", type:"cloze",
- text:"国土利用計画法の事後届出は、市街化区域では＿Ａ＿以上、市街化区域以外の都市計画区域では＿Ｂ＿以上の土地売買等の契約について、契約締結日から＿Ｃ＿以内に行う。",
- options:["Ａ：2,000㎡　Ｂ：5,000㎡　Ｃ：2週間","Ａ：1,000㎡　Ｂ：3,000㎡　Ｃ：2週間","Ａ：2,000㎡　Ｂ：5,000㎡　Ｃ：3週間","Ａ：2,000㎡　Ｂ：10,000㎡　Ｃ：1か月"],
- answer:0, law:"kokudo", search:"宅建 国土利用計画法 事後届出 2000㎡ 5000㎡ 2週間",
- kaisetsu:"事後届出の面積要件は<strong>市街化区域2,000㎡以上/その他の都市計画区域5,000㎡以上/都市計画区域外10,000㎡以上</strong>で、<strong>契約日から2週間以内</strong>に<strong>権利取得者(買主)</strong>が届け出ます。",
- related:"届出対象は「対価を得て」「権利を移転・設定する」「契約」の3要件を満たすもの。相続・贈与・時効取得は届出不要です。勧告に従わなくても契約は有効で、罰則はなく公表されうるにとどまります。",
- confuse:"開発許可の<strong>1,000㎡/3,000㎡</strong>と、国土法の<strong>2,000㎡/5,000㎡/10,000㎡</strong>のすり替えが超頻出。「開発は1・3・10(千㎡)、国土は2・5・10(千㎡)」と語呂で分けましょう。届出義務者が「売主」ではなく<strong>買主</strong>である点も注意。"},
-{id:"ho03", cat:"法令上の制限", type:"cloze",
- text:"建築基準法上、建築物の敷地は、原則として幅員＿Ａ＿以上の道路に＿Ｂ＿以上接しなければならない。",
- options:["Ａ：4m　Ｂ：2m","Ａ：4m　Ｂ：1.5m","Ａ：6m　Ｂ：2m","Ａ：2m　Ｂ：4m"],
- answer:0, law:"kenchiku", search:"宅建 接道義務 4m 2m 建築基準法 解説",
- kaisetsu:"接道義務は<strong>幅員4m以上の道路に2m以上</strong>接すること。「4mの道路に2m接する」とセットで覚えます。",
- related:"幅員4m未満でも特定行政庁の指定があれば道路とみなされます(<strong>42条2項道路</strong>)。この場合、原則として<strong>道路中心線から2m</strong>のセットバック部分は敷地面積に算入できません。",
- confuse:"「幅員2mの道路に4m接する」と数字を入れ替える出題に注意。また地方公共団体は条例で接道義務を<strong>付加(厳しく)</strong>はできますが、<strong>緩和はできません</strong>。"},
-{id:"ho04", cat:"法令上の制限", type:"choice",
- text:"第一種・第二種低層住居専用地域および田園住居地域内の建築物の高さの限度は、都市計画で定められたどちらかの数値か。",
- options:["10mまたは12m","12mまたは15m","10mまたは20m","制限なし"],
- answer:0, law:"kenchiku", search:"宅建 低層住居専用地域 絶対高さ制限 10m 12m",
- kaisetsu:"低層住居専用地域・田園住居地域では、建築物の高さは都市計画で定めた<strong>10mまたは12m</strong>を超えられません(絶対高さ制限)。",
- related:"この3地域には<strong>隣地斜線制限は適用されません</strong>(絶対高さ制限があるため不要)。逆に北側斜線制限は低層系・中高層系の住居専用地域等に適用されます。",
- confuse:"「10mまたは15m」などのすり替えに注意。また日影規制の対象となる「軒高7m超または3階建以上」(低層系)の数字とも混同しやすいので区別を。"},
-{id:"ho05", cat:"法令上の制限", type:"cloze",
- text:"建蔽率は、特定行政庁が指定する角地では＿Ａ＿が加算され、防火地域内の耐火建築物等では＿Ｂ＿が加算される。建蔽率の限度が10分の8とされている地域内で防火地域内の耐火建築物等については＿Ｃ＿。",
- options:["Ａ：1/10　Ｂ：1/10　Ｃ：建蔽率の制限が適用されない","Ａ：2/10　Ｂ：1/10　Ｃ：9/10になる","Ａ：1/10　Ｂ：2/10　Ｃ：建蔽率の制限が適用されない","Ａ：1/10　Ｂ：1/10　Ｃ：9/10になる"],
- answer:0, law:"kenchiku", search:"宅建 建蔽率 緩和 角地 1/10 防火地域 耐火建築物",
- kaisetsu:"角地指定で<strong>+1/10</strong>、防火地域内の耐火建築物等で<strong>+1/10</strong>(両方満たせば+2/10)。<strong>8/10の地域×防火地域内の耐火建築物等なら建蔽率は無制限(100%)</strong>です。",
- related:"準防火地域内の耐火建築物等・準耐火建築物等も<strong>+1/10</strong>の対象です。敷地が建蔽率の異なる地域にわたる場合は<strong>面積按分(加重平均)</strong>で計算します。",
- confuse:"「8/10地域+防火+耐火=9/10」とする引っかけが定番(正しくは<strong>適用除外=100%</strong>)。容積率の前面道路幅員による制限(住居系×4/10、その他×6/10)と混同しないように。"},
-{id:"ho06", cat:"法令上の制限", type:"choice",
- text:"市街化調整区域内で行う開発行為について、開発許可が不要となる面積要件はどれか。",
- options:["300㎡未満は不要","1,000㎡未満は不要","3,000㎡未満は不要","面積にかかわらず原則として許可が必要"],
- answer:3, law:"toshi", search:"宅建 市街化調整区域 開発許可 面積 例外なし",
- kaisetsu:"市街化調整区域には<strong>小規模開発の例外がありません</strong>。面積にかかわらず、原則として開発許可が必要です。",
- related:"ただし<strong>農林漁業用建築物</strong>やその業を営む者の居住用建築物のための開発、駅舎・図書館・公民館等の公益上必要な建築物のための開発は、面積を問わず許可不要です。",
- confuse:"「市街化調整区域も1,000㎡未満なら不要」とする引っかけが定番。<strong>面積の例外があるのは市街化区域(1,000㎡)・非線引き/準都計(3,000㎡)・区域外(1ha)</strong>だけです。"},
-{id:"ho07", cat:"法令上の制限", type:"cloze",
- text:"容積率は、前面道路の幅員が＿Ａ＿未満の場合、住居系の用途地域では「幅員×＿Ｂ＿」と都市計画で定めた容積率のいずれか小さい方が限度となる。",
- options:["Ａ：12m　Ｂ：4/10","Ａ：12m　Ｂ：6/10","Ａ：6m　Ｂ：4/10","Ａ：4m　Ｂ：4/10"],
- answer:0, law:"kenchiku", search:"宅建 容積率 前面道路 12m未満 4/10 6/10",
- kaisetsu:"前面道路が<strong>12m未満</strong>のときは、<strong>住居系:幅員×4/10</strong>、<strong>その他(商業系・工業系等):幅員×6/10</strong>と指定容積率の小さい方が限度です。例:住居系で前面道路6mなら 6×4/10=24/10(240%)。",
- related:"前面道路が2つ以上あるときは<strong>最も広い幅員</strong>で計算します。敷地が容積率の異なる地域にわたる場合は、建蔽率と同じく<strong>面積按分(加重平均)</strong>です。",
- confuse:"<strong>4/10(住居系)と6/10(その他)の入れ替え</strong>が頻出。建蔽率の緩和「+1/10」とも混同しやすいので、「容積率は道路幅員×係数、建蔽率は加算」と構造から区別しましょう。"},
-{id:"ho08", cat:"法令上の制限", type:"cloze",
- text:"盛土規制法上、宅地造成等工事規制区域内では、盛土で高さ＿Ａ＿を超える崖を生ずるもの、切土で高さ＿Ｂ＿を超える崖を生ずるもの、または盛土・切土をする面積が＿Ｃ＿を超えるもの等の工事は、知事の許可が必要である。",
- options:["Ａ：1m　Ｂ：2m　Ｃ：500㎡","Ａ：2m　Ｂ：1m　Ｃ：500㎡","Ａ：1m　Ｂ：2m　Ｃ：1,000㎡","Ａ：2m　Ｂ：2m　Ｃ：300㎡"],
- answer:0, law:"morido", search:"盛土規制法 宅地造成 許可 盛土1m 切土2m 500㎡",
- kaisetsu:"許可が必要な規模は<strong>盛土で1m超の崖/切土で2m超の崖/盛土と切土を合わせて2m超の崖/崖を生じない盛土で高さ2m超/面積500㎡超</strong>です。「盛1・切2・面500」で覚えます。",
- related:"盛土規制法は旧宅地造成等規制法の改正法(2023年施行)で、農地や森林の盛土も規制対象になりました。工事の<strong>届出制ではなく許可制</strong>である点、完了後は検査を受ける点も押さえましょう。",
- confuse:"「盛土2m・切土1m」と逆にする引っかけが定番。<strong>崩れやすい盛土の方が基準が厳しい(1m)</strong>と理屈で覚えると迷いません。開発許可の面積基準(1,000㎡等)とも別制度です。"},
-{id:"ho09", cat:"法令上の制限", type:"choice",
- text:"2025年4月施行の改正建築基準法により、都市計画区域の内外を問わず建築確認が必要となる木造建築物(新2号建築物)の規模はどれか。",
- options:["階数3以上または延べ面積500㎡超","階数2以上または延べ面積200㎡超","平屋かつ延べ面積200㎡以下","すべての木造建築物"],
- answer:1, law:"kenchiku", search:"建築基準法 改正 2025 4号特例 縮小 新2号建築物 建築確認",
- kaisetsu:"2025年4月の改正(4号特例の縮小)で、木造は<strong>階数2以上または延べ面積200㎡超</strong>(新2号建築物)なら区域を問わず建築確認が必要になりました。",
- related:"<strong>平屋かつ延べ面積200㎡以下</strong>(新3号建築物)は、都市計画区域・準都市計画区域等の<strong>区域内でのみ</strong>確認が必要です。非木造と木造の区分が実質なくなった点が改正の柱です。",
- confuse:"旧制度の「木造:3階以上・500㎡超・高さ13m超・軒高9m超」は<strong>廃止済み</strong>。古いテキストの数字のまま覚えないよう注意。改正直後の論点は出題されやすいので、最新テキストでの確認が特に重要です。"},
-{id:"ho10", cat:"法令上の制限", type:"choice",
- text:"区域区分が定められていない都市計画区域および準都市計画区域内で、開発許可が不要となるのは何㎡未満の開発行為か。",
- options:["1,000㎡未満","2,000㎡未満","3,000㎡未満","10,000㎡未満"],
- answer:2, law:"toshi", search:"宅建 開発許可 非線引き 準都市計画区域 3000㎡",
- kaisetsu:"非線引き都市計画区域・準都市計画区域では<strong>3,000㎡未満</strong>が許可不要です。",
- related:"面積基準の全体像:<strong>市街化区域1,000㎡/非線引き・準都計3,000㎡/両区域外1ha(10,000㎡)/市街化調整区域は例外なし</strong>。「1・3・10、調整は常に必要」とまとめて覚えます。",
- confuse:"国土利用計画法の<strong>5,000㎡(市街化区域以外の都市計画区域)</strong>とのすり替えが最頻出。「開発許可に5,000という数字は出てこない」と覚えておくと引っかかりません。"},
-{id:"ho11", cat:"法令上の制限", type:"choice",
- text:"用途地域に関する都市計画で建築物の敷地面積の最低限度を定める場合、その最低限度は何㎡を超えてはならないか。",
- options:["100㎡","150㎡","200㎡","300㎡"],
- answer:2, law:"kenchiku", search:"宅建 敷地面積の最低限度 200㎡ 建築基準法53条の2",
- kaisetsu:"敷地面積の最低限度は<strong>200㎡を超えない範囲</strong>で定めます(建築基準法53条の2)。ミニ開発による住環境悪化を防ぐための制度です。",
- related:"制限が定められた際、<strong>すでに建築物が建っている敷地や工事中の敷地</strong>には適用されません(既存不適格の救済)。",
- confuse:"固定資産税の住宅用地特例(<strong>200㎡以下は1/6</strong>)や日影規制など、宅建には「200」という数字が複数登場します。<strong>「敷地の最低限度の上限=200㎡」</strong>と文脈ごと覚えましょう。"},
-/* ---------------- 権利関係 ---------------- */
-{id:"ke01", cat:"権利関係", type:"cloze",
- text:"借地借家法上、借地権の存続期間は＿Ａ＿以上とされ、最初の更新後の期間は＿Ｂ＿以上、2回目以降の更新後の期間は＿Ｃ＿以上としなければならない。",
- options:["Ａ：30年　Ｂ：20年　Ｃ：10年","Ａ：20年　Ｂ：10年　Ｃ：5年","Ａ：30年　Ｂ：10年　Ｃ：10年","Ａ：50年　Ｂ：30年　Ｃ：20年"],
- answer:0, law:"shakuchi", search:"宅建 借地権 存続期間 30年 20年 10年",
- kaisetsu:"普通借地権は<strong>当初30年→1回目の更新20年→2回目以降10年</strong>。「30・20・10」のリズムで覚えます。これより長い約定は有効、短い約定は無効です。",
- related:"期間の定めがない場合や短い定めをした場合も<strong>30年</strong>になります。更新後に建物が滅失し、借地権者が承諾なく再築した場合、借地権設定者は地上権消滅請求・解約申入れができます。",
- confuse:"<strong>民法上の賃貸借の最長期間は50年</strong>(借地借家法適用外の駐車場・資材置場など)。「建物所有目的なら借地借家法で最低30年、それ以外なら民法で最長50年」と適用法から区別しましょう。"},
-{id:"ke02", cat:"権利関係", type:"choice",
- text:"事業用定期借地権の存続期間として正しいものはどれか。",
- options:["10年以上30年未満","10年以上50年未満","30年以上50年未満","50年以上"],
- answer:1, law:"shakuchi", search:"宅建 事業用定期借地権 10年以上50年未満 公正証書",
- kaisetsu:"事業用定期借地権は<strong>10年以上50年未満</strong>で設定します。専ら事業の用に供する建物(居住用は不可)の所有が目的で、<strong>公正証書</strong>による設定が必要です。",
- related:"定期借地権3兄弟:<strong>一般定期借地権=50年以上(書面または電磁的記録でよい)/事業用=10年以上50年未満(公正証書限定)/建物譲渡特約付=30年以上(口頭でも可)</strong>。",
- confuse:"「50年<strong>未満</strong>」を「50年以下」とするひっかけや、「一般定期借地権も公正証書が必要」とする誤りが頻出。公正証書が<strong>必須なのは事業用だけ</strong>です。"},
-{id:"ke03", cat:"権利関係", type:"choice",
- text:"所有の意思をもって平穏かつ公然と他人の物を占有した者が、占有開始時に善意かつ無過失であった場合、何年で所有権を時効取得するか。",
- options:["5年","10年","15年","20年"],
- answer:1, law:"minpo", search:"宅建 取得時効 10年 20年 善意無過失",
- kaisetsu:"占有開始時に<strong>善意無過失なら10年</strong>、それ以外(悪意または有過失)なら<strong>20年</strong>で取得時効が完成します。善意無過失は<strong>占有開始時点</strong>で判定し、途中で悪意になっても10年のままです。",
- related:"<strong>消滅時効</strong>は、債権者が権利を行使できることを<strong>知った時から5年</strong>、権利を<strong>行使できる時から10年</strong>のいずれか早い方(人の生命・身体の侵害による損害賠償は知った時から5年・行使できる時から20年)。",
- confuse:"取得時効の「10年・20年」と消滅時効の「5年・10年」の混同が定番。「取る(取得)のは10・20、消えるのは5・10」と分けて覚えましょう。"},
-{id:"ke04", cat:"権利関係", type:"choice",
- text:"相続の放棄は、自己のために相続の開始があったことを知った時から何か月以内に家庭裁判所に申述しなければならないか。",
- options:["1か月以内","3か月以内","6か月以内","10か月以内"],
- answer:1, law:"minpo", search:"宅建 相続放棄 3か月 熟慮期間",
- kaisetsu:"相続放棄・限定承認は、自己のために相続の開始があったことを<strong>知った時から3か月以内</strong>(熟慮期間)に家庭裁判所へ申述します。何もしなければ単純承認とみなされます。",
- related:"放棄した者は<strong>初めから相続人でなかった</strong>ものとみなされ、<strong>代襲相続も生じません</strong>。限定承認は共同相続人<strong>全員</strong>で行う必要があります。",
- confuse:"<strong>遺留分侵害額請求は「知った時から1年・相続開始から10年」</strong>、相続税の申告は10か月など、相続まわりは期間が乱立します。「放棄=3か月」を軸に区別しましょう。"},
-{id:"ke05", cat:"権利関係", type:"cloze",
- text:"期間の定めのある建物賃貸借において、当事者が更新拒絶の通知をする場合は、期間満了の＿Ａ＿前から＿Ｂ＿前までの間にしなければならない(賃貸人からの通知には正当事由が必要)。",
- options:["Ａ：1年　Ｂ：6か月","Ａ：6か月　Ｂ：3か月","Ａ：1年　Ｂ：3か月","Ａ：2年　Ｂ：1年"],
- answer:0, law:"shakuchi", search:"宅建 建物賃貸借 更新拒絶 1年前 6か月前 正当事由",
- kaisetsu:"更新拒絶の通知は<strong>期間満了の1年前から6か月前まで</strong>。通知がなければ従前と同一条件で更新したものとみなされます(法定更新・期間の定めなし)。",
- related:"通知をしても、期間満了後に賃借人が使用を継続し、賃貸人が<strong>遅滞なく異議</strong>を述べなければやはり更新扱い。<strong>定期建物賃貸借(期間1年以上)の終了通知も「1年前から6か月前まで」</strong>と同じ数字です。",
- confuse:"借地(30年等)と借家で期間ルールが全く違う点に注意。また「6か月前から3か月前」など期間のずらしが定番の引っかけです。"},
-{id:"ke06", cat:"権利関係", type:"choice",
- text:"期間の定めのない建物賃貸借において、賃貸人が解約を申し入れた場合(正当事由あり)、建物の賃貸借は申入れの日から何か月を経過することで終了するか。",
- options:["1か月","3か月","6か月","1年"],
- answer:2, law:"shakuchi", search:"宅建 建物賃貸借 解約申入れ 6か月 3か月",
- kaisetsu:"賃貸人からの解約申入れは<strong>6か月経過で終了</strong>(正当事由が必要)。<strong>賃借人からは民法により3か月</strong>で終了します(正当事由不要)。",
- related:"正当事由は、建物使用の必要性・従前の経過・利用状況・立退料の申出などを総合考慮して判断されます。申入れ後も使用継続+遅滞ない異議なしなら更新扱いになる点は更新拒絶と同じです。",
- confuse:"<strong>「貸主6か月・借主3か月」の入れ替え</strong>が頻出。民法だけの世界(借地借家法の適用がない土地賃貸借)では、解約申入れ後、土地1年・建物3か月で終了という別の数字もあります。"},
-{id:"ke07", cat:"権利関係", type:"choice",
- text:"配偶者と被相続人の兄弟姉妹が相続人となる場合、配偶者の法定相続分はどれだけか。",
- options:["2分の1","3分の2","4分の3","全部"],
- answer:2, law:"minpo", search:"宅建 法定相続分 配偶者 兄弟姉妹 4分の3",
- kaisetsu:"法定相続分は<strong>配偶者と子:1/2ずつ/配偶者と直系尊属:2/3と1/3/配偶者と兄弟姉妹:3/4と1/4</strong>。相続順位が下がるほど配偶者の取り分が増えます。",
- related:"子・直系尊属・兄弟姉妹が複数いれば、その相続分を<strong>頭数で均等に分けます</strong>。子の代襲相続は孫・ひ孫と続きますが、<strong>兄弟姉妹の代襲は甥・姪の一代限り</strong>です。",
- confuse:"「配偶者と兄弟姉妹で2/3」とするすり替えに注意(2/3は<strong>直系尊属と組む場合</strong>)。また<strong>兄弟姉妹には遺留分がない</strong>という論点とセットで問われます。"},
-{id:"ke08", cat:"権利関係", type:"cloze",
- text:"遺留分は、原則として遺留分を算定するための財産の価額の＿Ａ＿(直系尊属のみが相続人である場合は＿Ｂ＿)であり、兄弟姉妹には＿Ｃ＿。",
- options:["Ａ：1/2　Ｂ：1/3　Ｃ：遺留分がない","Ａ：1/3　Ｂ：1/2　Ｃ：遺留分がない","Ａ：1/2　Ｂ：1/3　Ｃ：1/4の遺留分がある","Ａ：1/2　Ｂ：1/4　Ｃ：遺留分がない"],
- answer:0, law:"minpo", search:"宅建 遺留分 2分の1 3分の1 兄弟姉妹なし",
- kaisetsu:"遺留分は原則<strong>1/2</strong>、<strong>直系尊属のみが相続人なら1/3</strong>。<strong>兄弟姉妹に遺留分はありません</strong>。各自の遺留分は「全体の遺留分×法定相続分」で計算します。",
- related:"遺留分を侵害する遺贈・贈与も<strong>当然に無効にはならず</strong>、遺留分権利者は<strong>金銭の支払い</strong>を請求できます(遺留分侵害額請求)。請求権は<strong>侵害を知った時から1年・相続開始から10年</strong>で消滅します。",
- confuse:"法定相続分(1/2・2/3・3/4)と遺留分(1/2・1/3)の混同が最大の落とし穴。「遺留分の話なのに3/4を選ばせる」タイプの引っかけに注意しましょう。"},
-{id:"ke09", cat:"権利関係", type:"choice",
- text:"民法上、賃貸借の存続期間の上限は何年か(借地借家法の適用がない場合)。",
- options:["20年","30年","50年","制限なし"],
- answer:2, law:"minpo", search:"民法 賃貸借 存続期間 50年 上限",
- kaisetsu:"民法上の賃貸借は<strong>最長50年</strong>。これより長い期間を定めても50年に短縮されます。更新もできますが、更新後も<strong>50年を超えられません</strong>。",
- related:"駐車場・資材置場・ゴルフ場など<strong>建物所有を目的としない土地の賃貸借</strong>が典型例。建物所有目的なら借地借家法が適用され、最低30年・上限なしの世界になります。",
- confuse:"2020年民法改正前は「最長20年」でした。古い知識の「20年」と、借地借家法の「30年」との3すくみで混乱しやすいポイント。<strong>民法=上限50年/借地借家法=下限30年</strong>と向きの違いで覚えましょう。"},
-{id:"ke10", cat:"権利関係", type:"choice",
- text:"民法上の成年年齢は何歳か。",
- options:["16歳","18歳","20歳","22歳"],
- answer:1, law:"minpo", search:"民法 成年年齢 18歳 未成年者 取消し",
- kaisetsu:"成年年齢は<strong>18歳</strong>です(2022年4月施行)。18歳になれば、親の同意なく単独で売買契約や賃貸借契約を結べます。",
- related:"<strong>婚姻できる年齢も男女とも18歳</strong>に統一され、「婚姻による成年擬制」の制度は廃止されました。未成年者が同意なくした法律行為は取り消せますが、<strong>単に権利を得または義務を免れる行為や、処分を許された財産(小遣い)の処分</strong>は取り消せません。",
- confuse:"「20歳」は旧法の知識。一方、<strong>遺言は15歳から</strong>できるという別の数字があり、この2つのすり替えが定番です。"},
-{id:"ke11", cat:"権利関係", type:"choice",
- text:"遺言をすることができるのは何歳以上の者か。",
- options:["12歳以上","15歳以上","18歳以上","20歳以上"],
- answer:1, law:"minpo", search:"民法 遺言能力 15歳 未成年",
- kaisetsu:"<strong>15歳に達した者は遺言をすることができます</strong>。未成年でも法定代理人の同意は不要で、遺言に行為能力の規定は適用されません。",
- related:"自筆証書遺言は<strong>全文・日付・氏名を自書し押印</strong>が原則ですが、<strong>財産目録はパソコン作成等でも可</strong>(各頁に署名押印)。公正証書遺言は証人2人以上の立会いが必要です。",
- confuse:"成年年齢の<strong>18歳</strong>とのすり替えが最頻出。「契約は18歳から、遺言は15歳から」とセットで覚えましょう。"},
-{id:"ke12", cat:"権利関係", type:"cloze",
- text:"不法行為による損害賠償請求権は、被害者が損害および加害者を知った時から＿Ａ＿(人の生命または身体を害する不法行為の場合は＿Ｂ＿)、または不法行為の時から＿Ｃ＿を経過したときに時効消滅する。",
- options:["Ａ：3年　Ｂ：5年　Ｃ：20年","Ａ：5年　Ｂ：10年　Ｃ：20年","Ａ：3年　Ｂ：5年　Ｃ：10年","Ａ：1年　Ｂ：3年　Ｃ：20年"],
- answer:0, law:"minpo", search:"民法 不法行為 消滅時効 3年 5年 20年",
- kaisetsu:"不法行為の消滅時効は<strong>知った時から3年(生命・身体の侵害は5年)/不法行為時から20年</strong>です。",
- related:"通常の債権(債務不履行など)の消滅時効は<strong>知った時から5年・行使できる時から10年</strong>(生命・身体の侵害による損害賠償は知った時から5年・行使できる時から20年)。",
- confuse:"<strong>不法行為「3年」と債務不履行「5年」の対比</strong>が急所。「20年」は不法行為の客観的起算点で共通、と整理すると混乱しません。取得時効の10年・20年ともまったく別物です。"},
-/* ---------------- 税・その他 ---------------- */
-{id:"ze01", cat:"税・その他", type:"choice",
- text:"固定資産税の標準税率はどれか。",
- options:["1.0%","1.4%","3%","4%"],
- answer:1, law:"chihozei", search:"宅建 固定資産税 標準税率 1.4% 住宅用地特例",
- kaisetsu:"固定資産税の標準税率は<strong>1.4%</strong>。賦課期日は<strong>1月1日</strong>で、その時点の固定資産の所有者(登記名義人等)に課税されます。",
- related:"<strong>住宅用地の特例</strong>:200㎡以下の部分は課税標準が<strong>1/6</strong>、200㎡超の部分は<strong>1/3</strong>。免税点は<strong>土地30万円・家屋20万円・償却資産150万円</strong>未満です。",
- confuse:"不動産取得税の標準税率<strong>4%(住宅・土地は3%)</strong>との混同が頻出。「持ち続ける税(固定資産税)=1.4%」「取得する税=4%→3%」と場面で区別しましょう。"},
-{id:"ze02", cat:"税・その他", type:"cloze",
- text:"不動産取得税の標準税率は＿Ａ＿であるが、住宅および土地の取得については＿Ｂ＿とする特例がある。また、一定の新築住宅の取得については課税標準から＿Ｃ＿が控除される。",
- options:["Ａ：4%　Ｂ：3%　Ｃ：1,200万円","Ａ：4%　Ｂ：2%　Ｃ：1,000万円","Ａ：3%　Ｂ：1.4%　Ｃ：1,200万円","Ａ：4%　Ｂ：3%　Ｃ：1,500万円"],
- answer:0, law:"chihozei", search:"宅建 不動産取得税 4% 3% 1200万円 控除",
- kaisetsu:"標準税率は<strong>4%</strong>、住宅・土地は<strong>3%</strong>の特例税率。床面積50㎡以上240㎡以下等の新築住宅は課税標準から<strong>1,200万円</strong>(認定長期優良住宅は1,300万円)が控除されます。",
- related:"免税点は<strong>土地10万円・家屋は新築等23万円・その他12万円</strong>未満。相続による取得には課税されません(贈与には課税)。宅地の課税標準は価格の<strong>1/2</strong>とする特例もあります。",
- confuse:"固定資産税(1.4%)・登録免許税(税率は登記の種類ごと)と税率のすり替えに注意。控除額1,200万円を「1,000万円」「1,500万円」に変える出題も定番です。"},
-{id:"ze03", cat:"税・その他", type:"choice",
- text:"居住用財産を譲渡した場合の譲渡所得の特別控除額は最高いくらか。",
- options:["1,000万円","2,000万円","3,000万円","5,000万円"],
- answer:2, law:"sozei", search:"宅建 居住用財産 3000万円特別控除 譲渡所得",
- kaisetsu:"居住用財産(マイホーム)の譲渡には最高<strong>3,000万円の特別控除</strong>があります。<strong>所有期間の長短を問わず</strong>適用できます。",
- related:"所有期間が譲渡年の1月1日で<strong>10年超</strong>なら軽減税率の特例(課税譲渡所得6,000万円以下の部分は所得税・住民税合計14%)があり、<strong>3,000万円控除と併用可能</strong>です。長期譲渡所得となるのは所有期間<strong>5年超</strong>。",
- confuse:"配偶者・直系血族など<strong>特別な関係者への譲渡には適用なし</strong>。「所有期間10年超が3,000万円控除の要件」とする引っかけに注意——10年超が要件なのは<strong>軽減税率</strong>の方です。"},
-{id:"ze04", cat:"税・その他", type:"cloze",
- text:"住宅用家屋の所有権移転登記に係る登録免許税の軽減税率は、個人の自己居住用で、床面積＿Ａ＿以上、かつ新築または取得後＿Ｂ＿以内に登記を受けるものに適用される。",
- options:["Ａ：50㎡　Ｂ：1年","Ａ：40㎡　Ｂ：1年","Ａ：50㎡　Ｂ：6か月","Ａ：60㎡　Ｂ：2年"],
- answer:0, law:"sozei", search:"登録免許税 住宅用家屋 軽減税率 50㎡ 1年以内",
- kaisetsu:"要件は<strong>自己居住用・床面積50㎡以上・新築または取得後1年以内の登記</strong>。所有権保存・移転(売買等)・抵当権設定の各登記に軽減税率があります。",
- related:"この軽減は<strong>家屋のみが対象で土地には適用されません</strong>。また適用回数に制限はなく、以前に適用を受けていても再度使えます。",
- confuse:"不動産取得税の住宅控除の要件「<strong>50㎡以上240㎡以下</strong>」と混同注意——登録免許税には<strong>上限(240㎡)がありません</strong>。「1年以内」を「6か月以内」にするすり替えも定番です。"},
-{id:"ze05", cat:"税・その他", type:"choice",
- text:"記載金額のない不動産売買契約書に課される印紙税の額はいくらか。",
- options:["非課税","200円","400円","1,000円"],
- answer:1, law:"inshi", search:"印紙税 記載金額のない契約書 200円 宅建",
- kaisetsu:"契約金額の記載のない不動産譲渡契約書の印紙税は<strong>一律200円</strong>です。",
- related:"納税義務者は<strong>文書の作成者</strong>(共同作成なら連帯納税)。<strong>国・地方公共団体が作成した文書は非課税</strong>。貼り忘れは本来の税額+2倍の<strong>過怠税(合計3倍)</strong>、自主申告なら1.1倍で済みます。消印を忘れた場合も消印しなかった印紙額と同額の過怠税です。",
- confuse:"「記載金額<strong>1万円未満</strong>の契約書は非課税」「記載金額<strong>5万円未満</strong>の領収書は非課税」と、非課税ラインの数字が別にあります。「記載なし=200円」「1万円未満=非課税」を混ぜないように。"},
-{id:"ze06", cat:"税・その他", type:"choice",
- text:"相続時精算課税制度を選択した場合の特別控除額(累計)はいくらか。",
- options:["1,000万円","1,500万円","2,500万円","3,000万円"],
- answer:2, law:"souzoku", search:"相続時精算課税 特別控除 2500万円 110万円 基礎控除",
- kaisetsu:"相続時精算課税の特別控除は累計<strong>2,500万円</strong>で、超えた部分には一律<strong>20%</strong>の贈与税が課されます(相続時に精算)。",
- related:"適用対象は原則<strong>60歳以上の父母・祖父母から18歳以上の子・孫</strong>への贈与。2024年からは特別控除とは別に<strong>年110万円の基礎控除</strong>が新設され、110万円以下の贈与は申告不要・相続財産にも加算されません。",
- confuse:"暦年課税の<strong>基礎控除110万円</strong>と数字が同じですが別制度。「2,500万円は住宅取得資金贈与の非課税枠」とする誤りにも注意(住宅資金の非課税措置は年度により限度額が変わる別の特例です)。"},
-{id:"ze07", cat:"税・その他", type:"choice",
- text:"地価公示における標準地の価格判定の基準日はいつか。",
- options:["毎年1月1日","毎年4月1日","毎年7月1日","毎年10月1日"],
- answer:0, law:"chika", search:"地価公示 基準日 1月1日 標準地 宅建",
- kaisetsu:"地価公示は<strong>毎年1月1日時点</strong>の標準地の正常な価格を判定し、3月頃に公示されます。判定は<strong>2人以上の不動産鑑定士</strong>の鑑定評価を基に行われます。",
- related:"公示区域は<strong>都市計画区域の内外を問わず</strong>定められます(国土法の規制区域を除く)。不動産鑑定士が公示区域内の土地を鑑定評価するときは公示価格を<strong>規準としなければなりません</strong>。",
- confuse:"都道府県地価調査(基準地価格)の基準日は<strong>7月1日</strong>。「公示=1月1日、地価調査=7月1日」の対比が定番です。固定資産税の賦課期日(1月1日)と同じ日付なのは偶然の一致として整理を。"},
-/* ---------------- 追加パターン: ○×問題 ---------------- */
-{id:"ox01", cat:"宅建業法", type:"ox",
- text:"【正誤判定】専任媒介契約の有効期間を6か月と定めた場合、その媒介契約は無効となる。",
- options:["正しい","誤り"],
- answer:1, law:"gyoho", search:"宅建 専任媒介 3か月 超える定め 短縮 無効ではない",
- kaisetsu:"<strong>誤り</strong>です。3か月を超える定めをしても契約は無効にならず、<strong>有効期間が3か月に短縮</strong>されます。",
- related:"更新後の期間も3か月以内。更新は<strong>依頼者の申出</strong>があるときに限られ、自動更新の特約は無効です(依頼者が宅建業者の場合を除き、規制は依頼者保護のためのものです)。",
- confuse:"「超える定め=契約全体が無効」とするひっかけの定番形。クーリング・オフの「買主に不利な特約は無効」と混ざりやすいですが、媒介の期間は<strong>特約だけが3か月に修正される</strong>処理です。"},
-{id:"ox02", cat:"法令上の制限", type:"ox",
- text:"【正誤判定】市街化区域内において900㎡の宅地造成のための開発行為を行う場合、原則として開発許可を受ける必要はない。",
- options:["正しい","誤り"],
- answer:0, law:"toshi", search:"宅建 開発許可 市街化区域 1000㎡未満 不要",
- kaisetsu:"<strong>正しい</strong>です。市街化区域では<strong>1,000㎡未満</strong>の開発行為は許可不要なので、900㎡は原則許可不要です。",
- related:"三大都市圏の一定区域では条例等により<strong>500㎡以上</strong>に引き下げられている場合があります。「原則」と「条例による引下げ」の関係も過去に出題されています。",
- confuse:"同じ900㎡でも<strong>市街化調整区域なら面積にかかわらず許可が必要</strong>。区域名を読み飛ばすと落とします。国土法の事後届出(市街化区域2,000㎡以上)とは別判断です。"},
-{id:"ox03", cat:"権利関係", type:"ox",
- text:"【正誤判定】定期建物賃貸借契約では、期間を1年未満と定めることもでき、その定めは有効である。",
- options:["正しい","誤り"],
- answer:0, law:"shakuchi", search:"定期建物賃貸借 1年未満 有効 普通借家 期間の定めなし",
- kaisetsu:"<strong>正しい</strong>です。定期建物賃貸借は<strong>1年未満の期間も有効</strong>で、定めた期間どおり終了します。",
- related:"定期建物賃貸借は<strong>公正証書等の書面(または電磁的記録)</strong>で契約し、契約前に「更新がなく期間満了で終了する」旨を<strong>書面を交付して説明</strong>する必要があります。説明を怠ると更新がない旨の定めは無効になります。",
- confuse:"<strong>普通借家で期間を1年未満と定めると「期間の定めのない賃貸借」</strong>とみなされます。「1年未満」の扱いが普通借家と定期借家で正反対になる、対比の急所です。"},
-{id:"ox04", cat:"税・その他", type:"ox",
- text:"【正誤判定】固定資産税の免税点は、土地20万円未満、家屋30万円未満である。",
- options:["正しい","誤り"],
- answer:1, law:"chihozei", search:"固定資産税 免税点 土地30万 家屋20万",
- kaisetsu:"<strong>誤り</strong>です。正しくは<strong>土地30万円・家屋20万円</strong>(償却資産150万円)未満。数字が入れ替えられています。",
- related:"免税点は「同一市町村内の同一人が所有する課税標準の合計」で判定します。課税標準が免税点未満なら課税されません。",
- confuse:"不動産取得税の免税点(<strong>土地10万円・新築等23万円・その他12万円</strong>)との混同も頻出。「固定資産税=30・20・150」「取得税=10・23・12」と税目ごとに分けて暗記を。"},
-/* ---------------- 追加パターン: 計算問題 ---------------- */
-{id:"ca01", cat:"宅建業法", type:"calc",
- text:"【計算】宅地(代金400万円・消費税は考慮しない)の売買を媒介した宅建業者が、依頼者の一方から受領できる報酬の限度額はいくらか。",
- options:["16万円","18万円","20万円","22万円"],
- answer:1, law:"gyoho", search:"宅建 報酬計算 400万円 4% 2万円",
- kaisetsu:"400万円は「200万円超<strong>400万円以下</strong>」の区分なので<strong>4%+2万円</strong>を適用し、400万×4%+2万=<strong>18万円</strong>です。",
- related:"「400万円<strong>超</strong>」から3%+6万円になるため、400万円ちょうどは4%+2万円。ちなみに3%+6万円で計算しても400万×3%+6万=18万円と同額になります(速算式が連続している証拠)。",
- confuse:"境目の「200万円ちょうど」「400万円ちょうど」がどちらの区分かを問う出題に注意。<strong>「以下」はその区分に含む</strong>と覚えましょう。低廉な空家等の特例(800万円以下・最大30万円)を使うと結論が変わる点も要注意。"},
-{id:"ca02", cat:"宅建業法", type:"calc",
- text:"【計算】本店のほか支店を3か所設置して宅建業を営もうとする者(保証協会には加入しない)が供託すべき営業保証金の合計額はいくらか。",
- options:["1,500万円","2,000万円","2,500万円","150万円"],
- answer:2, law:"gyoho", search:"営業保証金 計算 本店1000万 支店500万",
- kaisetsu:"1,000万円(本店)+500万円×3(支店)=<strong>2,500万円</strong>です。",
- related:"事務所を<strong>増設</strong>したときは、増設分の営業保証金を供託し届出をした後でなければ、その事務所で事業を開始できません。",
- confuse:"選択肢の「150万円」は保証協会の分担金(60万+30万×3)で計算した場合の額。<strong>問題文が「営業保証金」か「分担金」か</strong>を必ず確認する癖をつけましょう。"},
-{id:"ca03", cat:"法令上の制限", type:"calc",
- text:"【計算】指定建蔽率6/10の地域内で、特定行政庁が指定する角地にあり、かつ防火地域内に耐火建築物を建てる場合、敷地面積200㎡に対する建築面積の最高限度はいくらか。",
- options:["120㎡","140㎡","160㎡","200㎡"],
- answer:2, law:"kenchiku", search:"建蔽率 計算 角地 防火地域 耐火建築物 加算",
- kaisetsu:"6/10+1/10(角地)+1/10(防火地域内の耐火建築物等)=8/10。200㎡×8/10=<strong>160㎡</strong>です。",
- related:"もし指定建蔽率が<strong>8/10の地域</strong>で防火地域内の耐火建築物等なら、建蔽率の制限自体が適用されず<strong>200㎡(100%)</strong>まで可能になります。",
- confuse:"「角地と防火・耐火は併用できない」とする誤りに注意——<strong>両方満たせば+2/10</strong>です。容積率の計算(前面道路×4/10等)と混ぜないこと。"},
-{id:"ca04", cat:"法令上の制限", type:"calc",
- text:"【計算】第一種住居地域(指定容積率30/10)内で、前面道路の幅員が4mである敷地の容積率の最高限度はいくらか。",
- options:["120%","160%","240%","300%"],
- answer:1, law:"kenchiku", search:"容積率 計算 前面道路 4m 住居系 4/10",
- kaisetsu:"前面道路12m未満なので、住居系は<strong>幅員×4/10</strong>=4×4/10=16/10(160%)。指定容積率300%と比べて<strong>小さい方の160%</strong>が限度です。",
- related:"商業地域など<strong>住居系以外なら×6/10</strong>で、4×6/10=240%になります。前面道路が12m以上あれば指定容積率(300%)をそのまま使えます。",
- confuse:"「指定容積率と道路幅員制限の<strong>大きい方</strong>」とする誤りが定番——正しくは<strong>小さい(厳しい)方</strong>。4/10と6/10の適用地域の入れ替えにも注意。"},
-/* ---------------- 追加パターン: 誤り探し ---------------- */
-{id:"er01", cat:"宅建業法", type:"error",
- text:"媒介契約に関する次の記述のうち、誤っているものはどれか。",
- options:["専任媒介契約では、業務の処理状況を2週間に1回以上報告しなければならない","専属専任媒介契約では、業務の処理状況を1週間に1回以上報告しなければならない","専任媒介契約では、契約締結日から5日以内(休業日を除く)に指定流通機構へ登録しなければならない","一般媒介契約には、指定流通機構への登録義務はない"],
- answer:2, law:"gyoho", search:"宅建 媒介契約 レインズ 7日 5日 報告義務 比較",
- kaisetsu:"専任媒介の登録期限は<strong>7日以内</strong>(休業日を除く)なので、「5日以内」が誤り。<strong>5日は専属専任媒介</strong>の期限です。",
- related:"4つの数字はセットで:<strong>専任=報告2週間に1回・登録7日/専属専任=報告1週間に1回・登録5日</strong>。一般媒介は期間・報告・登録のいずれの義務もありません。",
- confuse:"本試験ではこのように<strong>正しい記述の中に1つだけ数字を入れ替えた肢</strong>を混ぜてきます。「どの契約類型の数字か」を肢ごとに確認する習慣をつけましょう。"},
-{id:"er02", cat:"権利関係", type:"error",
- text:"借地借家法の借地権に関する次の記述のうち、誤っているものはどれか。",
- options:["普通借地権の当初の存続期間は30年以上である","一般定期借地権の存続期間は50年以上である","事業用定期借地権の存続期間は10年以上50年未満である","建物譲渡特約付借地権の存続期間は20年以上である"],
- answer:3, law:"shakuchi", search:"建物譲渡特約付借地権 30年 定期借地権 比較",
- kaisetsu:"建物譲渡特約付借地権は<strong>30年以上</strong>なので「20年以上」が誤りです。",
- related:"覚え方:「普通も譲渡特約付も<strong>30</strong>」「一般定期は<strong>50</strong>」「事業用は<strong>10〜50未満</strong>」。方式は、一般定期=書面等/事業用=公正証書/譲渡特約付=口頭でも可、と3点セットで整理。",
- confuse:"「20年」は<strong>普通借地権の1回目の更新後の期間</strong>に登場する数字。更新の系列(30・20・10)と定期借地の系列(50・10〜50・30)を混ぜるのが出題者の常套手段です。"},
-{id:"er03", cat:"税・その他", type:"error",
- text:"不動産に関する税の数字について、誤っているものはどれか。",
- options:["固定資産税の標準税率は1.4%である","不動産取得税の標準税率は4%である","住宅・土地に係る不動産取得税の特例税率は3%である","固定資産税の住宅用地特例では、200㎡以下の部分の課税標準が3分の1になる"],
- answer:3, law:"chihozei", search:"固定資産税 住宅用地特例 6分の1 3分の1 200㎡",
- kaisetsu:"200㎡以下の小規模住宅用地は<strong>6分の1</strong>なので「3分の1」が誤り。<strong>1/3は200㎡を超える部分</strong>です。",
- related:"新築住宅の税額減額(<strong>3年間・マンション等は5年間、120㎡相当分が1/2</strong>)も固定資産税の頻出特例です。",
- confuse:"「1/6と1/3の適用面積の入れ替え」はこの論点の定番ひっかけ。<strong>狭い方(200㎡以下)が有利な1/6</strong>と、優遇の向きで覚えましょう。"},
-{id:"er04", cat:"宅建業法", type:"error",
- text:"営業保証金・弁済業務保証金分担金に関する次の記述のうち、誤っているものはどれか。",
- options:["営業保証金は、主たる事務所につき1,000万円である","営業保証金は、その他の事務所1か所につき500万円である","弁済業務保証金分担金は、主たる事務所につき60万円である","弁済業務保証金分担金は、その他の事務所1か所につき50万円である"],
- answer:3, law:"gyoho", search:"弁済業務保証金分担金 30万円 営業保証金 比較",
- kaisetsu:"分担金の従たる事務所分は<strong>30万円</strong>なので「50万円」が誤りです。",
- related:"「営業保証金1,000万/500万」「分担金60万/30万」はどちらも<strong>主:従=2:1</strong>の比率。比率で覚えるとどちらかを忘れても復元できます。",
- confuse:"営業保証金の「500万円」と分担金の従たる事務所分を混ぜた「50万円」のような、<strong>桁や制度をまたいだ合成数字</strong>に注意。金銭のみ(分担金)か有価証券可(営業保証金)かの違いも一緒に確認を。"},
-/* ---------------- 追加パターン: 数字の逆引き ---------------- */
-{id:"re01", cat:"宅建業法", type:"reverse",
- text:"【逆引き】次のうち、期限が「2週間以内」であるものはどれか。",
- options:["国土利用計画法の事後届出(契約締結日から)","案内所等の設置の届出(業務開始日まで)","宅建業者の変更の届出","宅建業者の廃業等の届出"],
- answer:0, law:"kokudo", search:"宅建 期限 2週間 10日前 30日 届出 まとめ",
- kaisetsu:"「2週間以内」は<strong>国土法の事後届出</strong>(契約日から2週間以内)。案内所は<strong>10日前まで</strong>、変更・廃業の届出は<strong>30日以内</strong>です。",
- related:"「2週間」仲間は他に:<strong>専任宅建士の補充措置/営業保証金の不足額供託/還付充当金の納付/分担金(事務所新設時)</strong>など。業法の「2週間」は補充・穴埋め系に多いのが特徴です。",
- confuse:"「10日<strong>前</strong>(事前)」は案内所だけ。届出系はほぼ「30日以内(事後)」。<strong>事前か事後か</strong>という向きの違いも同時に確認しましょう。"},
-{id:"re02", cat:"宅建業法", type:"reverse",
- text:"【逆引き】次のうち、「5年」が当てはまらないものはどれか。",
- options:["宅建業の免許の有効期間","宅建士証の有効期間","免許欠格事由に該当した場合の欠格期間","従業者名簿の保存期間"],
- answer:3, law:"gyoho", search:"宅建 5年 まとめ 免許 宅建士証 欠格 名簿10年",
- kaisetsu:"従業者名簿の保存期間は<strong>10年</strong>なので「5年」は当てはまりません。他の3つはすべて5年です。",
- related:"「5年」仲間:<strong>免許・宅建士証の有効期間/各種欠格期間/帳簿の保存(閉鎖後)</strong>。「10年」仲間:<strong>従業者名簿/自ら売主の新築住宅の帳簿/瑕疵担保責任</strong>。グループで覚えると逆引きに強くなります。",
- confuse:"帳簿(5年)と名簿(10年)は最も混同しやすいペア。「<strong>名(前)は長く残る=名簿10年</strong>」など、自分なりのフックを作りましょう。"},
-{id:"re03", cat:"税・その他", type:"reverse",
- text:"【逆引き】次のうち、基準日・賦課期日が「1月1日」でないものはどれか。",
- options:["固定資産税の賦課期日","地価公示の標準地の価格判定の基準日","都道府県地価調査(基準地)の価格判定の基準日","譲渡所得の長期・短期を判定する所有期間の起算基準(譲渡した年の)"],
- answer:2, law:"chika", search:"地価調査 7月1日 地価公示 1月1日 比較",
- kaisetsu:"都道府県地価調査の基準日は<strong>7月1日</strong>です。固定資産税の賦課期日・地価公示の基準日・譲渡所得の所有期間判定はいずれも<strong>1月1日</strong>を使います。",
- related:"地価公示(国土交通省・1月1日)と地価調査(都道府県・7月1日)は、実施主体と基準日をセットで対比。半年ずれているため、地価動向を年2回把握できる仕組みになっています。",
- confuse:"「不動産取得税にも賦課期日1月1日がある」と考えないこと——取得税は<strong>取得の時点</strong>で課税される流通税で、賦課期日という概念がありません。"},
+const sets=[
+{id:"mediation",cat:"宅建業法",title:"媒介契約の重要数字",prompt:"次の項目をすべて選んでください。",items:[
+["専任媒介契約のレインズ登録期限",7,"日以内",[5,7,8,14]],["専属専任媒介契約のレインズ登録期限",5,"日以内",[3,5,7,8]],["専任媒介契約の報告",2,"週間に1回以上",[1,2,3,4]],["専属専任媒介契約の報告",1,"週間に1回以上",[1,2,3,4]],["契約有効期間の上限",3,"か月",[1,2,3,6]]],e:"専任は登録7日・報告2週間、専属専任は登録5日・報告1週間。期間はどちらも3か月以内です。"},
+{id:"license",cat:"宅建業法",title:"免許・宅建士・設置人数",prompt:"有効期間と必要人数をすべて選んでください。",items:[
+["宅建業者免許の有効期間",5,"年",[3,5,7,10]],["宅建士証の有効期間",5,"年",[3,5,7,10]],["事務所の専任宅建士",5,"人につき1人以上",[3,5,10,20]],["一定の案内所等の専任宅建士",1,"人以上",[1,2,3,5]]],e:"免許・宅建士証はともに5年。事務所は5人に1人、一定の案内所等は1人以上です。"},
+{id:"guarantee",cat:"宅建業法",title:"営業保証金と保証協会",prompt:"主たる事務所・従たる事務所の金額をすべて選んでください。",items:[
+["営業保証金：主たる事務所",1000,"万円",[500,600,1000,1500]],["営業保証金：従たる事務所1か所",500,"万円",[250,300,500,1000]],["分担金：主たる事務所",60,"万円",[30,60,90,100]],["分担金：従たる事務所1か所",30,"万円",[15,30,50,60]]],e:"営業保証金は1,000万円・500万円。保証協会の分担金は60万円・30万円です。"},
+{id:"selfseller",cat:"宅建業法",title:"宅建業者自ら売主の制限",prompt:"上限・保全措置・責任期間をすべて選んでください。",items:[
+["受領できる手付額の上限",20,"％",[5,10,20,30]],["損害賠償予定額と違約金の合計上限",20,"％",[10,20,30,40]],["保全措置不要となる割合の上限",5,"％",[5,10,15,20]],["保全措置不要となる金額の上限",1000,"万円",[500,800,1000,1500]],["担保責任の通知期間を短縮できる最低期間",2,"年以上",[1,2,5,10]]],e:"20％・20％、保全不要は5％以下かつ1,000万円以下、担保責任は2年以上です。"},
+{id:"prescription",cat:"民法・権利関係",title:"消滅時効の基本セット",prompt:"債権と不法行為の期間をすべて選んでください。",items:[
+["債権：行使できることを知った時から",5,"年",[1,3,5,10]],["債権：行使できる時から",10,"年",[5,10,15,20]],["不法行為：損害と加害者を知った時から",3,"年",[1,3,5,10]],["生命・身体侵害：知った時から",5,"年",[3,5,10,20]],["不法行為の時から",20,"年",[5,10,15,20]]],e:"債権は5年・10年。不法行為は原則3年、生命身体は5年、行為時から20年です。"},
+{id:"acquisitive",cat:"民法・権利関係",title:"取得時効",prompt:"2つの期間を選んでください。",items:[
+["善意・無過失",10,"年",[5,10,15,20]],["善意・無過失でない場合",20,"年",[5,10,15,20]]],e:"善意・無過失は10年、それ以外は20年です。"},
+{id:"inheritance",cat:"民法・権利関係",title:"相続の期間",prompt:"相続放棄と遺留分の期間をすべて選んでください。",items:[
+["相続放棄・限定承認",3,"か月",[1,3,6,12]],["遺留分侵害額請求：知った時から",1,"年",[1,2,3,5]],["遺留分侵害額請求：相続開始から",10,"年",[5,10,15,20]]],e:"相続放棄等は3か月、遺留分は知った時から1年・相続開始から10年です。"},
+{id:"landlease",cat:"民法・権利関係",title:"普通借地権の期間",prompt:"当初・最初の更新・2回目以降をすべて選んでください。",items:[
+["当初の存続期間",30,"年以上",[10,20,30,50]],["最初の更新後",20,"年以上",[10,20,30,50]],["2回目以降の更新",10,"年以上",[5,10,20,30]]],e:"当初30年、最初の更新20年、その後10年です。"},
+{id:"fixedlease",cat:"民法・権利関係",title:"定期借地権の期間",prompt:"定期借地権の各期間をすべて選んでください。",items:[
+["一般定期借地権",50,"年以上",[20,30,50,60]],["事業用定期借地権の下限",10,"年以上",[5,10,20,30]],["事業用定期借地権の上限",50,"年未満",[30,40,50,60]],["建物譲渡特約付借地権",30,"年以上経過後",[10,20,30,50]]],e:"一般定期50年以上、事業用10年以上50年未満、建物譲渡特約付は30年以上経過後です。"},
+{id:"development",cat:"法令上の制限",title:"開発許可の規模",prompt:"区域ごとの代表的基準をすべて選んでください。",items:[
+["市街化区域の一般的基準",1000,"㎡以上",[300,500,1000,3000]],["三大都市圏の一定区域",500,"㎡以上",[300,500,1000,3000]],["都市計画区域等の区域外",10000,"㎡以上",[1000,3000,5000,10000]],["市街化調整区域で面積だけにより一律許可不要",0,"㎡",[0,300,500,1000]]],e:"一般1,000㎡、一定区域500㎡、区域外10,000㎡。市街化調整区域には面積だけの一律免除はありません。"},
+{id:"fireproof",cat:"法令上の制限",title:"防火・準防火地域",prompt:"階数と延べ面積をすべて選んでください。",items:[
+["防火地域：地階を含む階数",3,"階以上",[2,3,4,5]],["防火地域：延べ面積",100,"㎡超",[50,100,500,1500]],["準防火地域：地階を除く階数",4,"階以上",[2,3,4,5]],["準防火地域：延べ面積",1500,"㎡超",[100,500,1000,1500]]],e:"防火地域は3階以上・100㎡超、準防火地域は4階以上・1,500㎡超が基本整理です。"},
+{id:"farmland",cat:"法令上の制限",title:"農地法3条・4条・5条",prompt:"内容に対応する条文番号をすべて選んでください。",items:[
+["農地の権利移転・設定",3,"条",[2,3,4,5]],["自己所有農地の転用",4,"条",[2,3,4,5]],["転用目的の権利移転・設定",5,"条",[2,3,4,5]]],e:"権利移転は3条、自己転用は4条、転用目的の権利移転は5条です。"},
+{id:"taxrate",cat:"税・その他",title:"不動産に関する税率",prompt:"標準税率・制限税率をすべて選んでください。",items:[
+["不動産取得税の標準税率（原則）",4,"％",[1.4,3,4,5]],["固定資産税の標準税率",1.4,"％",[0.3,1.4,3,4]],["都市計画税の制限税率",0.3,"％",[0.3,1.4,3,4]]],e:"不動産取得税4％、固定資産税1.4％、都市計画税0.3％です。"},
+{id:"residential",cat:"税・その他",title:"住宅用地の特例",prompt:"小規模住宅用地の数字をすべて選んでください。",items:[
+["住宅1戸あたりの面積",200,"㎡まで",[100,150,200,300]],["固定資産税の課税標準",6,"分の1",[2,3,4,6]],["都市計画税の課税標準",3,"分の1",[2,3,4,6]]],e:"200㎡まで。固定資産税は6分の1、都市計画税は3分の1です。"},
+{id:"publicprice",cat:"税・その他",title:"地価公示・地価調査",prompt:"それぞれの基準日を選んでください。",items:[
+["地価公示",1,"月1日",[1,4,7,10]],["都道府県地価調査",7,"月1日",[1,4,7,10]]],e:"地価公示は1月1日、都道府県地価調査は7月1日です。"}
 ];
 
-/* ===================================================== */
-const CATS = ["宅建業法","法令上の制限","権利関係","税・その他"];
-const TYPE_LABEL = {choice:"数値問題", cloze:"穴埋め問題", ox:"○×問題", calc:"計算問題", error:"誤り探し", reverse:"数字の逆引き"};
-const $ = id => document.getElementById(id);
-const screens = {start:$("screen-start"), quiz:$("screen-quiz"), result:$("screen-result")};
-
-let session = [];
-let idx = 0;
-let results = [];
-let stats = {};
-const STAT_KEY = "takken_suji_stats_v1";
-
-/* ---------- 記録の保存(window.storage → localStorage → メモリ) ---------- */
-const memStore = {};
-async function loadStats(){
-  if(typeof window.storage !== "undefined" && window.storage){
-    try{
-      const r = await window.storage.get(STAT_KEY);
-      if(r && r.value) return JSON.parse(r.value);
-    }catch(e){ /* キー未作成 */ }
-    return {};
-  }
-  try{
-    const v = localStorage.getItem(STAT_KEY);
-    if(v) return JSON.parse(v);
-  }catch(e){}
-  return memStore[STAT_KEY] || {};
+const KEY="takkenSetStatsV2";
+let stats=JSON.parse(localStorage.getItem(KEY)||"{}"),quiz=[],index=0,confidence=null,answered=false;
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const todayKey=()=>new Date().toISOString().slice(0,10);
+const shuffle=a=>[...a].sort(()=>Math.random()-.5);
+const getStat=id=>stats[id]||{right:0,wrong:0,streak:0,uncertain:0,conf:{high:0,mid:0,low:0},last:""};
+function save(){localStorage.setItem(KEY,JSON.stringify(stats))}
+function cats(){return["すべて",...new Set(sets.map(x=>x.cat))]}
+function init(){
+ $("#cat").innerHTML=cats().map(x=>`<option>${x}</option>`).join("");
+ $$(".tab").forEach(b=>b.onclick=()=>show(b.dataset.view));
+ $$(".conf").forEach(b=>b.onclick=()=>{$$(".conf").forEach(x=>x.classList.remove("active"));b.classList.add("active");confidence=b.dataset.conf});
+ $("#start").onclick=()=>start();$("#random3").onclick=()=>start({count:3});$("#review").onclick=()=>start({review:true});
+ $("#check").onclick=check;$("#next").onclick=()=>{index++;render()};$("#quit").onclick=()=>show("home");
+ $("#reset").onclick=()=>{if(confirm("学習履歴を削除しますか？")){stats={};save();dashboard()}};
+ $("#export").onclick=exportData;dashboard();
 }
-async function saveStats(){
-  const json = JSON.stringify(stats);
-  if(typeof window.storage !== "undefined" && window.storage){
-    try{ await window.storage.set(STAT_KEY, json); return "storage"; }catch(e){}
-  }
-  try{ localStorage.setItem(STAT_KEY, json); return "local"; }catch(e){}
-  memStore[STAT_KEY] = stats;
-  return "memory";
+function show(v){$$(".view").forEach(x=>x.classList.toggle("active",x.id===v));$$(".tab").forEach(x=>x.classList.toggle("active",x.dataset.view===v));if(v==="home"||v==="data")dashboard();scrollTo({top:0,behavior:"smooth"})}
+function start(opt={}){
+ let pool=[...sets],cat=$("#cat").value;if(cat!=="すべて")pool=pool.filter(x=>x.cat===cat);
+ if(opt.review)pool=pool.filter(x=>{let s=getStat(x.id);return s.wrong>s.right||s.uncertain>0});
+ if(!pool.length){alert("対象となる復習セットがありません。");return}
+ pool.sort((a,b)=>{let A=getStat(a.id),B=getStat(b.id);return(B.wrong*4+B.uncertain*2-B.right+Math.random()*2)-(A.wrong*4+A.uncertain*2-A.right+Math.random()*2)});
+ quiz=pool.slice(0,Math.min(opt.count||Number($("#count").value),pool.length));index=0;render();show("quiz");
 }
-
-function show(name){
-  Object.values(screens).forEach(s=>s.classList.add("hidden"));
-  screens[name].classList.remove("hidden");
-  window.scrollTo({top:0,behavior:"smooth"});
-}
-function shuffle(a){
-  const arr=[...a];
-  for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]];}
-  return arr;
-}
-function esc(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
-
-/* ---------- 苦手度スコア(高いほど苦手) ---------- */
-function weakScore(qid){
-  const s = stats[qid];
-  if(!s || s.a===0) return 0.55;
-  return (s.a - s.c + 1) / (s.a + 2);
-}
-function catStat(cat){
-  let a=0,c=0;
-  QUESTIONS.filter(q=>q.cat===cat).forEach(q=>{
-    const s=stats[q.id]; if(s){a+=s.a;c+=s.c;}
-  });
-  return {a,c,rate:a?c/a:null};
-}
-
-/* ---------- スタート画面 ---------- */
-function buildCatChips(){
-  const wrap=$("cat-chips");
-  wrap.innerHTML="";
-  const all=document.createElement("span");
-  all.className="chip";
-  all.innerHTML='<input type="radio" name="cat" value="ALL" id="cAll" checked><label class="lab" for="cAll">全分野 <span class="cnt">'+QUESTIONS.length+'問</span></label>';
-  wrap.appendChild(all);
-  CATS.forEach((c,i)=>{
-    const n=QUESTIONS.filter(q=>q.cat===c).length;
-    const s=document.createElement("span");
-    s.className="chip";
-    s.innerHTML='<input type="radio" name="cat" value="'+c+'" id="c'+i+'"><label class="lab" for="c'+i+'">'+c+' <span class="cnt">'+n+'問</span></label>';
-    wrap.appendChild(s);
-  });
-}
-
-function renderRecord(){
-  const rows=$("stat-rows");
-  rows.innerHTML="";
-  const data=CATS.map(c=>({cat:c,...catStat(c)}));
-  const answered=data.some(d=>d.a>0);
-  $("record-empty").classList.toggle("hidden",answered);
-  $("record-note").textContent = answered ? "この端末に自動保存されます" : "";
-  if(!answered) return;
-
-  const rated=data.filter(d=>d.rate!==null);
-  const worst=rated.length?rated.reduce((m,d)=>d.rate<m.rate?d:m):null;
-
-  data.forEach(d=>{
-    const row=document.createElement("div");
-    row.className="stat-row";
-    const pct=d.rate===null?0:Math.round(d.rate*100);
-    const isWeak = worst && d.cat===worst.cat && d.rate!==null && d.rate<1;
-    row.innerHTML=
-      '<span class="nm">'+d.cat+(isWeak?'<span class="weak-mark">▼苦手</span>':'')+'</span>'+
-      '<span class="bar"><i class="'+(d.rate!==null&&d.rate<0.6?"low":"")+'" style="width:'+pct+'%"></i></span>'+
-      '<span class="val">'+(d.rate===null?"未回答":pct+"%("+d.c+"/"+d.a+")")+'</span>';
-    rows.appendChild(row);
-  });
-}
-
-function getPool(){
-  const cat=document.querySelector('input[name="cat"]:checked').value;
-  return cat==="ALL"?[...QUESTIONS]:QUESTIONS.filter(q=>q.cat===cat);
-}
-function getCount(pool){
-  const v=document.querySelector('input[name="qnum"]:checked').value;
-  return v==="all"?pool.length:Math.min(parseInt(v,10),pool.length);
-}
-
-$("btn-start").addEventListener("click",()=>{
-  const pool=shuffle(getPool());
-  startSession(pool.slice(0,getCount(pool)),false);
-});
-$("btn-start-weak").addEventListener("click",()=>{
-  const pool=getPool()
-    .map(q=>({q,w:weakScore(q.id)+Math.random()*0.08}))
-    .sort((a,b)=>b.w-a.w)
-    .map(o=>o.q);
-  startSession(pool.slice(0,getCount(pool)),true);
-});
-$("btn-reset-stats").addEventListener("click",async()=>{
-  if(!confirm("学習記録をすべて削除します。よろしいですか?"))return;
-  stats={};
-  await saveStats();
-  renderRecord();
-});
-
-function startSession(qs,weakMode){
-  session=qs; idx=0; results=[];
-  session.weakMode=weakMode;
-  show("quiz");
-  render();
-}
-
-/* ---------- 出題 ---------- */
 function render(){
-  const q=session[idx];
-  $("tag-cat").textContent=q.cat;
-  $("tag-type").textContent=TYPE_LABEL[q.type]||"数値問題";
-  const s=stats[q.id];
-  $("tag-weak").classList.toggle("hidden",!(s&&s.a>0&&s.c<s.a));
-  $("quiz-counter").textContent=(idx+1)+" / "+session.length+" 問"+(session.weakMode?"(苦手優先)":"");
-  $("progress-bar").style.width=(idx/session.length)*100+"%";
-  $("q-num").textContent="第 "+(idx+1)+" 問";
-  $("q-text").innerHTML=esc(q.text).replace(/＿([ＡＢＣＤ])＿/g,'<span class="blank">$1</span>');
-
-  const isOx=q.type==="ox";
-  const order=isOx?q.options.map((t,i)=>({t,i})):shuffle(q.options.map((t,i)=>({t,i})));
-  const marks=isOx?["○","×"]:["ア","イ","ウ","エ"];
-  const box=$("opts");
-  box.innerHTML="";
-  order.forEach((o,pos)=>{
-    const b=document.createElement("button");
-    b.className="opt";
-    b.dataset.optIndex=o.i;
-    b.innerHTML='<span class="key">'+marks[pos]+'</span>'+esc(o.t);
-    b.addEventListener("click",()=>answer(q,o.i,b,box));
-    box.appendChild(b);
-  });
-
-  $("kaisetsu").classList.add("hidden");
-  $("next-row").classList.add("hidden");
+ if(index>=quiz.length){finish();return}
+ answered=false;confidence=null;$$(".conf").forEach(x=>x.classList.remove("active"));
+ let q=quiz[index];$("#bar").style.width=`${index/quiz.length*100}%`;$("#qcat").textContent=q.cat;$("#qnum").textContent=`${index+1} / ${quiz.length}`;$("#qtitle").textContent=q.title;$("#qprompt").textContent=q.prompt;
+ $("#parts").innerHTML=q.items.map((it,i)=>`<div class="part" data-i="${i}"><div class="part-label">${i+1}. ${it[0]}</div><select class="part-select"><option value="">選択してください</option>${shuffle(it[3]).map(v=>`<option value="${v}">${v}${it[2]}</option>`).join("")}</select><div class="answer-result"></div></div>`).join("");
+ $("#feedback").className="feedback";$("#feedback").innerHTML="";$("#check").classList.remove("hidden");$("#next").classList.add("hidden");
 }
-
-async function answer(q,pickedIdx,btn,box){
-  const correct=pickedIdx===q.answer;
-  results.push({q,picked:q.options[pickedIdx],correct});
-
-  if(!stats[q.id])stats[q.id]={a:0,c:0};
-  stats[q.id].a++;
-  if(correct)stats[q.id].c++;
-  saveStats();
-
-  [...box.querySelectorAll(".opt")].forEach(b=>{
-    b.disabled=true;
-    const oi=parseInt(b.dataset.optIndex,10);
-    if(oi===q.answer){b.classList.add("is-correct");}
-    else if(b===btn){b.classList.add("is-wrong");}
-    else{b.classList.add("dim");}
-  });
-
-  const seal=document.createElement("div");
-  seal.className="seal animate "+(correct?"ok":"ng");
-  seal.textContent=correct?"正":"誤";
-  seal.setAttribute("role","img");
-  seal.setAttribute("aria-label",correct?"正解":"不正解");
-  box.appendChild(seal);
-
-  $("ans-text").textContent=q.options[q.answer];
-  $("k-main").innerHTML=q.kaisetsu;
-  $("k-related").innerHTML=q.related;
-  $("k-confuse").innerHTML=q.confuse;
-
-  const links=$("k-links");
-  links.innerHTML="";
-  const law=LAWS[q.law];
-  const items=[
-    {t:"この論点の解説を検索", u:"https://www.google.com/search?q="+encodeURIComponent(q.search)},
-    {t:"条文を読む("+law.name+" / e-Gov)", u:law.url},
-    {t:"宅建試験ドットコムで過去問演習", u:"https://takken-siken.com/kakomon.php"}
-  ];
-  items.forEach(it=>{
-    const a=document.createElement("a");
-    a.href=it.u; a.target="_blank"; a.rel="noopener";
-    a.textContent=it.t;
-    links.appendChild(a);
-  });
-
-  $("kaisetsu").classList.remove("hidden");
-  $("next-row").classList.remove("hidden");
-  $("btn-next").textContent=idx===session.length-1?"結果を見る":"次の問題へ";
-  $("progress-bar").style.width=((idx+1)/session.length)*100+"%";
+function check(){
+ if(answered)return;let q=quiz[index],sels=$$(".part-select");
+ if(sels.some(s=>s.value==="")){alert("すべての項目を選択してください。");return}
+ if(!confidence){alert("採点前の自信度を選んでください。");return}
+ answered=true;let correct=0;
+ sels.forEach((s,i)=>{let it=q.items[i],ok=Math.abs(Number(s.value)-Number(it[1]))<.00001,row=s.closest(".part");if(ok)correct++;row.classList.add(ok?"correct":"wrong");row.querySelector(".answer-result").innerHTML=ok?`○ 正解：<b>${it[1]}${it[2]}</b>`:`× あなた：${s.value}${it[2]}　正解：<b>${it[1]}${it[2]}</b>`;s.disabled=true});
+ let all=correct===q.items.length,st=getStat(q.id);st.right+=all?1:0;st.wrong+=all?0:1;st.streak=all?st.streak+1:0;st.conf=st.conf||{high:0,mid:0,low:0};st.conf[confidence]=(st.conf[confidence]||0)+1;st.last=todayKey();
+ if(all&&confidence!=="high")st.uncertain=(st.uncertain||0)+1;
+ if(!all&&st.uncertain>0)st.uncertain--;
+ stats[q.id]=st;stats._days=stats._days||{};let d=stats._days[todayKey()]||{total:0,right:0};d.total++;if(all)d.right++;stats._days[todayKey()]=d;save();
+ let labels={high:"自信あり",mid:"少し不安",low:"自信なし"},extra="";
+ if(all&&confidence!=="high")extra="<br><b>正解ですが、復習対象として記録しました。</b>";
+ if(!all&&confidence==="high")extra="<br><b>自信ありでの不正解です。思い込みに注意して復習してください。</b>";
+ let f=$("#feedback");f.className=`feedback show ${all?"ok":"bad"}`;f.innerHTML=`<b>${correct}/${q.items.length}項目正解</b><br>採点前：${labels[confidence]}${extra}<br><br>${q.e}`;
+ $("#check").classList.add("hidden");$("#next").classList.remove("hidden");$("#next").textContent=index===quiz.length-1?"結果を見る":"次のセット";
 }
-
-$("btn-next").addEventListener("click",()=>{
-  idx++;
-  if(idx<session.length){render();}
-  else{showResult();}
-});
-
-/* ---------- 結果 ---------- */
-async function showResult(){
-  const ok=results.filter(r=>r.correct).length;
-  const total=results.length;
-  $("score-big").textContent=ok+"/"+total;
-  $("score-small").textContent="正解";
-  const rate=ok/total;
-  $("result-msg").textContent=
-    rate===1?"全問正解。数字は完璧です。":
-    rate>=0.8?"合格圏。あと一歩、間違えた数字を潰しましょう。":
-    rate>=0.5?"基礎はOK。混同ペアを重点復習しましょう。":
-    "ここからが本番。復習リストを繰り返しましょう。";
-
-  const how=await saveStats();
-  $("save-note").textContent =
-    how==="memory" ? "※この環境では記録を保存できないため、今回の成績はこの画面を閉じると消えます"
-                   : "成績を学習記録に保存しました(トップ画面で分野別に確認できます)";
-
-  const list=$("review-list");
-  list.innerHTML="";
-  const wrongs=results.filter(r=>!r.correct);
-  if(wrongs.length===0){
-    list.innerHTML='<p style="font-size:.9rem;color:var(--ink-soft);">間違えた問題はありません。別の分野にも挑戦してみましょう。</p>';
-    $("btn-retry-wrong").disabled=true;
-  }else{
-    $("btn-retry-wrong").disabled=false;
-    wrongs.forEach(r=>{
-      const d=document.createElement("div");
-      d.className="rv-item";
-      d.innerHTML='<p class="rv-q">【'+r.q.cat+'】'+esc(r.q.text).replace(/＿([ＡＢＣＤ])＿/g,"〔$1〕")+'</p>'+
-        '<p class="rv-a">あなたの解答：'+esc(r.picked)+'　→　正解：<b>'+esc(r.q.options[r.q.answer])+'</b></p>';
-      list.appendChild(d);
-    });
-  }
-  show("result");
+function finish(){
+ $("#bar").style.width="100%";$("#qcat").textContent="完了";$("#qnum").textContent="";$("#qtitle").textContent="トレーニング終了！";$("#qprompt").textContent="間違えたセットと、自信がなかった正解は復習対象に記録されています。";$("#parts").innerHTML='<div class="empty"><div style="font-size:50px">🎉</div>今日もお疲れさまでした。</div>';$("#confidence").classList.add("hidden");$("#check").classList.add("hidden");$("#next").classList.add("hidden");dashboard();setTimeout(()=>$("#confidence").classList.remove("hidden"),1000)
 }
-
-$("btn-retry-wrong").addEventListener("click",()=>{
-  const wrongQs=results.filter(r=>!r.correct).map(r=>r.q);
-  if(wrongQs.length)startSession(shuffle(wrongQs),false);
-});
-$("btn-home").addEventListener("click",()=>{renderRecord();show("start");});
-
-/* ---------- PWA: Service Worker登録 ---------- */
-if("serviceWorker" in navigator && location.protocol.indexOf("http")===0){
-  window.addEventListener("load",()=>{
-    navigator.serviceWorker.register("sw.js").catch(()=>{});
-  });
+function dashboard(){
+ let d=(stats._days||{})[todayKey()]||{total:0,right:0};$("#today").textContent=d.total;$("#rate").textContent=d.total?Math.round(d.right/d.total*100)+"%":"0%";
+ let weak=sets.filter(x=>{let s=getStat(x.id);return s.wrong>s.right||s.uncertain>0}).length;$("#weak").textContent=weak;
+ let total=0,right=0,master=0;sets.forEach(x=>{let s=getStat(x.id);total+=s.right+s.wrong;right+=s.right;if(s.streak>=3&&!s.uncertain)master++});$("#total").textContent=total;$("#correct").textContent=right;$("#master").textContent=master;
+ let days=stats._days||{},streak=0,dt=new Date();for(let i=0;i<365;i++){let k=dt.toISOString().slice(0,10);if(days[k]?.total){streak++;dt.setDate(dt.getDate()-1)}else if(i===0)dt.setDate(dt.getDate()-1);else break}$("#streak").textContent=`🔥 ${streak}日`;
+ $("#catstats").innerHTML=cats().filter(c=>c!=="すべて").map(c=>{let t=0,r=0,u=0;sets.filter(x=>x.cat===c).forEach(x=>{let s=getStat(x.id);t+=s.right+s.wrong;r+=s.right;u+=s.uncertain||0});let p=t?Math.round(r/t*100):0;return`<div class="item"><div class="item-top"><b>${c}</b><span>${p}%</span></div><div class="progress" style="margin:8px 0"><div style="width:${p}%"></div></div><p>${r}/${t}セット正解　自信不足の正解 ${u}回</p></div>`}).join("");
 }
-
-/* ---------- 初期化 ---------- */
-(async()=>{
-  buildCatChips();
-  stats=await loadStats();
-  renderRecord();
-})();
+function exportData(){let b=new Blob([JSON.stringify({version:2,stats},null,2)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(b);a.download=`宅建数字セット_${todayKey()}.json`;a.click();URL.revokeObjectURL(a.href)}
+init();
 </script>
-</body>
-</html>
+</body></html>
