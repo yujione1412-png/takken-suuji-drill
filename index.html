@@ -253,7 +253,7 @@ footer{margin-top:40px;text-align:center;font-size:.72rem;color:var(--ink-soft);
     <div><div class="brand">宅建<span class="shu">数字</span>ドリル</div></div>
     <div style="text-align:right;">
       <div class="brand-sub">TAKKEN SUJI DRILL</div>
-      <div class="ver">v1.5.0</div>
+      <div class="ver">v1.5.1</div>
     </div>
   </header>
 
@@ -305,9 +305,15 @@ footer{margin-top:40px;text-align:center;font-size:.72rem;color:var(--ink-soft);
       <div id="stat-rows" class="stat-rows"></div>
       <p class="record-empty hidden" id="record-empty">まだ記録がありません。1回解くと、分野ごとの正答率と苦手分野がここに表示されます。</p>
       <div class="record-actions">
-        <button class="btn ghost small" id="btn-pairs">対比カードで整理</button>
         <button class="btn ghost small" id="btn-reset-stats">記録をリセット</button>
       </div>
+    </div>
+
+    <!-- 対比カード -->
+    <div class="card record-card">
+      <span class="record-title">紛らわしい数字を見開きで</span>
+      <p class="today-note" style="margin:6px 0 12px;">「名簿10年⇔帳簿5年」「盛土1m⇔切土2m」など、混同しやすい数字19組を左右セットで整理して眺められます。</p>
+      <button class="btn ghost small" id="btn-pairs">対比カードで整理</button>
     </div>
 
     <!-- 参考サイト -->
@@ -1511,8 +1517,19 @@ $("btn-review").addEventListener("click",()=>{
     .slice(0,20);
   if(due.length)startSession(due,"(復習)");
 });
-$("btn-pairs").addEventListener("click",()=>{renderPairs();show("pairs");});
-const backToTop=()=>{updateToday();renderRecord();show("start");};
+$("btn-pairs").addEventListener("click",()=>{
+  renderPairs();
+  show("pairs");
+  try{ history.pushState({s:"pairs"},""); }catch(e){}
+});
+function leavePairs(){updateToday();renderRecord();show("start");}
+window.addEventListener("popstate",()=>{
+  if(!screens.pairs.classList.contains("hidden")) leavePairs();
+});
+const backToTop=()=>{
+  if(history.state && history.state.s==="pairs"){ history.back(); } // popstateでleavePairsが呼ばれる
+  else leavePairs();
+};
 $("btn-pairs-back").addEventListener("click",backToTop);
 $("btn-pairs-back2").addEventListener("click",backToTop);
 
