@@ -222,14 +222,14 @@ legend{font-weight:700;font-size:.85rem;letter-spacing:.18em;color:var(--ink-sof
 .period-toggle{font-family:inherit;font-size:.74rem;font-weight:700;letter-spacing:.08em;color:var(--ink);background:#fff;border:1.5px solid var(--line);border-radius:999px;padding:4px 12px;cursor:pointer;transition:border-color .12s ease;}
 .period-toggle:hover{border-color:var(--ink);}
 .period-toggle:focus-visible{outline:3px solid var(--shu);outline-offset:2px;}
-.today-card{margin-top:20px;display:flex;gap:18px;align-items:center;flex-wrap:wrap;}
-.streak-seal2{position:relative;width:88px;height:88px;border-radius:50%;border:3px solid var(--shu);color:var(--shu);display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:"Shippori Mincho",serif;transform:rotate(-8deg);mix-blend-mode:multiply;flex:none;}
-.streak-seal2::after{content:"";position:absolute;inset:5px;border-radius:50%;border:1.5px solid var(--shu);opacity:.7;}
-.streak-seal2 .n{font-size:1.9rem;font-weight:800;line-height:1.1;}
-.streak-seal2 .l{font-size:.6rem;letter-spacing:.2em;}
-.today-main{flex:1;min-width:230px;}
-.today-btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;}
 .today-note{font-size:.76rem;color:var(--ink-soft);margin-top:8px;}
+/* ---------- クイックバー(スクロール不要の常設操作) ---------- */
+.quickbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:12px 16px;margin-bottom:16px;}
+.qb-streak{position:relative;width:56px;height:56px;border-radius:50%;border:2.5px solid var(--shu);color:var(--shu);display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:"Shippori Mincho",serif;transform:rotate(-8deg);mix-blend-mode:multiply;flex:none;}
+.qb-streak::after{content:"";position:absolute;inset:4px;border-radius:50%;border:1px solid var(--shu);opacity:.7;}
+.qb-streak .n{font-size:1.25rem;font-weight:800;line-height:1.1;}
+.qb-streak .l{font-size:.5rem;letter-spacing:.15em;}
+.qb-note{flex-basis:100%;font-size:.72rem;color:var(--ink-soft);margin:0;}
 /* ---------- 対比カード ---------- */
 .pairs-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;gap:10px;}
 .pair-card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);margin-bottom:14px;overflow:hidden;}
@@ -253,12 +253,18 @@ footer{margin-top:40px;text-align:center;font-size:.72rem;color:var(--ink-soft);
     <div><div class="brand">宅建<span class="shu">数字</span>ドリル</div></div>
     <div style="text-align:right;">
       <div class="brand-sub">TAKKEN SUJI DRILL</div>
-      <div class="ver">v1.4.0</div>
+      <div class="ver">v1.5.0</div>
     </div>
   </header>
 
   <!-- ========== スタート画面 ========== -->
   <section id="screen-start">
+    <div class="quickbar">
+      <div class="qb-streak" id="qb-streak" title="連続で学習した日数"><span class="n" id="streak-num">0</span><span class="l">連続日</span></div>
+      <button class="btn shu-btn small" id="btn-daily" title="復習期限→未学習→苦手の順で自動選定した5問">今日の5問</button>
+      <button class="btn small" id="btn-review">今日の復習</button>
+      <p class="qb-note" id="review-note"></p>
+    </div>
     <div class="card">
       <p class="eyebrow">数字で落とさない</p>
       <h1 class="hero-title">宅建試験の<em>「数字」</em>を、<br>反復で自分のものに。</h1>
@@ -280,24 +286,11 @@ footer{margin-top:40px;text-align:center;font-size:.72rem;color:var(--ink-soft);
       </fieldset>
 
       <div class="start-actions">
-        <button class="btn" id="btn-start">試験開始</button>
-        <button class="btn shu-btn" id="btn-start-weak" title="正答率の低い問題・分野を優先して出題します">苦手優先で出題</button>
+        <button class="btn" id="btn-start" title="習熟度に応じて出題を自動調整します">試験開始</button>
+        <button class="btn ghost" id="btn-random" title="成績に関係なく全問から均等に出題します">ランダム出題</button>
+        <button class="btn shu-btn" id="btn-start-weak" title="正答率の低い問題を優先して出題します">苦手優先で出題</button>
       </div>
-    </div>
-
-    <!-- 今日の学習 -->
-    <div class="card record-card today-card">
-      <div class="streak-seal2"><span class="n" id="streak-num">0</span><span class="l">連続日</span></div>
-      <div class="today-main">
-        <span class="record-title">今日の学習</span>
-        <p class="today-note" id="streak-state"></p>
-        <div class="today-btns">
-          <button class="btn shu-btn small" id="btn-daily">今日の5問</button>
-          <button class="btn small" id="btn-review">今日の復習</button>
-          <button class="btn ghost small" id="btn-pairs">対比カードで整理</button>
-        </div>
-        <p class="today-note" id="review-note"></p>
-      </div>
+      <p class="today-note" style="text-align:center;">「試験開始」は正解を重ねた問題ほど出にくく、忘れかけ・未学習の問題ほど出やすくなります。「ランダム出題」は成績に関係なく均等に出ます。</p>
     </div>
 
     <!-- 学習記録 -->
@@ -312,6 +305,7 @@ footer{margin-top:40px;text-align:center;font-size:.72rem;color:var(--ink-soft);
       <div id="stat-rows" class="stat-rows"></div>
       <p class="record-empty hidden" id="record-empty">まだ記録がありません。1回解くと、分野ごとの正答率と苦手分野がここに表示されます。</p>
       <div class="record-actions">
+        <button class="btn ghost small" id="btn-pairs">対比カードで整理</button>
         <button class="btn ghost small" id="btn-reset-stats">記録をリセット</button>
       </div>
     </div>
@@ -1147,16 +1141,14 @@ function updateToday(){
   const btn = $("btn-review");
   btn.disabled = due.length === 0;
   btn.textContent = "今日の復習" + (due.length ? "("+due.length+"問)" : "");
-  $("review-note").textContent = due.length
-    ? "「今日の復習」には、忘れかけた頃(正解を重ねるほど1日→3日→7日→14日→30日後)の問題が出ます"
-    : "復習期限が来た問題はありません。「今日の5問」で先へ進みましょう";
   const today = localDate(new Date());
   const yest = localDate(new Date(Date.now()-DAY));
   const alive = (meta.last === today || meta.last === yest) ? (meta.streak||0) : 0;
   $("streak-num").textContent = alive;
-  $("streak-state").textContent = meta.last === today
-    ? "今日の学習は済んでいます。積み増しも歓迎。"
-    : (alive ? "連続記録が途切れる前に、今日の分を解きましょう" : "1回解くと連続記録が始まります");
+  $("qb-streak").title = meta.last === today ? "連続"+alive+"日目。今日の学習は済んでいます" : "連続で学習した日数";
+  $("review-note").textContent = due.length
+    ? "復習期限の問題があります(正解を重ねるほど1日→3日→7日→14日→30日後に再出題)"
+    : (meta.last === today ? "今日の学習は済んでいます。積み増しも歓迎" : "まずは「今日の5問」から。復習期限の問題はありません");
 }
 
 /* ---------- 対比カード(混同ペア) ---------- */
@@ -1245,6 +1237,27 @@ function weakScore(qid){
 }
 const PERIODS=[{label:"直近1週間",days:7},{label:"直近1か月",days:30},{label:"全期間",days:null}];
 let periodIdx=2;
+/* ---------- 習熟度に応じた出題の重み(メインモード用) ---------- */
+function drawWeight(q){
+  const s=stats[q.id];
+  if(!s||!s.a) return 1.0;                       // 未学習: 標準
+  if(!s.due||s.due<=Date.now()) return 1.3;       // 復習期限到来: やや出やすい
+  return Math.max(0.15, 1/(1+(s.lv||0)));         // 連続正解が多いほど出にくい
+}
+function weightedSample(pool,n,wfn){
+  const items=pool.map(q=>({q,w:wfn(q)}));
+  const out=[];
+  while(out.length<n&&items.length){
+    let tot=0;for(const it of items)tot+=it.w;
+    let r=Math.random()*tot, idx=0;
+    for(;idx<items.length;idx++){r-=items[idx].w;if(r<=0)break;}
+    if(idx>=items.length)idx=items.length-1;
+    out.push(items[idx].q);
+    items.splice(idx,1);
+  }
+  return out;
+}
+
 function catStat(cat,since){
   let a=0,c=0;
   QUESTIONS.filter(q=>q.cat===cat).forEach(q=>{
@@ -1312,8 +1325,12 @@ function getCount(pool){
 }
 
 $("btn-start").addEventListener("click",()=>{
+  const pool=getPool();
+  startSession(weightedSample(pool,getCount(pool),drawWeight),"");
+});
+$("btn-random").addEventListener("click",()=>{
   const pool=shuffle(getPool());
-  startSession(pool.slice(0,getCount(pool)),"");
+  startSession(pool.slice(0,getCount(pool)),"(ランダム)");
 });
 $("btn-start-weak").addEventListener("click",()=>{
   const pool=getPool()
@@ -1481,9 +1498,8 @@ $("btn-home").addEventListener("click",()=>{updateToday();renderRecord();show("s
 $("btn-daily").addEventListener("click",()=>{
   const due=shuffle(dueQuestions());
   const unseen=shuffle(QUESTIONS.filter(q=>!stats[q.id]||!stats[q.id].a));
-  const rest=QUESTIONS.filter(q=>stats[q.id]&&stats[q.id].a>0)
-    .map(q=>({q,w:weakScore(q.id)+Math.random()*0.08}))
-    .sort((a,b)=>b.w-a.w).map(o=>o.q);
+  const answeredQs=QUESTIONS.filter(q=>stats[q.id]&&stats[q.id].a>0);
+  const rest=weightedSample(answeredQs,5,drawWeight);
   const pick=[];
   const add=arr=>{for(const q of arr){if(pick.length<5&&pick.indexOf(q)<0)pick.push(q);}};
   add(due);add(unseen);add(rest);
