@@ -218,6 +218,10 @@ legend{font-weight:700;font-size:.85rem;letter-spacing:.18em;color:var(--ink-sof
 .refs h2{font-size:.8rem;letter-spacing:.2em;color:var(--ink-soft);margin-bottom:10px;}
 .install-note{margin-top:14px;font-size:.8rem;color:var(--ink-soft);border-top:1px dashed var(--line);padding-top:12px;line-height:1.9;}
 /* ---------- 今日の学習 ---------- */
+.ver{font-size:.64rem;color:var(--ink-soft);letter-spacing:.12em;margin-top:2px;}
+.period-toggle{font-family:inherit;font-size:.74rem;font-weight:700;letter-spacing:.08em;color:var(--ink);background:#fff;border:1.5px solid var(--line);border-radius:999px;padding:4px 12px;cursor:pointer;transition:border-color .12s ease;}
+.period-toggle:hover{border-color:var(--ink);}
+.period-toggle:focus-visible{outline:3px solid var(--shu);outline-offset:2px;}
 .today-card{margin-top:20px;display:flex;gap:18px;align-items:center;flex-wrap:wrap;}
 .streak-seal2{position:relative;width:88px;height:88px;border-radius:50%;border:3px solid var(--shu);color:var(--shu);display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:"Shippori Mincho",serif;transform:rotate(-8deg);mix-blend-mode:multiply;flex:none;}
 .streak-seal2::after{content:"";position:absolute;inset:5px;border-radius:50%;border:1.5px solid var(--shu);opacity:.7;}
@@ -247,7 +251,10 @@ footer{margin-top:40px;text-align:center;font-size:.72rem;color:var(--ink-soft);
 <div class="wrap">
   <header>
     <div><div class="brand">宅建<span class="shu">数字</span>ドリル</div></div>
-    <div class="brand-sub">TAKKEN SUJI DRILL</div>
+    <div style="text-align:right;">
+      <div class="brand-sub">TAKKEN SUJI DRILL</div>
+      <div class="ver">v1.4.0</div>
+    </div>
   </header>
 
   <!-- ========== スタート画面 ========== -->
@@ -297,7 +304,10 @@ footer{margin-top:40px;text-align:center;font-size:.72rem;color:var(--ink-soft);
     <div class="card record-card">
       <div class="record-head">
         <span class="record-title">学習記録 — 分野別成績</span>
-        <span class="record-note" id="record-note"></span>
+        <span style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+          <button class="period-toggle" id="btn-period" title="タップで集計期間を切り替え">全期間 ▸</button>
+          <span class="record-note" id="record-note"></span>
+        </span>
       </div>
       <div id="stat-rows" class="stat-rows"></div>
       <p class="record-empty hidden" id="record-empty">まだ記録がありません。1回解くと、分野ごとの正答率と苦手分野がここに表示されます。</p>
@@ -428,70 +438,70 @@ const QUESTIONS = [
 {id:"gy01", cat:"宅建業法", type:"cloze",
  text:"宅建業者が自ら売主となり、宅建業者ではない者が買主となる売買で、事務所等以外の場所で買受けの申込みをした者は、クーリング・オフができる旨等を記載した書面を交付して告げられた日から起算して＿Ａ＿を経過するまでは、＿Ｂ＿により申込みの撤回等を行うことができる。",
  options:["Ａ：8日間　Ｂ：書面","Ａ：8日間　Ｂ：口頭または書面","Ａ：10日間　Ｂ：書面","Ａ：14日間　Ｂ：口頭または書面"],
- answer:0, law:"gyoho", search:"宅建 クーリングオフ 8日間 37条の2 解説",
+ answer:0, variants:[{options:["Ａ：8日間　Ｂ：書面","Ａ：7日間　Ｂ：書面","Ａ：8日間　Ｂ：内容証明郵便に限る","Ａ：20日間　Ｂ：書面"],answer:0}], law:"gyoho", search:"宅建 クーリングオフ 8日間 37条の2 解説",
  kaisetsu:"クーリング・オフは<strong>「書面を交付して告げられた日」を1日目として8日間</strong>行使できます。撤回等の通知は宅建業法上、<strong>書面</strong>で行う必要があり、書面を<strong>発した時</strong>に効力が生じます(発信主義)。",
  related:"「事務所等」で申込みをした場合はクーリング・オフ不可。テント張りの案内所や喫茶店・自宅(申出なし)は「事務所等以外」に当たります。買主に不利な特約(例:期間を5日に短縮)は無効ですが、有利な特約(10日に延長)は有効です。",
  confuse:"<strong>「引渡しを受け、かつ代金全部を支払った」</strong>ときは8日以内でもクーリング・オフ不可。「引渡しのみ」「代金の一部支払いのみ」ならまだ可能、という引っかけが頻出です。また起算点は「契約した日」ではなく「書面を交付して告げられた日」です。"},
 {id:"gy02", cat:"宅建業法", type:"choice",
  text:"宅建業者が自ら売主となり、宅建業者ではない買主に宅地または建物を売却する場合、受領できる手付の額の上限は代金のいくらか。",
  options:["10分の1(10%)","10分の2(20%)","10分の3(30%)","2分の1(50%)"],
- answer:1, law:"gyoho", search:"宅建 手付額の制限 10分の2 39条 解説",
+ answer:1, variants:[{options:["100分の5(5%)","100分の10(10%)","10分の2(20%)","10分の3(30%)"],answer:2}], law:"gyoho", search:"宅建 手付額の制限 10分の2 39条 解説",
  kaisetsu:"自ら売主制限(8種制限)の一つ。手付は代金の<strong>10分の2(20%)を超えて受領できません</strong>。超えた部分は無効です。",
  related:"この手付はどんな名目でも<strong>解約手付</strong>とみなされます。相手方が履行に着手するまで、買主は手付放棄、売主は<strong>倍額を現実に提供</strong>して解除できます。損害賠償額の予定・違約金も合算して代金の<strong>10分の2まで</strong>です。",
  confuse:"手付金等の<strong>保全措置</strong>の基準(未完成5%・完成10%)と混同しがち。「受領できる上限」は20%、「保全措置が必要になるライン」は5%・10%と、別の制度・別の数字です。"},
 {id:"gy03", cat:"宅建業法", type:"cloze",
  text:"宅建業者が自ら売主となり、宅建業者ではない買主に売却する場合、未完成物件では代金の＿Ａ＿を超えるか＿Ｂ＿を超える手付金等を受領するときは、保全措置を講じなければならない。",
  options:["Ａ：5%　Ｂ：1,000万円","Ａ：10%　Ｂ：1,000万円","Ａ：5%　Ｂ：500万円","Ａ：20%　Ｂ：1,000万円"],
- answer:0, law:"gyoho", search:"宅建 手付金等の保全措置 5% 10% 1000万円 解説",
+ answer:0, variants:[{options:["Ａ：5%　Ｂ：1,000万円","Ａ：5%　Ｂ：2,000万円","Ａ：10%　Ｂ：500万円","Ａ：20%　Ｂ：500万円"],answer:0}], law:"gyoho", search:"宅建 手付金等の保全措置 5% 10% 1000万円 解説",
  kaisetsu:"未完成物件は<strong>代金の5%超 または 1,000万円超</strong>で保全措置が必要。<strong>完成物件は10%超 または 1,000万円超</strong>です。",
  related:"保全の方法は、未完成物件が「銀行等による保証」「保険事業者による保証保険」の2種類。完成物件はこれに<strong>指定保管機関による保管</strong>を加えた3種類が使えます。買主への所有権移転登記がされれば保全措置は不要です。",
  confuse:"<strong>「未完成=5%」「完成=10%」の入れ替え</strong>が最頻出の引っかけ。また手付の受領上限20%とも混同注意。保全措置を講じない場合、買主は手付金等の支払いを拒めます。"},
 {id:"gy04", cat:"宅建業法", type:"choice",
  text:"営業保証金の供託額は、主たる事務所につきいくらか。",
  options:["500万円","1,000万円","2,000万円","60万円"],
- answer:1, law:"gyoho", search:"宅建 営業保証金 1000万円 500万円 供託 解説",
+ answer:1, variants:[{options:["800万円","1,000万円","1,500万円","3,000万円"],answer:1}], law:"gyoho", search:"宅建 営業保証金 1000万円 500万円 供託 解説",
  kaisetsu:"営業保証金は<strong>主たる事務所1,000万円</strong>、<strong>その他の事務所は1か所につき500万円</strong>を、主たる事務所の最寄りの供託所に供託します。",
  related:"金銭のほか有価証券でも供託でき、評価額は<strong>国債100%・地方債等90%・その他80%</strong>。供託した旨の届出をした後でなければ事業を開始できません。免許から3か月以内に届出がないと催告され、催告から1か月以内に届出がないと免許を取り消されることがあります。",
  confuse:"保証協会の<strong>弁済業務保証金分担金(主60万円・従30万円)</strong>との混同が定番。「1,000万/500万」は供託所へ、「60万/30万」は保証協会へ、と納付先ごとに整理しましょう。"},
 {id:"gy05", cat:"宅建業法", type:"choice",
  text:"保証協会に加入する宅建業者が納付する弁済業務保証金分担金は、本店と支店2か所の場合、合計いくらか。",
  options:["90万円","120万円","150万円","2,000万円"],
- answer:1, law:"gyoho", search:"宅建 弁済業務保証金分担金 60万円 30万円 解説",
+ answer:1, variants:[{options:["60万円","90万円","120万円","180万円"],answer:2}], law:"gyoho", search:"宅建 弁済業務保証金分担金 60万円 30万円 解説",
  kaisetsu:"分担金は<strong>主たる事務所60万円+その他の事務所1か所につき30万円</strong>。60万+30万×2=<strong>120万円</strong>です。",
  related:"納付は<strong>加入しようとする日まで</strong>に、<strong>金銭のみ</strong>で行います(有価証券は不可)。加入後に事務所を新設したときは、設置日から<strong>2週間以内</strong>に納付しないと社員の地位を失います。",
  confuse:"営業保証金(1,000万/500万・有価証券可)との対比で出題されます。「分担金も有価証券で納付できる」は誤り。同じ計算問題でも営業保証金なら 1,000万+500万×2=2,000万円になります。"},
 {id:"gy06", cat:"宅建業法", type:"cloze",
  text:"専任媒介契約の有効期間は＿Ａ＿を超えることができず、依頼者に対し業務の処理状況を＿Ｂ＿に1回以上報告しなければならない。",
  options:["Ａ：3か月　Ｂ：2週間","Ａ：3か月　Ｂ：1週間","Ａ：6か月　Ｂ：2週間","Ａ：1か月　Ｂ：1週間"],
- answer:0, law:"gyoho", search:"宅建 専任媒介契約 3か月 2週間に1回 解説",
+ answer:0, variants:[{options:["Ａ：3か月　Ｂ：2週間","Ａ：2か月　Ｂ：2週間","Ａ：3か月　Ｂ：3週間","Ａ：6か月　Ｂ：1か月"],answer:0}], law:"gyoho", search:"宅建 専任媒介契約 3か月 2週間に1回 解説",
  kaisetsu:"専任媒介は<strong>有効期間3か月以内・報告2週間に1回以上</strong>。3か月を超える定めをしたときは、無効ではなく<strong>3か月に短縮</strong>されます。",
  related:"指定流通機構(レインズ)への登録は、専任媒介では契約日から<strong>7日以内(休業日を除く)</strong>。更新は依頼者の申出があるときに限り可能で、自動更新特約は無効です。",
  confuse:"<strong>専属専任媒介は「1週間に1回以上・登録5日以内」</strong>。専任「2週・7日」/専属専任「1週・5日」のセットで暗記を。一般媒介には期間規制・報告義務・登録義務がありません。"},
 {id:"gy07", cat:"宅建業法", type:"choice",
  text:"専属専任媒介契約を締結したとき、指定流通機構(レインズ)への登録は契約締結日から何日以内に行うか(休業日を除く)。",
  options:["3日以内","5日以内","7日以内","10日以内"],
- answer:1, law:"gyoho", search:"宅建 専属専任媒介 レインズ 5日以内 解説",
+ answer:1, variants:[{options:["2日以内","5日以内","6日以内","8日以内"],answer:1}], law:"gyoho", search:"宅建 専属専任媒介 レインズ 5日以内 解説",
  kaisetsu:"専属専任媒介は<strong>5日以内(休業日を除く)</strong>に登録します。専任媒介より依頼者の拘束が強いぶん、業者の義務は重くなります。",
  related:"登録事項は所在・規模・形質・売買すべき価額など。登録後は<strong>遅滞なく登録を証する書面(または電磁的記録)を依頼者に引き渡す</strong>義務があります。成約したら遅滞なく機構へ通知します。",
  confuse:"専任媒介の<strong>7日以内</strong>とのすり替えが頻出。「拘束が強い専属専任ほど日数が短い(5日)」と理屈で覚えると混同しません。"},
 {id:"gy08", cat:"宅建業法", type:"choice",
  text:"宅建業者は、事務所ごとに業務に従事する者何人に1人以上の割合で、成年者である専任の宅建士を置かなければならないか。",
  options:["3人に1人","5人に1人","10人に1人","事務所ごとに1人"],
- answer:1, law:"gyoho", search:"宅建 専任の宅建士 設置 5人に1人 解説",
+ answer:1, variants:[{options:["4人に1人","5人に1人","6人に1人","20人に1人"],answer:1}], law:"gyoho", search:"宅建 専任の宅建士 設置 5人に1人 解説",
  kaisetsu:"事務所には<strong>従事者5人に1人以上</strong>の割合で成年者である専任の宅建士が必要です。従事者11人なら3人必要になります。",
  related:"契約の申込み・締結を行う<strong>案内所等には(人数にかかわらず)専任の宅建士1人以上</strong>で足ります。法定数を欠いたときは<strong>2週間以内</strong>に補充等の措置をとらなければなりません。",
  confuse:"「案内所も5人に1人」は誤り。<strong>事務所=5人に1人、案内所=1人以上</strong>。また補充の「2週間以内」は、媒介の報告「2週間に1回」と数字は同じでも別制度なので注意。"},
 {id:"gy09", cat:"宅建業法", type:"cloze",
  text:"宅建業の免許の有効期間は＿Ａ＿であり、更新を受けようとする者は、有効期間満了の日の＿Ｂ＿前から＿Ｃ＿前までの間に免許申請書を提出しなければならない。",
  options:["Ａ：5年　Ｂ：90日　Ｃ：30日","Ａ：5年　Ｂ：60日　Ｃ：30日","Ａ：3年　Ｂ：90日　Ｃ：30日","Ａ：5年　Ｂ：30日　Ｃ：14日"],
- answer:0, law:"gyoho", search:"宅建業 免許 有効期間 5年 更新 90日前 30日前",
+ answer:0, variants:[{options:["Ａ：5年　Ｂ：90日　Ｃ：30日","Ａ：5年　Ｂ：90日　Ｃ：60日","Ａ：5年　Ｂ：120日　Ｃ：30日","Ａ：10年　Ｂ：90日　Ｃ：30日"],answer:0}], law:"gyoho", search:"宅建業 免許 有効期間 5年 更新 90日前 30日前",
  kaisetsu:"免許の有効期間は<strong>5年</strong>。更新申請は満了日の<strong>90日前から30日前まで</strong>に行います。期間内に申請すれば、処分が遅れても旧免許は処分があるまで有効です。",
  related:"<strong>宅建士証の有効期間も5年</strong>。宅建士証の更新には、交付申請前<strong>6か月以内</strong>に行われる知事指定の法定講習の受講が必要です(登録の移転に伴う交付は講習不要・残存期間のみ)。",
  confuse:"「90日〜30日」を「60日〜30日」などにすり替える出題が定番。また免許・宅建士証はどちらも5年ですが、<strong>更新講習が要るのは宅建士証</strong>だけ、という対比も問われます。"},
 {id:"gy10", cat:"宅建業法", type:"choice",
  text:"宅建業者が事務所ごとに備える従業者名簿の保存期間は、最終の記載をした日からどれだけか。",
  options:["3年間","5年間","10年間","永久保存"],
- answer:2, law:"gyoho", search:"宅建 従業者名簿 10年 帳簿 5年 保存期間",
+ answer:2, variants:[{options:["最終記載日から5年間","最終記載日から7年間","最終記載日から10年間","閉鎖後10年間"],answer:2}], law:"gyoho", search:"宅建 従業者名簿 10年 帳簿 5年 保存期間",
  kaisetsu:"従業者名簿は<strong>最終の記載をした日から10年間</strong>保存します。取引関係者から請求があれば閲覧させる義務があります。",
  related:"<strong>帳簿</strong>は各事業年度末に閉鎖し、<strong>閉鎖後5年間</strong>(自ら売主となる新築住宅に係るものは<strong>10年間</strong>)保存します。帳簿には閲覧義務はありません。",
  confuse:"<strong>名簿10年・帳簿5年</strong>の入れ替えが最頻出。「閲覧させる義務があるのは名簿だけ」「帳簿は取引のつど記載」もセットで整理しましょう。"},
@@ -505,7 +515,7 @@ const QUESTIONS = [
 {id:"gy12", cat:"宅建業法", type:"choice",
  text:"土地(代金1,000万円・消費税は考慮しない)の売買を媒介した宅建業者が、依頼者の一方から受領できる報酬の限度額はいくらか。",
  options:["30万円","33万円","36万円","39万円"],
- answer:2, law:"gyoho", search:"宅建 報酬 速算式 3% 6万円 計算 解説",
+ answer:2, variants:[{options:["33万円","36万円","40万円","46万円"],answer:1}], law:"gyoho", search:"宅建 報酬 速算式 3% 6万円 計算 解説",
  kaisetsu:"代金400万円超なので速算式<strong>「代金×3%+6万円」</strong>を使い、1,000万×3%+6万=<strong>36万円</strong>です(課税業者は別途消費税を加算可)。",
  related:"速算式は<strong>200万円以下:5% / 200万超400万以下:4%+2万円 / 400万超:3%+6万円</strong>。<strong>代理</strong>なら媒介の2倍まで受領できますが、双方から受ける合計も同じ上限です。",
  confuse:"低廉な空家等(<strong>800万円以下</strong>)の売買では、売主・買主双方それぞれから<strong>最大30万円(税抜)</strong>まで受領できる特例があります(2024年改正)。通常の速算式の額と混同しないように。"},
@@ -519,7 +529,7 @@ const QUESTIONS = [
 {id:"gy14", cat:"宅建業法", type:"choice",
  text:"拘禁刑以上の刑または宅建業法違反等による罰金刑に処せられた者は、刑の執行を終わり、または執行を受けることがなくなった日から何年間、宅建業の免許を受けられないか。",
  options:["1年間","3年間","5年間","10年間"],
- answer:2, law:"gyoho", search:"宅建 免許 欠格事由 5年 刑の執行 解説",
+ answer:2, variants:[{options:["2年間","5年間","7年間","10年間"],answer:1}], law:"gyoho", search:"宅建 免許 欠格事由 5年 刑の執行 解説",
  kaisetsu:"欠格期間は<strong>刑の執行を終わり、または執行を受けることがなくなった日から5年間</strong>です。暴力団関係の罪・傷害・背任など一定の罪の罰金刑も対象になります。",
  related:"不正手段による免許取得等で<strong>免許を取り消された場合も5年間</strong>欠格。取消処分の聴聞公示後に廃業の届出をした場合も、届出から5年間は免許を受けられません。",
  confuse:"<strong>執行猶予付きの判決は、猶予期間が満了すれば直ちに免許OK</strong>(さらに5年待つ必要なし)という引っかけが超頻出。「拘留・科料」や宅建業法等以外の過失犯の罰金は欠格事由になりません。"},
@@ -569,28 +579,28 @@ const QUESTIONS = [
 {id:"ho01", cat:"法令上の制限", type:"choice",
  text:"市街化区域内では、原則として何㎡未満の開発行為が開発許可不要となるか。なお、条例による開発許可対象規模の引下げはないものとする。",
  options:["500㎡未満","1,000㎡未満","2,000㎡未満","3,000㎡未満"],
- answer:1, law:"toshi", search:"宅建 開発許可 市街化区域 1000㎡ 解説",
+ answer:1, variants:[{options:["300㎡未満","500㎡未満","1,000㎡未満","2,000㎡未満"],answer:2}], law:"toshi", search:"宅建 開発許可 市街化区域 1000㎡ 解説",
  kaisetsu:"市街化区域では原則として<strong>1,000㎡未満</strong>の開発行為は許可不要です(小規模例外)。ただし、条例により開発許可の対象となる面積が引き下げられている場合があります。",
  related:"<strong>非線引き都市計画区域・準都市計画区域は3,000㎡未満</strong>、<strong>都市計画区域外・準都市計画区域外は1ha(10,000㎡)未満</strong>が許可不要。図書館・公民館・鉄道施設や、市街化区域外での農林漁業用建築物のための開発も許可不要です。",
  confuse:"<strong>市街化調整区域には小規模例外がなく、面積にかかわらず許可が必要</strong>。また国土利用計画法の事後届出(市街化区域2,000㎡以上)と数字が紛らわしいので、制度ごとに分けて覚えましょう。"},
 {id:"ho02", cat:"法令上の制限", type:"cloze",
  text:"国土利用計画法の事後届出は、市街化区域では＿Ａ＿以上、市街化区域以外の都市計画区域では＿Ｂ＿以上の土地売買等の契約について、契約締結日から＿Ｃ＿以内に行う。",
  options:["Ａ：2,000㎡　Ｂ：5,000㎡　Ｃ：2週間","Ａ：1,000㎡　Ｂ：3,000㎡　Ｃ：2週間","Ａ：2,000㎡　Ｂ：5,000㎡　Ｃ：3週間","Ａ：2,000㎡　Ｂ：10,000㎡　Ｃ：1か月"],
- answer:0, law:"kokudo", search:"宅建 国土利用計画法 事後届出 2000㎡ 5000㎡ 2週間",
+ answer:0, variants:[{options:["Ａ：2,000㎡　Ｂ：5,000㎡　Ｃ：2週間","Ａ：2,000㎡　Ｂ：3,000㎡　Ｃ：2週間","Ａ：3,000㎡　Ｂ：5,000㎡　Ｃ：2週間","Ａ：2,000㎡　Ｂ：5,000㎡　Ｃ：1週間"],answer:0}], law:"kokudo", search:"宅建 国土利用計画法 事後届出 2000㎡ 5000㎡ 2週間",
  kaisetsu:"事後届出の面積要件は<strong>市街化区域2,000㎡以上/その他の都市計画区域5,000㎡以上/都市計画区域外10,000㎡以上</strong>で、<strong>契約日から2週間以内</strong>に<strong>権利取得者(買主)</strong>が届け出ます。",
  related:"届出対象は「対価を得て」「権利を移転・設定する」「契約」の3要件を満たすもの。相続・贈与・時効取得は届出不要です。勧告に従わなくても契約は有効で、罰則はなく公表されうるにとどまります。",
  confuse:"開発許可の<strong>1,000㎡/3,000㎡</strong>と、国土法の<strong>2,000㎡/5,000㎡/10,000㎡</strong>のすり替えが超頻出。「開発は1・3・10(千㎡)、国土は2・5・10(千㎡)」と語呂で分けましょう。届出義務者が「売主」ではなく<strong>買主</strong>である点も注意。"},
 {id:"ho03", cat:"法令上の制限", type:"cloze",
  text:"建築基準法上、建築物の敷地は、原則として幅員＿Ａ＿以上の道路に＿Ｂ＿以上接しなければならない。",
  options:["Ａ：4m　Ｂ：2m","Ａ：4m　Ｂ：1.5m","Ａ：6m　Ｂ：2m","Ａ：2m　Ｂ：4m"],
- answer:0, law:"kenchiku", search:"宅建 接道義務 4m 2m 建築基準法 解説",
+ answer:0, variants:[{options:["Ａ：4m　Ｂ：2m","Ａ：4m　Ｂ：3m","Ａ：5m　Ｂ：2m","Ａ：3m　Ｂ：2m"],answer:0}], law:"kenchiku", search:"宅建 接道義務 4m 2m 建築基準法 解説",
  kaisetsu:"接道義務は<strong>幅員4m以上の道路に2m以上</strong>接すること。「4mの道路に2m接する」とセットで覚えます。",
  related:"幅員4m未満でも特定行政庁の指定があれば道路とみなされます(<strong>42条2項道路</strong>)。この場合、原則として<strong>道路中心線から2m</strong>のセットバック部分は敷地面積に算入できません。",
  confuse:"「幅員2mの道路に4m接する」と数字を入れ替える出題に注意。また地方公共団体は条例で接道義務を<strong>付加(厳しく)</strong>はできますが、<strong>緩和はできません</strong>。"},
 {id:"ho04", cat:"法令上の制限", type:"choice",
  text:"第一種・第二種低層住居専用地域および田園住居地域内の建築物の高さの限度は、都市計画で定められたどちらかの数値か。",
  options:["10mまたは12m","12mまたは15m","10mまたは20m","制限なし"],
- answer:0, law:"kenchiku", search:"宅建 低層住居専用地域 絶対高さ制限 10m 12m",
+ answer:0, variants:[{options:["10mまたは12m","10mまたは13m","9mまたは12m","12mまたは15m"],answer:0}], law:"kenchiku", search:"宅建 低層住居専用地域 絶対高さ制限 10m 12m",
  kaisetsu:"低層住居専用地域・田園住居地域では、建築物の高さは都市計画で定めた<strong>10mまたは12m</strong>を超えられません(絶対高さ制限)。",
  related:"この3地域には<strong>隣地斜線制限は適用されません</strong>(絶対高さ制限があるため不要)。逆に北側斜線制限は低層系・中高層系の住居専用地域等に適用されます。",
  confuse:"「10mまたは15m」などのすり替えに注意。また日影規制の対象となる「軒高7m超または3階建以上」(低層系)の数字とも混同しやすいので区別を。"},
@@ -647,28 +657,28 @@ const QUESTIONS = [
 {id:"ke01", cat:"権利関係", type:"cloze",
  text:"借地借家法上、借地権の存続期間は＿Ａ＿以上とされ、最初の更新後の期間は＿Ｂ＿以上、2回目以降の更新後の期間は＿Ｃ＿以上としなければならない。",
  options:["Ａ：30年　Ｂ：20年　Ｃ：10年","Ａ：20年　Ｂ：10年　Ｃ：5年","Ａ：30年　Ｂ：10年　Ｃ：10年","Ａ：50年　Ｂ：30年　Ｃ：20年"],
- answer:0, law:"shakuchi", search:"宅建 借地権 存続期間 30年 20年 10年",
+ answer:0, variants:[{options:["Ａ：30年　Ｂ：20年　Ｃ：10年","Ａ：30年　Ｂ：20年　Ｃ：20年","Ａ：30年　Ｂ：15年　Ｃ：10年","Ａ：40年　Ｂ：20年　Ｃ：10年"],answer:0}], law:"shakuchi", search:"宅建 借地権 存続期間 30年 20年 10年",
  kaisetsu:"普通借地権は<strong>当初30年→1回目の更新20年→2回目以降10年</strong>。「30・20・10」のリズムで覚えます。これより長い約定は有効、短い約定は無効です。",
  related:"期間の定めがない場合や短い定めをした場合も<strong>30年</strong>になります。更新後に建物が滅失し、借地権者が承諾なく再築した場合、借地権設定者は地上権消滅請求・解約申入れができます。",
  confuse:"<strong>民法上の賃貸借の最長期間は50年</strong>(借地借家法適用外の駐車場・資材置場など)。「建物所有目的なら借地借家法で最低30年、それ以外なら民法で最長50年」と適用法から区別しましょう。"},
 {id:"ke02", cat:"権利関係", type:"choice",
  text:"事業用定期借地権の存続期間として正しいものはどれか。",
  options:["10年以上30年未満","10年以上50年未満","30年以上50年未満","50年以上"],
- answer:1, law:"shakuchi", search:"宅建 事業用定期借地権 10年以上50年未満 公正証書",
+ answer:1, variants:[{options:["10年以上50年以下","10年以上50年未満","15年以上50年未満","10年以上30年以下"],answer:1}], law:"shakuchi", search:"宅建 事業用定期借地権 10年以上50年未満 公正証書",
  kaisetsu:"事業用定期借地権は<strong>10年以上50年未満</strong>で設定します。専ら事業の用に供する建物(居住用は不可)の所有が目的で、<strong>公正証書</strong>による設定が必要です。",
  related:"定期借地権3兄弟:<strong>一般定期借地権=50年以上(書面または電磁的記録でよい)/事業用=10年以上50年未満(公正証書限定)/建物譲渡特約付=30年以上(口頭でも可)</strong>。",
  confuse:"「50年<strong>未満</strong>」を「50年以下」とするひっかけや、「一般定期借地権も公正証書が必要」とする誤りが頻出。公正証書が<strong>必須なのは事業用だけ</strong>です。"},
 {id:"ke03", cat:"権利関係", type:"choice",
  text:"所有の意思をもって平穏かつ公然と他人の物を占有した者が、占有開始時に善意かつ無過失であった場合、何年で所有権を時効取得するか。",
  options:["5年","10年","15年","20年"],
- answer:1, law:"minpo", search:"宅建 取得時効 10年 20年 善意無過失",
+ answer:1, variants:[{options:["7年","10年","12年","20年"],answer:1}], law:"minpo", search:"宅建 取得時効 10年 20年 善意無過失",
  kaisetsu:"占有開始時に<strong>善意無過失なら10年</strong>、それ以外(悪意または有過失)なら<strong>20年</strong>で取得時効が完成します。善意無過失は<strong>占有開始時点</strong>で判定し、途中で悪意になっても10年のままです。",
  related:"<strong>消滅時効</strong>は、債権者が権利を行使できることを<strong>知った時から5年</strong>、権利を<strong>行使できる時から10年</strong>のいずれか早い方(人の生命・身体の侵害による損害賠償は知った時から5年・行使できる時から20年)。",
  confuse:"取得時効の「10年・20年」と消滅時効の「5年・10年」の混同が定番。「取る(取得)のは10・20、消えるのは5・10」と分けて覚えましょう。"},
 {id:"ke04", cat:"権利関係", type:"choice",
  text:"相続の放棄は、自己のために相続の開始があったことを知った時から何か月以内に家庭裁判所に申述しなければならないか。",
  options:["1か月以内","3か月以内","6か月以内","10か月以内"],
- answer:1, law:"minpo", search:"宅建 相続放棄 3か月 熟慮期間",
+ answer:1, variants:[{options:["2か月以内","3か月以内","4か月以内","1年以内"],answer:1}], law:"minpo", search:"宅建 相続放棄 3か月 熟慮期間",
  kaisetsu:"相続放棄・限定承認は、自己のために相続の開始があったことを<strong>知った時から3か月以内</strong>(熟慮期間)に家庭裁判所へ申述します。何もしなければ単純承認とみなされます。",
  related:"放棄した者は<strong>初めから相続人でなかった</strong>ものとみなされ、<strong>代襲相続も生じません</strong>。限定承認は共同相続人<strong>全員</strong>で行う必要があります。",
  confuse:"<strong>遺留分侵害額請求は「知った時から1年・相続開始から10年」</strong>、相続税の申告は10か月など、相続まわりは期間が乱立します。「放棄=3か月」を軸に区別しましょう。"},
@@ -732,21 +742,21 @@ const QUESTIONS = [
 {id:"ze01", cat:"税・その他", type:"choice",
  text:"固定資産税の標準税率はどれか。",
  options:["1.0%","1.4%","3%","4%"],
- answer:1, law:"chihozei", search:"宅建 固定資産税 標準税率 1.4% 住宅用地特例",
+ answer:1, variants:[{options:["1.4%","1.5%","1.6%","2.1%"],answer:0}], law:"chihozei", search:"宅建 固定資産税 標準税率 1.4% 住宅用地特例",
  kaisetsu:"固定資産税の標準税率は<strong>1.4%</strong>。賦課期日は<strong>1月1日</strong>で、その時点の固定資産の所有者(登記名義人等)に課税されます。",
  related:"<strong>住宅用地の特例</strong>:200㎡以下の部分は課税標準が<strong>1/6</strong>、200㎡超の部分は<strong>1/3</strong>。免税点は<strong>土地30万円・家屋20万円・償却資産150万円</strong>未満です。",
  confuse:"不動産取得税の標準税率<strong>4%(住宅・土地は3%)</strong>との混同が頻出。「持ち続ける税(固定資産税)=1.4%」「取得する税=4%→3%」と場面で区別しましょう。"},
 {id:"ze02", cat:"税・その他", type:"cloze",
  text:"不動産取得税の標準税率は＿Ａ＿であるが、住宅および土地の取得については＿Ｂ＿とする特例がある。また、一定の新築住宅の取得については課税標準から＿Ｃ＿が控除される。",
  options:["Ａ：4%　Ｂ：3%　Ｃ：1,200万円","Ａ：4%　Ｂ：2%　Ｃ：1,000万円","Ａ：3%　Ｂ：1.4%　Ｃ：1,200万円","Ａ：4%　Ｂ：3%　Ｃ：1,500万円"],
- answer:0, law:"chihozei", search:"宅建 不動産取得税 4% 3% 1200万円 控除",
+ answer:0, variants:[{options:["Ａ：4%　Ｂ：3%　Ｃ：1,200万円","Ａ：4%　Ｂ：3%　Ｃ：1,100万円","Ａ：4%　Ｂ：3.5%　Ｃ：1,200万円","Ａ：5%　Ｂ：3%　Ｃ：1,200万円"],answer:0}], law:"chihozei", search:"宅建 不動産取得税 4% 3% 1200万円 控除",
  kaisetsu:"標準税率は<strong>4%</strong>、住宅・土地は<strong>3%</strong>の特例税率。床面積50㎡以上240㎡以下等の新築住宅は課税標準から<strong>1,200万円</strong>(認定長期優良住宅は1,300万円)が控除されます。",
  related:"免税点は<strong>土地10万円・家屋は新築等23万円・その他12万円</strong>未満。相続による取得には課税されません(贈与には課税)。宅地の課税標準は価格の<strong>1/2</strong>とする特例もあります。新築住宅の1,200万円控除は、床面積(50㎡以上240㎡以下)などの一定の要件を満たす場合に適用されます。税率や課税標準の特例には適用期限があるため、受験年度の法令基準日現在の制度を確認してください。",
  confuse:"固定資産税(1.4%)・登録免許税(税率は登記の種類ごと)と税率のすり替えに注意。控除額1,200万円を「1,000万円」「1,500万円」に変える出題も定番です。"},
 {id:"ze03", cat:"税・その他", type:"choice",
  text:"居住用財産を譲渡した場合の譲渡所得の特別控除額は最高いくらか。",
  options:["1,000万円","2,000万円","3,000万円","5,000万円"],
- answer:2, law:"sozei", search:"宅建 居住用財産 3000万円特別控除 譲渡所得",
+ answer:2, variants:[{options:["1,500万円","2,500万円","3,000万円","3,500万円"],answer:2}], law:"sozei", search:"宅建 居住用財産 3000万円特別控除 譲渡所得",
  kaisetsu:"居住用財産(マイホーム)の譲渡には最高<strong>3,000万円の特別控除</strong>があります。<strong>所有期間の長短を問わず</strong>適用できます。",
  related:"所有期間が譲渡年の1月1日で<strong>10年超</strong>なら軽減税率の特例があり、<strong>3,000万円控除と併用可能</strong>です。課税長期譲渡所得6,000万円以下の部分は<strong>所得税10%・住民税4%</strong>が基本税率です(実際には所得税に復興特別所得税が加算されます)。長期譲渡所得となるのは所有期間<strong>5年超</strong>。",
  confuse:"配偶者・直系血族など<strong>特別な関係者への譲渡には適用なし</strong>。「所有期間10年超が3,000万円控除の要件」とする引っかけに注意——10年超が要件なのは<strong>軽減税率</strong>の方です。"},
@@ -953,11 +963,115 @@ const QUESTIONS = [
  kaisetsu:"配偶者と子が相続人の場合、配偶者は<strong>1/2</strong>。1億2,000万×1/2=<strong>6,000万円</strong>です(F・Gは残り1/2を折半して各3,000万円)。",
  related:"相続人の組合せが変わると、<strong>配偶者と直系尊属なら2/3(8,000万円)、配偶者と兄弟姉妹なら3/4(9,000万円)</strong>になります。誤答肢はまさにその金額です。",
  confuse:"「子の1人が相続放棄」した場合は<strong>初めから相続人でなかった扱い</strong>になり残る子が1/2全部を取る、「代襲相続」なら孫が親の分を引き継ぐ——事例のひねりパターンも確認を。"},
+/* ---------------- 逆パターン問題(既出テーマの反対側) ---------------- */
+{id:"gy21", cat:"宅建業法", type:"choice",
+ text:"宅建業者が自ら売主となり、宅建業者ではない買主に完成物件を売却する場合、代金の何%を超える手付金等を受領するときに保全措置が必要か(受領額は1,000万円以下とする)。",
+ options:["5%","10%","20%","30%"],
+ answer:1, law:"gyoho", search:"手付金等 保全措置 完成物件 10% 解説",
+ variants:[{options:["5%","8%","10%","15%"],answer:2}],
+ kaisetsu:"完成物件は<strong>代金の10%超</strong>(または1,000万円超)で保全措置が必要です。",
+ related:"<strong>未完成物件なら5%超</strong>。保全措置を講じれば、手付そのものの上限<strong>20%</strong>まで受領できます。",
+ confuse:"gy03(未完成=5%)の裏返し。「完成10%・未完成5%」を両方向から即答できるようにしておくと、どちらを聞かれても迷いません。"},
+{id:"gy22", cat:"宅建業法", type:"choice",
+ text:"専任媒介契約(専属専任ではない)を締結したとき、指定流通機構(レインズ)への登録は契約締結日から何日以内に行うか(休業日を除く)。",
+ options:["3日以内","5日以内","7日以内","10日以内"],
+ answer:2, law:"gyoho", search:"専任媒介 レインズ 7日以内 解説",
+ variants:[{options:["5日以内","7日以内","14日以内","登録義務はない"],answer:1}],
+ kaisetsu:"専任媒介は<strong>7日以内(休業日を除く)</strong>に登録します。",
+ related:"<strong>専属専任媒介は5日以内</strong>、一般媒介には登録義務がありません。業務処理状況の報告(専任2週間に1回・専属専任1週間に1回)とセットで。",
+ confuse:"gy07(専属専任=5日)の裏返し。「拘束が強いほど日数が短い」の原則で、7日と5日を入れ替える引っかけを見抜きましょう。"},
+{id:"gy23", cat:"宅建業法", type:"choice",
+ text:"宅建業者が事務所ごとに備える帳簿の保存期間は、各事業年度末の閉鎖後どれだけか(自ら売主となる新築住宅に係るものを除く)。",
+ options:["3年間","5年間","10年間","永久保存"],
+ answer:1, law:"gyoho", search:"宅建 帳簿 保存期間 閉鎖後5年 解説",
+ variants:[{options:["閉鎖後2年間","閉鎖後5年間","閉鎖後7年間","最終記載日から5年間"],answer:1}],
+ kaisetsu:"帳簿は各事業年度末に閉鎖し、<strong>閉鎖後5年間</strong>保存します(自ら売主となる新築住宅に係るものは10年間)。",
+ related:"帳簿は<strong>取引のあったつど</strong>記載し、閲覧義務はありません。<strong>従業者名簿は最終記載日から10年・閲覧義務あり</strong>と対で覚えます。",
+ confuse:"gy10(名簿=10年)の裏返し。「起算点」も違います——帳簿は<strong>閉鎖後</strong>、名簿は<strong>最終記載日から</strong>です。"},
+{id:"gy24", cat:"宅建業法", type:"choice",
+ text:"宅建業者に対する業務停止処分の期間は、最長でどれだけか。",
+ options:["6か月以内","1年以内","2年以内","5年以内"],
+ answer:1, law:"gyoho", search:"宅建業者 業務停止処分 1年以内 解説",
+ kaisetsu:"業務停止処分は<strong>1年以内</strong>の期間を定めて行われます。情状が特に重いときは免許取消しの対象です。",
+ related:"監督処分は<strong>指示処分→業務停止処分→免許取消処分</strong>の3段階。業務停止処分に違反すると免許を<strong>取り消さなければなりません</strong>(必要的取消し)。",
+ confuse:"gy16(宅建士の事務禁止処分=1年以内)と数字は同じですが対象が別。「業者=業務停止/宅建士=事務禁止」で、どちらも上限1年と整理を。"},
+{id:"ho12", cat:"法令上の制限", type:"choice",
+ text:"都市計画区域および準都市計画区域のいずれにも該当しない区域内では、何㎡以上の開発行為について開発許可が必要となるか。",
+ options:["1,000㎡以上","3,000㎡以上","10,000㎡(1ha)以上","開発許可は不要"],
+ answer:2, law:"toshi", search:"開発許可 都市計画区域外 1ヘクタール 10000㎡",
+ variants:[{options:["5,000㎡以上","10,000㎡(1ha)以上","20,000㎡以上","開発許可は不要"],answer:1}],
+ kaisetsu:"両区域外では<strong>1ha(10,000㎡)以上</strong>の開発行為に許可が必要です(未満なら不要)。",
+ related:"面積階段の全体:<strong>市街化区域1,000㎡/非線引き・準都計3,000㎡/両区域外1ha</strong>(いずれも未満で不要)、<strong>市街化調整区域は面積不問で必要</strong>。",
+ confuse:"ho01(市街化区域)・ho10(非線引き)の裏返し。国土法の「区域外10,000㎡<strong>以上で届出</strong>」と数字が同じなので、許可か届出かを取り違えないように。"},
+{id:"ho13", cat:"法令上の制限", type:"choice",
+ text:"国土利用計画法の事後届出は、都市計画区域外では何㎡以上の土地売買等の契約について必要となるか。",
+ options:["2,000㎡以上","5,000㎡以上","10,000㎡以上","面積にかかわらず不要"],
+ answer:2, law:"kokudo", search:"国土利用計画法 事後届出 都市計画区域外 10000㎡",
+ variants:[{options:["3,000㎡以上","5,000㎡以上","10,000㎡以上","20,000㎡以上"],answer:2}],
+ kaisetsu:"都市計画区域外は<strong>10,000㎡以上</strong>で事後届出が必要です。市街化区域2,000㎡・その他の都市計画区域5,000㎡とあわせて「2・5・10」で覚えます。",
+ related:"届出は<strong>権利取得者(買主)</strong>が<strong>契約日から2週間以内</strong>に行います。相続・贈与・時効取得は対象外です。",
+ confuse:"ho02(市街化区域2,000㎡等)の裏返し。開発許可の1haと同じ10,000㎡ですが、あちらは「許可」、こちらは「届出」です。"},
+{id:"ke13", cat:"権利関係", type:"choice",
+ text:"所有の意思をもって平穏かつ公然と他人の物を占有した者が、占有開始時に悪意または有過失であった場合、何年で所有権を時効取得するか。",
+ options:["10年","15年","20年","30年"],
+ answer:2, law:"minpo", search:"取得時効 20年 悪意 有過失",
+ variants:[{options:["10年","20年","25年","時効取得できない"],answer:1}],
+ kaisetsu:"悪意または有過失の場合は<strong>20年</strong>で取得時効が完成します(善意無過失なら10年)。",
+ related:"善意無過失かどうかは<strong>占有開始時点</strong>で判定します。占有の途中で他人の物と知っても、10年のままです。",
+ confuse:"ke03(善意無過失=10年)の裏返し。「悪意でも時効取得できる(20年)」という点自体が引っかけに使われます——できないわけではありません。"},
+{id:"ke14", cat:"権利関係", type:"choice",
+ text:"配偶者と被相続人の直系尊属(父母)が相続人となる場合、配偶者の法定相続分はどれだけか。",
+ options:["2分の1","3分の2","4分の3","3分の1"],
+ answer:1, law:"minpo", search:"法定相続分 配偶者 直系尊属 3分の2",
+ variants:[{options:["2分の1","5分の3","3分の2","4分の3"],answer:2}],
+ kaisetsu:"配偶者と直系尊属の組合せでは、配偶者<strong>2/3</strong>・直系尊属<strong>1/3</strong>です。",
+ related:"3パターンを通しで:<strong>配偶者と子=1/2ずつ/配偶者と直系尊属=2/3と1/3/配偶者と兄弟姉妹=3/4と1/4</strong>。順位が下がるほど配偶者が増えます。",
+ confuse:"ke07(兄弟姉妹と組む場合=3/4)の裏返し。<strong>直系尊属のみが相続人のときの遺留分1/3</strong>と「1/3」つながりで混同しやすいので注意。"},
+{id:"ke15", cat:"権利関係", type:"choice",
+ text:"一般定期借地権の存続期間として正しいものはどれか。",
+ options:["30年以上","50年以上","10年以上50年未満","20年以上"],
+ answer:1, law:"shakuchi", search:"一般定期借地権 50年以上 書面",
+ variants:[{options:["40年以上","50年以上","50年超","60年以上"],answer:1}],
+ kaisetsu:"一般定期借地権は<strong>50年以上</strong>で設定します。更新や建物買取請求がない旨の特約は<strong>書面(または電磁的記録)</strong>で行います。",
+ related:"公正証書は<strong>不要</strong>(公正証書が必須なのは事業用定期借地権だけ)。3類型「一般50年以上/事業用10年以上50年未満/建物譲渡特約付30年以上」を再確認。",
+ confuse:"ke02(事業用=10年以上50年未満)の裏返し。「50年<strong>以上</strong>」と「50年<strong>未満</strong>」で50年ちょうどの扱いが分かれる点が問われます(一般定期は50年ちょうどOK)。"},
+{id:"ke16", cat:"権利関係", type:"choice",
+ text:"債権は、債権者が権利を行使できることを知った時から5年のほか、権利を行使することができる時から何年間行使しないときに時効消滅するか。",
+ options:["5年","10年","15年","20年"],
+ answer:1, law:"minpo", search:"消滅時効 10年 権利を行使することができる時",
+ variants:[{options:["8年","10年","20年","消滅しない"],answer:1}],
+ kaisetsu:"客観的起算点からは<strong>10年</strong>です(主観5年・客観10年の早い方で完成)。",
+ related:"<strong>人の生命・身体の侵害</strong>による損害賠償請求権は、客観的起算点からの期間が<strong>20年</strong>に伸長されます。",
+ confuse:"ke03のrelated(主観5年)の裏返し。取得時効の10年・20年、不法行為の3年・5年・20年と、時効の数字は3系統をセットで整理しましょう。"},
+{id:"ze08", cat:"税・その他", type:"choice",
+ text:"固定資産税の住宅用地の特例で、200㎡以下の部分(小規模住宅用地)の課税標準はいくらに軽減されるか。",
+ options:["2分の1","3分の1","6分の1","8分の1"],
+ answer:2, law:"chihozei", search:"固定資産税 住宅用地特例 6分の1 200㎡",
+ variants:[{options:["3分の1","4分の1","6分の1","10分の1"],answer:2}],
+ kaisetsu:"200㎡以下の部分は課税標準が<strong>1/6</strong>に軽減されます(200㎡超の部分は1/3)。",
+ related:"新築住宅の<strong>税額</strong>の減額(3年間・マンション等5年間、120㎡相当分1/2)は課税標準の特例とは別枠で、適用期限があります。",
+ confuse:"er03(1/3とのすり替え)の裏返し。「<strong>課税標準</strong>の特例(1/6・1/3)」と「<strong>税額</strong>の減額(1/2)」は仕組みが違う点も区別を。"},
+{id:"ze09", cat:"税・その他", type:"choice",
+ text:"都道府県地価調査(基準地)の価格判定の基準日はいつか。",
+ options:["毎年1月1日","毎年4月1日","毎年7月1日","毎年10月1日"],
+ answer:2, law:"chika", search:"都道府県地価調査 基準日 7月1日",
+ variants:[{options:["毎年1月1日","毎年6月1日","毎年7月1日","毎年9月1日"],answer:2}],
+ kaisetsu:"地価調査の基準日は<strong>毎年7月1日</strong>です(9月頃に公表)。",
+ related:"実施主体は<strong>都道府県</strong>で、国土交通省が行う地価公示(基準日1月1日)と半年ずれています。両者で年2回の地価動向を把握できます。",
+ confuse:"ze07(地価公示=1月1日)の裏返し。re03の逆引きと合わせ、「公示1/1・調査7/1」を双方向で即答できるように。"},
 ];
 
 /* ===================================================== */
 const CATS = ["宅建業法","法令上の制限","権利関係","税・その他"];
 const TYPE_LABEL = {choice:"数値問題", cloze:"穴埋め問題", ox:"○×問題", calc:"計算問題", error:"誤り探し", reverse:"数字の逆引き", compare:"並べ替え問題", match:"組合せ問題", "case":"事例問題"};
+
+/* ---------- 選択肢バリエーション(出題ごとにランダム選択) ---------- */
+let curOptions=null, curAnswer=0;
+function pickVariant(q){
+  const sets=[{options:q.options,answer:q.answer}].concat(q.variants||[]);
+  const v=sets[Math.floor(Math.random()*sets.length)];
+  curOptions=v.options; curAnswer=v.answer;
+}
 const $ = id => document.getElementById(id);
 const screens = {start:$("screen-start"), quiz:$("screen-quiz"), result:$("screen-result"), pairs:$("screen-pairs")};
 
@@ -1129,10 +1243,14 @@ function weakScore(qid){
   if(!s || s.a===0) return 0.55;
   return (s.a - s.c + 1) / (s.a + 2);
 }
-function catStat(cat){
+const PERIODS=[{label:"直近1週間",days:7},{label:"直近1か月",days:30},{label:"全期間",days:null}];
+let periodIdx=2;
+function catStat(cat,since){
   let a=0,c=0;
   QUESTIONS.filter(q=>q.cat===cat).forEach(q=>{
-    const s=stats[q.id]; if(s){a+=s.a;c+=s.c;}
+    const s=stats[q.id]; if(!s)return;
+    if(since==null){a+=s.a;c+=s.c;}
+    else if(s.h){for(const e of s.h){if(e[0]>=since){a++;c+=e[1];}}}
   });
   return {a,c,rate:a?c/a:null};
 }
@@ -1157,10 +1275,15 @@ function buildCatChips(){
 function renderRecord(){
   const rows=$("stat-rows");
   rows.innerHTML="";
-  const data=CATS.map(c=>({cat:c,...catStat(c)}));
+  const per=PERIODS[periodIdx];
+  const since=per.days==null?null:Date.now()-per.days*DAY;
+  $("btn-period").textContent=per.label+" ▸";
+  const data=CATS.map(c=>({cat:c,...catStat(c,since)}));
   const answered=data.some(d=>d.a>0);
   $("record-empty").classList.toggle("hidden",answered);
-  $("record-note").textContent = answered ? "この端末に自動保存されます" : "";
+  $("record-note").textContent = answered
+    ? (per.days==null ? "この端末に自動保存されます" : "期間集計はv1.4.0以降の解答分が対象です")
+    : (per.days==null ? "" : "この期間の解答はありません");
   if(!answered) return;
 
   const rated=data.filter(d=>d.rate!==null);
@@ -1199,6 +1322,10 @@ $("btn-start-weak").addEventListener("click",()=>{
     .map(o=>o.q);
   startSession(pool.slice(0,getCount(pool)),"(苦手優先)");
 });
+$("btn-period").addEventListener("click",()=>{
+  periodIdx=(periodIdx+1)%PERIODS.length;
+  renderRecord();
+});
 $("btn-reset-stats").addEventListener("click",async()=>{
   if(!confirm("学習記録をすべて削除します。よろしいですか?"))return;
   stats={};
@@ -1225,8 +1352,9 @@ function render(){
   $("q-num").textContent="第 "+(idx+1)+" 問";
   $("q-text").innerHTML=esc(q.text).replace(/＿([ＡＢＣＤ])＿/g,'<span class="blank">$1</span>');
 
+  pickVariant(q);
   const isOx=q.type==="ox";
-  const order=isOx?q.options.map((t,i)=>({t,i})):shuffle(q.options.map((t,i)=>({t,i})));
+  const order=isOx?curOptions.map((t,i)=>({t,i})):shuffle(curOptions.map((t,i)=>({t,i})));
   const marks=isOx?["○","×"]:["ア","イ","ウ","エ"];
   const box=$("opts");
   box.innerHTML="";
@@ -1244,20 +1372,23 @@ function render(){
 }
 
 async function answer(q,pickedIdx,btn,box){
-  const correct=pickedIdx===q.answer;
-  results.push({q,picked:q.options[pickedIdx],correct});
+  const correct=pickedIdx===curAnswer;
+  results.push({q,picked:curOptions[pickedIdx],ans:curOptions[curAnswer],correct});
 
   if(!stats[q.id])stats[q.id]={a:0,c:0};
   const st=stats[q.id];
   st.a++;
   if(correct)st.c++;
   srsUpdate(st,correct);
+  st.h=st.h||[];
+  st.h.push([Date.now(),correct?1:0]);
+  if(st.h.length>100)st.h=st.h.slice(-100);
   saveStats();
 
   [...box.querySelectorAll(".opt")].forEach(b=>{
     b.disabled=true;
     const oi=parseInt(b.dataset.optIndex,10);
-    if(oi===q.answer){b.classList.add("is-correct");}
+    if(oi===curAnswer){b.classList.add("is-correct");}
     else if(b===btn){b.classList.add("is-wrong");}
     else{b.classList.add("dim");}
   });
@@ -1269,7 +1400,7 @@ async function answer(q,pickedIdx,btn,box){
   seal.setAttribute("aria-label",correct?"正解":"不正解");
   box.appendChild(seal);
 
-  $("ans-text").textContent=q.options[q.answer];
+  $("ans-text").textContent=curOptions[curAnswer];
   $("k-main").innerHTML=q.kaisetsu;
   $("k-related").innerHTML=q.related;
   $("k-confuse").innerHTML=q.confuse;
@@ -1333,7 +1464,7 @@ async function showResult(){
       const d=document.createElement("div");
       d.className="rv-item";
       d.innerHTML='<p class="rv-q">【'+r.q.cat+'】'+esc(r.q.text).replace(/＿([ＡＢＣＤ])＿/g,"〔$1〕")+'</p>'+
-        '<p class="rv-a">あなたの解答：'+esc(r.picked)+'　→　正解：<b>'+esc(r.q.options[r.q.answer])+'</b></p>';
+        '<p class="rv-a">あなたの解答：'+esc(r.picked)+'　→　正解：<b>'+esc(r.ans)+'</b></p>';
       list.appendChild(d);
     });
   }
